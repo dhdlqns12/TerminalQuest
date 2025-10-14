@@ -14,7 +14,7 @@ namespace TerimalQuest.Core
         마법사
     }
 
-    public abstract class Job
+    public class Job
     {
         public JobType jobType { get; set; }
         public string name { get; set; }
@@ -31,7 +31,7 @@ namespace TerimalQuest.Core
 
         public List<Skill> DefaultSkills { get; set; }          //기본 스킬(나중에 추가 위해 작성)
 
-        protected Job()                                     // 역직렬화용 생성자
+        protected Job()                                            // 역직렬화용 생성자
         {
             DefaultSkills = new List<Skill>();
         }
