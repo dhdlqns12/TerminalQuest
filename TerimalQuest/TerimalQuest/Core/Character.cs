@@ -8,20 +8,22 @@ namespace TerimalQuest.Core
 {
     public class Character
     {
-        protected string name;      // 캐릭터 이름
-        protected int level;        // 캐릭터 레벨
+        public string name { get; set; }      // 캐릭터 이름
+        public int level { get; set; }          // 캐릭터 레벨
 
-        protected float maxHp;      // 캐릭터 최대 체력
-        protected float hp;         // 캐릭터 체력
+        public float maxHp { get; set; }        // 캐릭터 최대 체력
+        public float hp { get; set; }           // 캐릭터 체력
 
-        protected float maxMp;      // 캐릭터 최대 마나
-        protected float mp;         // 캐릭터 마나
+        public float maxMp { get; set; }        // 캐릭터 최대 마나
+        public float mp { get; set; }           // 캐릭터 마나
 
-        protected float atk;        // 캐릭터 공격력
-        protected float def;        // 캐릭터 방어력
+        public float atk { get; set; }          // 캐릭터 공격력
+        public float def { get; set; }          // 캐릭터 방어력
 
-        protected float critRate;   // 캐릭터 크리율 
-        protected float evadeRate;  // 캐릭터 회피율
+        public float critRate { get; set; }     // 캐릭터 크리율 
+        public float evadeRate { get; set; }    // 캐릭터 회피율
+
+        public Character() { }
 
         public Character(string name, int level, float maxHp, float maxMp, float atk, float def) 
         {
