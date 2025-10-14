@@ -7,21 +7,13 @@ using TerimalQuest.System;
 
 namespace TerimalQuest.Core
 {
-    public enum JobType
-    {
-        전사,
-        궁수,
-        마법사
-    }
-
     public class Player : Character
     {
-        public JobType jobType { get; set; }         // 플레이어 직업
-        public string jobName { get; set; }
+        public Job job { get; set; }                    // Job객체
+        public string jobName { get; set; }           // 플레이어 직업
 
         public int gold { get; set; }           // 플레이어 골드
         public int exp { get; set; }            // 플레이어 경험치
-
         public int maxStamina { get; set; }     // 플레이어 최대 스태미나
         protected int stamina;      // 플레이어 스태미나
 
@@ -32,20 +24,16 @@ namespace TerimalQuest.Core
 
         protected int curStage;                 // 현재 스테이지
 
-        public Player() : base()
+        public Player() : base()                // 역직렬화용 생성자
         {
             questList = new List<int>();
             skillList = new List<Skill>();
         }
 
-        public Player(string name, JobType jobType): base(name, 1, 0, 0, 0, 0)
+        public Player(string name, Job _job): base(name, 1, 0, 0, 0, 0)      // 일반  생성자
         {
-            jobType = jobType;
-            jobName = jobType.ToString();
-            gold = 1000;
-            exp = 0;
-            questList = new List<int>();
-            skillList = new List<Skill>();
+            job = _job;
+            gold = 0;
             curStage = 0;
         }
     }

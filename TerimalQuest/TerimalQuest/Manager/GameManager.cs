@@ -25,7 +25,7 @@ namespace TerimalQuest.Manager
 
         private void Init()
         {
-            player = new Player("",1,"무직",1,1,1,1,1);
+            player = new Player();
             sceneManager = new SceneManager();
         }
 
