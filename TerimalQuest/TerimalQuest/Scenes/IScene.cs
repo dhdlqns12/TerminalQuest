@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace TerimalQuest.Scenes
 {
-    public interface Scene
+    public interface IScene
     {
-        
+        void Enter();
+        void Update();
+        void Exit();
     }
 }
