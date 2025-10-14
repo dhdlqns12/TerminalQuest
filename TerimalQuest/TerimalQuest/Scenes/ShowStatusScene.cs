@@ -11,6 +11,7 @@ namespace TerimalQuest.Scenes
         public event Action<IScene> OnSceneChangeRequested;
         public void Enter()
         {
+
         }
 
         public void Update()
