@@ -16,7 +16,7 @@ namespace TerimalQuest.Manager
         private Player player;
 
         private SceneManager sceneManager;
-        private UIManager uiManager;
+        private UIManager uiManager => UIManager.Instance;
 
         public GameManager() 
         {
@@ -24,16 +24,18 @@ namespace TerimalQuest.Manager
 
         private void Init()
         {
-            //player = new Player();
+            player = new Player("",1,"무직",1,1,1,1,1);
             sceneManager = new SceneManager();
-            uiManager = new UIManager();
         }
 
         public void Run()
         {
-            while(true)
-            {
+            Init();
 
+            sceneManager.ChangeScene(new StartScene());
+            while (true)
+            {
+                sceneManager.Update();
             }
         }
     }
