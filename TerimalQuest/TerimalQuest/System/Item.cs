@@ -58,5 +58,11 @@ namespace TerimalQuest.System
         {
             // 아이템 정보 표시 : 상점
         }
+
+        // 아이템 복제
+        public virtual Item Clone()
+        {
+            return new Item(Id, name, desc, price, type);
+        }
     }
 }

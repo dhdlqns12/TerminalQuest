@@ -44,5 +44,12 @@ namespace TerimalQuest.System
                 ConsoleHelper.PadRightForConsole(itemPurchase, 6),
                 isGoldIcon));
         }
+
+        // 아이템 복제
+        public override Weapon Clone()
+        {
+            this.Id += 1;   // 복제 시 Id 증가
+            return new Weapon(Id, name, desc, price, atk, type);
+        }
     }
 }

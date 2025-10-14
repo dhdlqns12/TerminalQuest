@@ -9,6 +9,20 @@ namespace TerimalQuest.System
 {
     public class Inventory
     {
+        /*
+         * 인벤토리는 캐릭터에 소속된다.
+         * 아이템 리스트를 가지고 있으며 최대 아이템 소지 개수가 정해져 있다.
+         * 각 아이템을 관리할 수 있는 기능을 가지고 있다.
+         * 
+         * [인벤토리 기능]
+         *  - 아이템 추기
+         *  - 아이템 삭제
+         *  - 아이템 찾기(이름/인덱스)
+         *  - 아이템 장착/해제
+         *  - 아이템 정보 표시
+         * 
+         */
+
         private int maxItemCount;    // 최대 아이템 개수
 
         // 아이템 리스트
@@ -101,5 +115,8 @@ namespace TerimalQuest.System
                 items[i].DisplayInfo();
             }
         }
+
+        // 프로퍼티 변수
+        public List<Item> Items { get { return items; } set { items = value; } }
     }
 }
