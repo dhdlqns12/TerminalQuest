@@ -17,10 +17,17 @@ namespace TerimalQuest.System
 
         public override void Equip()
         {
-            base.Equip();
+            // 아이템 정보 표시
 
-            // 플레이어 방어구 장착
+            // 현재 장착 관리 상태인지 확인 후 아이템 정보 표시
+            string isEquippedTxt = (isEquipped) ? "[E]" : "";
+            string itemName = $"{isEquippedTxt}{name}";
 
+            Console.WriteLine(
+                string.Format("{0} | {1} | {2}",
+                ConsoleHelper.PadRightForConsole(itemName, 20),
+                ConsoleHelper.PadRightForConsole($"공격력 +{atk}", 15),
+                desc));
         }
     }
 }

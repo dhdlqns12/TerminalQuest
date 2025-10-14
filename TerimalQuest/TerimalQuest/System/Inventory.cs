@@ -79,5 +79,27 @@ namespace TerimalQuest.System
                 items[idx].Equip();
             }
         }
+
+        public void DisplayInfo(bool isEquipMode)
+        {
+            Console.WriteLine("[아이템 목록]\n");
+
+            // 장착 관리 상태인지에 따라 표시 변환
+            string equipMode = (isEquipMode) ? ConsoleHelper.PadRightForConsole(" ", 6) : $"  ";
+
+            Console.WriteLine(
+                string.Format("{0}{1} | {2} | {3}",
+                equipMode,
+                ConsoleHelper.PadRightForConsole("[아이템 이름]", 20),
+                ConsoleHelper.PadRightForConsole("[아이템 효과]", 15),
+                "[아이템 설명]\n"));
+
+            for (int i = 0; i < items.Count; i++)
+            {
+                string idxTxt = (isEquipMode) ? $"{i + 1} : " : "";
+                Console.Write($"- {idxTxt}");
+                items[i].DisplayInfo();
+            }
+        }
     }
 }

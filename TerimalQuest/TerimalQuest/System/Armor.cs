@@ -27,7 +27,16 @@ namespace TerimalQuest.System
         public override void DisplayInfo()
         {
             // 아이템 정보 표시
-            //Console.WriteLine($"{name}")
+
+            // 현재 장착 관리 상태인지 확인 후 아이템 정보 표시
+            string isEquippedTxt = (isEquipped) ? "[E]" : "";
+            string itemName = $"{isEquippedTxt}{name}";
+
+            Console.WriteLine(
+                string.Format("{0} | {1} | {2}",
+                ConsoleHelper.PadRightForConsole(itemName, 20),
+                ConsoleHelper.PadRightForConsole($"방어력 +{def}", 15),
+                desc));
         }
     }
 }
