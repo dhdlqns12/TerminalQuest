@@ -55,7 +55,7 @@ namespace TerimalQuest.System
         public override Weapon Clone()
         {
             this.Id += 1;   // 복제 시 Id 증가
-            return new Weapon(Id, name, desc, price, atk, type);
+            return (Weapon)this.MemberwiseClone();
         }
     }
 }
