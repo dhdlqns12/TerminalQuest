@@ -14,7 +14,7 @@ namespace TerimalQuest.Manager
         private static GameManager instance;
         public static GameManager Instance => instance ??= new GameManager();
 
-        public Player player { get; set; }
+        private Player player;
 
         private SceneManager sceneManager;
         private UIManager uiManager => UIManager.Instance;
