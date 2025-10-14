@@ -31,25 +31,31 @@ namespace TerimalQuest.System
             // 현재 장착 관리 상태인지 확인 후 아이템 정보 표시
             string isEquippedTxt = (isEquipped) ? "[E]" : "";
             string itemName = $"{isEquippedTxt}{name}";
+            string itemEffect = $"방어력 +{def}";
+            string itemCount = $"수량: x{count}";
 
             Console.WriteLine(
                 string.Format("{0} | {1} | {2}",
                 ConsoleHelper.PadRightForConsole(itemName, 20),
-                ConsoleHelper.PadRightForConsole($"방어력 +{def}", 15),
-                desc));
+                ConsoleHelper.PadRightForConsole(itemEffect, 15),
+                ConsoleHelper.PadRightForConsole(desc, 50),
+                itemCount));
         }
 
         public void DisplayInfoProduct()
         {
             // 상품 목록에서 보여줄 아이템 정보 표시
+            string itemEffect = $"방어력 +{def}";
+            string itemCount = $"수량: x{count}";
             string itemPurchase = (isPurchase) ? "구매완료" : $"{price}";
             string isGoldIcon = (isPurchase) ? "" : "G";
 
             Console.WriteLine(
                 string.Format("{0} | {1} | {2} | {3} {4}",
                 ConsoleHelper.PadRightForConsole(name, 20),
-                ConsoleHelper.PadRightForConsole($"방어력 +{def}", 15),
+                ConsoleHelper.PadRightForConsole(itemEffect, 15),
                 ConsoleHelper.PadRightForConsole(desc, 50),
+                ConsoleHelper.PadRightForConsole(itemCount, 6),
                 ConsoleHelper.PadRightForConsole(itemPurchase, 6),
                 isGoldIcon));
         }

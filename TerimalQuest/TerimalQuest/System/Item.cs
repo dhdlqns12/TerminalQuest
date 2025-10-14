@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TerimalQuest.System
 {
-    public enum ItemType { Weapon, Armor, Portion, Etc }
+    public enum ItemType { Weapon, Armor, Potion, Etc }
 
     public class Item
     {
@@ -16,15 +16,16 @@ namespace TerimalQuest.System
          * 이 게임에서 사용하는 아이템 옵션은 다음과 같다.
          * [Armor] 방어구
          * [Weapon] 무기
-         * [Porion] 포션
+         * [Potion] 포션
          * [Etc] 기타 아이템
          * 
          */
 
-        public int Id { get; set; }      // 아이템 Id
-        public string name;              // 아이템 이름
-        public string desc;              // 아이템 설명
-        public int price;                // 아이템 가격
+        public int Id { get; set; }     // 아이템 Id
+        public string name;             // 아이템 이름
+        public string desc;             // 아이템 설명
+        public int price;               // 아이템 가격
+        public int count;               // 아이템 수량
 
         public bool isEquipped;             // 아이템 착용 여부
         public bool isPurchase;             // 아이템 구매 여부
@@ -41,6 +42,8 @@ namespace TerimalQuest.System
 
             this.isEquipped = false;
             this.isPurchase = false;
+
+            this.count = 1;
         }
 
         public virtual void Equip()
