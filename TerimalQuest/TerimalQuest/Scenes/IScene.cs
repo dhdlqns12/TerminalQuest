@@ -8,6 +8,7 @@ namespace TerimalQuest.Scenes
 {
     public interface IScene
     {
+        event Action<IScene> OnSceneChangeRequested;
         void Enter();
         void Update();
         void Exit();

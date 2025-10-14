@@ -13,9 +13,14 @@ namespace TerimalQuest.Manager
 
         public void ChangeScene(IScene newScene)
         {
-            currentScene?.Exit();
+            if (currentScene != null)
+            {
+                currentScene.OnSceneChangeRequested -= ChangeScene;
+                currentScene.Exit();
+            }
+
             currentScene = newScene;
-            Console.Clear();
+            currentScene.OnSceneChangeRequested += ChangeScene;
             currentScene.Enter();
         }
 
