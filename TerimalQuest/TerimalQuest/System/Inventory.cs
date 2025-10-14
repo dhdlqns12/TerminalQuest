@@ -3,10 +3,81 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerimalQuest.Manager;
 
 namespace TerimalQuest.System
 {
     public class Inventory
     {
+        private int maxItemCount;    // 최대 아이템 개수
+
+        // 아이템 리스트
+        private List<Item> items;
+
+        // 생성자
+        public Inventory(int maxItemCount)
+        {
+            this.maxItemCount = maxItemCount;
+            items = new List<Item>();
+        }
+
+        // 아이템 추가
+        public void Add(Item item)
+        {
+            // 최대 아이템 개수 출력
+            if(items.Count < maxItemCount)
+            {
+                Console.WriteLine("아이템을 최대 소지하였습니다.");
+                return;
+            }
+
+            items.Add(item);
+        }
+
+        // 아이템 삭제
+        public void Remove(Item item)
+        {
+            if (!items.Contains(item)) return;
+
+            items.Remove(item);
+        }
+
+        // 인벤토리 초기화
+        public void Clear()
+        {
+            items.Clear();
+        }
+
+        //  아이템 검색 : 아이디로 검색
+        public Item FindItemById(int id)
+        {
+            foreach (var item in items)
+            {
+                if (item.Id == id)
+                {
+                    return item;
+                }
+            }
+
+            return null;
+        }
+
+        // 장비 장착/해제 - 인덱스 검색
+        public void EquipItemByIdx(int idx)
+        {
+            if (items.Count <= 0 || idx >= items.Count) return;
+
+            // 이미 장착 중이라면 장착 해제
+            if (items[idx].isEquipped)
+            {
+                items[idx].Equip();
+            }
+
+            // 장착 중인 상태가 아니라면 장착
+            else
+            {
+                items[idx].Equip();
+            }
+        }
     }
 }
