@@ -38,5 +38,20 @@ namespace TerimalQuest.System
                 ConsoleHelper.PadRightForConsole($"방어력 +{def}", 15),
                 desc));
         }
+
+        public void DisplayInfoProduct()
+        {
+            // 상품 목록에서 보여줄 아이템 정보 표시
+            string itemPurchase = (isPurchase) ? "구매완료" : $"{price}";
+            string isGoldIcon = (isPurchase) ? "" : "G";
+
+            Console.WriteLine(
+                string.Format("{0} | {1} | {2} | {3} {4}",
+                ConsoleHelper.PadRightForConsole(name, 20),
+                ConsoleHelper.PadRightForConsole($"방어력 +{def}", 15),
+                ConsoleHelper.PadRightForConsole(desc, 50),
+                ConsoleHelper.PadRightForConsole(itemPurchase, 6),
+                isGoldIcon));
+        }
     }
 }

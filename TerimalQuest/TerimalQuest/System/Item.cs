@@ -53,5 +53,10 @@ namespace TerimalQuest.System
         {
             // 아이템 정보 표시
         }
+
+        public virtual void DisplayInfoProduct()
+        {
+            // 아이템 정보 표시 : 상점
+        }
     }
 }
