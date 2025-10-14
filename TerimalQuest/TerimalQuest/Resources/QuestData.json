@@ -1,0 +1,35 @@
+[
+  {
+    "name": "슬라임 잡기",
+    "questType": "사냥",
+    "description": "슬라임을 10마리 잡으세요",
+    "successConditions": {
+      "슬라임": 10
+    },
+    "rewardGold": 100,
+    "rewardExp": 10,
+    "rewardItem": null
+  },
+  {
+    "name": "토템 잡기",
+    "questType": "사냥",
+    "description": "토템을 5마리 잡으세요",
+    "successConditions": {
+      "토템": 5
+    },
+    "rewardGold": 100,
+    "rewardExp": 10,
+    "rewardItem": null
+  },
+  {
+    "name": "스켈레톤 잡기",
+    "questType": "사냥",
+    "description": "스켈레톤을 7마리 잡으세요",
+    "successConditions": {
+      "스켈레톤": 7
+    },
+    "rewardGold": 100,
+    "rewardExp": 10,
+    "rewardItem": null
+  }   
+]
