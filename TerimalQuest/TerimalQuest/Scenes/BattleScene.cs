@@ -8,6 +8,7 @@ namespace TerimalQuest.Scenes
 {
     public class BattleScene : IScene
     {
+        public event Action<IScene> OnSceneChangeRequested;
         public void Enter()
         {
 

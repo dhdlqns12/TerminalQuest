@@ -1,26 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TerimalQuest.Manager;
+using TerimalQuest.Scenes;
 
-namespace TerimalQuest.Scenes
+public class StartScene : IScene
 {
-    public class StartScene : IScene
+    public event Action<IScene> OnSceneChangeRequested;
+
+    public void Enter()
     {
-        public void Enter()
+        UIManager.Instance.ShowStartSceneScripts();
+    }
+
+    public void Update()
+    {
+        if (int.TryParse(Console.ReadLine(), out int answer))
         {
-
+            switch (answer)
+            {
+                case 1:
+                    OnSceneChangeRequested?.Invoke(new ShowStatusScene());
+                    break;
+                case 2:
+                    OnSceneChangeRequested?.Invoke(new BattleScene());
+                    break;
+                case 0:
+                    Environment.Exit(0);
+                    break;
+                default:
+                    Console.WriteLine("잘못된 입력입니다.");
+                    Console.ReadKey();
+                    break;
+            }
         }
-
-        public void Update()
+        else
         {
-
+            Console.WriteLine("잘못된 입력입니다.");
+            Console.ReadKey();
         }
+    }
 
-        public void Exit()
-        {
-
-        }
+    public void Exit()
+    {
+        // 나중에 UI 클리어, 리소스 해제 등 넣을 수 있음
     }
 }
