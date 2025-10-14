@@ -11,5 +11,10 @@ namespace TerimalQuest.Core
         public Monster(string name, int level, float maxHp, float maxMp, float atk, float def) : base(name, level, maxHp, maxMp, atk, def)
         {
         }
+
+        public Monster Clone()
+        {
+            return new Monster(this.name, this.level, this.maxHp, this.maxMp, this.atk, this.def);
+        }
     }
 }
