@@ -1,13 +1,22 @@
-﻿namespace TerimalQuest.Core
+﻿using TerimalQuest.Manager;
+
+namespace TerimalQuest.Core
 {
     public class GameMain
     {
-
-
-
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            for(int i =1; i<=3;i++)
+            {
+                if(!SaveManager.HasSaveData(i))
+                {
+
+                }
+                else
+                {
+
+                }
+            }
         }
     }
 }
