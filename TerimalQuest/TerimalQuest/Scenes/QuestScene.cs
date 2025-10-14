@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace TerimalQuest.Scenes
 {
-    public class StartScene : IScene
+    public class QuestScene: IScene
     {
+        public event Action<IScene> OnSceneChangeRequested;
         public void Enter()
         {
 

@@ -8,6 +8,7 @@ namespace TerimalQuest.Scenes
 {
     public class InventoryScene : IScene
     {
+        public event Action<IScene> OnSceneChangeRequested;
         public void Enter()
         {
 

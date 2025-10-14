@@ -1,0 +1,51 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TerimalQuest.Manager;
+
+namespace TerimalQuest.Scenes
+{
+    public class SetNameScene : IScene
+    {
+        public event Action<IScene> OnSceneChangeRequested;
+        public void Enter()
+        {
+            UIManager.Instance.ShowTitle("스파르타 마을에 오신 여러분들을 환영합니다.");
+        }
+
+        public void Update()
+        {
+            UIManager.Instance.SetNameScripts();
+            string name = Console.ReadLine();
+            if (string.IsNullOrEmpty(name))
+            {
+                Console.WriteLine("공백또는 잘못된 입력입니다.");
+            }
+            else
+            {
+                UIManager.Instance.NameConfirmScripts(name);
+                if(int.TryParse(Console.ReadLine(), out int answer))
+                {
+                    switch(answer)
+                    {
+                        case 1:
+                            OnSceneChangeRequested?.Invoke(new SetJobScene());
+                            break;
+                        case 2:
+                            break;
+                        default:
+                            Console.WriteLine("잘못된 입력입니다.");
+                            break;
+                    }
+                }
+            }
+        }
+
+        public void Exit()
+        {
+
+        }
+    }
+}
