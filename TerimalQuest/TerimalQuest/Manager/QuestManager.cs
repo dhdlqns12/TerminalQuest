@@ -65,9 +65,9 @@ namespace TerimalQuest.Manager
                 Console.WriteLine($"- {questDic.Key} {questDic.Value}마리 처치");
             }
             Console.WriteLine("\n- 보상 -\n");
-            if (quest.rewardItem.Count != 0)
+            if (quest.rewardItem?.Count != 0)
             {
-                for (int i = 0; i < quest.rewardItem.Count; i++)
+                for (int i = 0; i < quest.rewardItem?.Count; i++)
                     Console.WriteLine($"  {quest.rewardItem[i].name} x {quest.rewardItem[i].count}");
             }
             Console.WriteLine($"  {quest.rewardGold}G");

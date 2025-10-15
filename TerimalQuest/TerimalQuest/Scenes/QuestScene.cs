@@ -42,10 +42,10 @@ namespace TerimalQuest.Scenes
                         isSelecting = false;
                         break;
                     case "3":
-                        if (questManager.curQuest.isClear)
+                        Quest quest = questManager.curQuest;
+                        if (quest.isClear)
                         {
-                            questManager.curQuest.QuestClear(GameManager.Instance.player);
-
+                            quest.QuestClear(GameManager.Instance.player, quest);
                         }
                         else
                             Console.WriteLine("잘못된 입력입니다.");
