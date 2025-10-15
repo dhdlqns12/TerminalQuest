@@ -80,5 +80,12 @@ namespace TerimalQuest.Manager
             Console.ReadKey();
         }
 
+        public void SaveDataLoadingScripts()
+        {
+            Console.WriteLine("0: 새게임");
+            Console.WriteLine("\n[불러올 세이브파일 숫자를 입력해주세요.]");
+            Console.Write(">>");
+        }
+
     }
 }
