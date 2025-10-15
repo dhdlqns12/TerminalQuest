@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerimalQuest.Manager;
 
 namespace TerimalQuest.System
 {
@@ -17,8 +18,8 @@ namespace TerimalQuest.System
 
         public override void DisplayInfo()
         {
+            GameManager.Instance.player.ToggleEquipItem(this); //아이템 장착
             // 아이템 정보 표시
-
             // 현재 장착 관리 상태인지 확인 후 아이템 정보 표시
             string isEquippedTxt = (isEquipped) ? "[E]" : "";
             string itemName = $"{isEquippedTxt}{name}";

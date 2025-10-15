@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TerimalQuest.Core;
+using TerimalQuest.Manager;
 
 namespace TerimalQuest.System
 {
@@ -18,7 +19,9 @@ namespace TerimalQuest.System
 
         public override void Equip()
         {
-            base.Equip();
+            //아이템 장착
+            GameManager.Instance.player.ToggleEquipItem(this);
+            //base.Equip();
 
             // 플레이어 방어구 장착
             

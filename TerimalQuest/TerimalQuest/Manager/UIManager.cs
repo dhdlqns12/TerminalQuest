@@ -88,6 +88,33 @@ namespace TerimalQuest.Manager
             Console.Write(">>");
         }
 
+        public bool YesOrNo()
+        {
+            while(true)
+            {
+                string answer = Console.ReadLine();
+                if (answer != null)
+                {
+                    if(answer == "y")
+                    {
+                        return true;
+                    }
+                    else if(answer == "n")
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("잘못된 입력입니다.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("잘못된 입력입니다.");
+                }
+            }
+        }
+
         #region BattleUI
 
         public void AttackTarget(Character attacker, Character target, bool isEvade)
