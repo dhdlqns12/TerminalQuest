@@ -21,7 +21,7 @@ namespace TerimalQuest.Scenes
             equipIdx = 0;
             inventory = GameManager.Instance.player.inventory;
 
-            InventoryEquipView();
+            UIManager.Instance.InventoryEquipScripts(inventory);
         }
 
         public void Update()
@@ -32,20 +32,6 @@ namespace TerimalQuest.Scenes
         public void Exit()
         {
 
-        }
-
-        // 플레이어 인벤토리 장착 관리 창 : 플레이어의 아이템을 장착/해제 할 수 있다.
-        private void InventoryEquipView()
-        {
-            Inventory inventory = GameManager.Instance.player.inventory;
-
-            Console.Clear();
-            Console.WriteLine("인벤토리 - 장착 관리");
-            Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
-            Console.WriteLine();
-            inventory.DisplayInfo(true);
-            Console.WriteLine();
-            DisplayOption(["(번호). 해당 장비 장착", "0. 나가기"]);
         }
 
         private void Process()
@@ -64,16 +50,6 @@ namespace TerimalQuest.Scenes
 
             // 업데이트 하여 갱신
             OnSceneChangeRequested?.Invoke(new InventoryEquipScene());
-        }
-
-        public void DisplayOption(string[] options)
-        {
-            foreach (var option in options)
-            {
-                Console.WriteLine(option);
-            }
-            Console.WriteLine();
-            Console.WriteLine("원하시는 행동을 입력해주세요.");
         }
 
         // 사용자 입력 체크
