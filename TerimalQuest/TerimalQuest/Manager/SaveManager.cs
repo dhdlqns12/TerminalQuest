@@ -80,6 +80,15 @@ namespace TerimalQuest.Manager
         {
             return File.Exists(SavePath(_slot));
         }
+
+        public static SaveData GetSlotInfo(int _slot)
+        {
+            if (!HasSaveData(_slot))
+            {
+                return null;
+            }
+            return GameLoad(_slot);
+        }
     }
 }
 

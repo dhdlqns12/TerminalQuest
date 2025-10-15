@@ -6,16 +6,21 @@ namespace TerimalQuest.Core
     {
         static void Main(string[] args)
         {
+            UIManager.Instance.ShowTitle("스파르타 마을에 오신것을 환영합니다!");
+            int saveDataCount = 0;
             for(int i =1; i<=3;i++)
             {
-                if(!SaveManager.HasSaveData(i))
-                {
-
-                }
-                else
-                {
-
-                }
+                saveDataCount++;
+            }
+            if (saveDataCount >= 1)
+            {
+                UIManager.Instance.HasSaveDataScripts();
+                GameManager.Instance.Run(1);
+            }
+            else
+            {
+                UIManager.Instance.EmptySaveDataScripts();
+                GameManager.Instance.Run(0);
             }
         }
     }

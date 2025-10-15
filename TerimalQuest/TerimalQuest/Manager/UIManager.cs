@@ -66,5 +66,19 @@ namespace TerimalQuest.Manager
             Console.Write($"{job}가 되시겠습니까? \n\n1. 저장 \n2. 취소 \n\n원하시는 행동을 입력해주세요. \n>>");
         }
 
+        public void HasSaveDataScripts()
+        {
+            Console.WriteLine("\n[기존 세이브 데이터를 발견했습니다.]");
+            Console.WriteLine("불러오기 화면으로 이동합니다...");
+            Console.ReadKey();
+        }
+
+        public void EmptySaveDataScripts()
+        {
+            Console.WriteLine("\n[저장 데이터가 없습니다.]");
+            Console.WriteLine("새 캐릭터를 생성합니다...");
+            Console.ReadKey();
+        }
+
     }
 }
