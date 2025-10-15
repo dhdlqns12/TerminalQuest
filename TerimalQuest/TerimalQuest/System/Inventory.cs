@@ -35,10 +35,33 @@ namespace TerimalQuest.System
             items = new List<Item>();
         }
 
-        // 아이템 추가
+        // 아이템 추가 
         public void Add(Item item)
         {
-            items.Add(item);
+            AddByItemType(item);
+        }
+
+        // 아이템 타입에 따라 추가
+        private void AddByItemType(Item item)
+        {
+            if(item is Weapon weapon || item is Armor armor)
+            {
+                // 장비면 새로 추가
+                items.Add(item);
+            }
+            else
+            {
+                // 장비가 아니면 수량을 올려서 겹쳐서 사용
+                Item originItem = FindItemByName(item.name);
+                if(originItem == null)
+                {
+                    items.Add(item);
+                }
+                else
+                {
+                    originItem.count++;
+                }
+            }
         }
 
         // 아이템 삭제
@@ -61,6 +84,20 @@ namespace TerimalQuest.System
             foreach (var item in items)
             {
                 if (item.Id == id)
+                {
+                    return item;
+                }
+            }
+
+            return null;
+        }
+
+        //  아이템 검색 : 이름으로 검색
+        public Item FindItemByName(string name)
+        {
+            foreach (var item in items)
+            {
+                if (item.name == name)
                 {
                     return item;
                 }
