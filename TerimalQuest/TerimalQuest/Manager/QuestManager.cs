@@ -40,6 +40,7 @@ namespace TerimalQuest.Manager
         public void QuestListShow(List<Quest> quests)
         {
             Console.Clear();
+            Console.WriteLine("퀘스트 목록\n");
             curQuest = null;
             for (int i = 0; i < quests.Count; i++)
             {
@@ -59,8 +60,8 @@ namespace TerimalQuest.Manager
         {
             Console.Clear();
             curQuest = quest;
-            Console.WriteLine($"{quest.name}\n");
-            Console.WriteLine($"\n{quest.description}\n");
+            Console.WriteLine($"퀘스트 : {quest.name}\n");
+            Console.WriteLine($"{quest.description}\n");
             foreach(var questDic in quest.successConditions)
             {
                 int curNum = curQuest.currentCounts[questDic.Key];

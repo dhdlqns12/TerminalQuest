@@ -25,6 +25,9 @@ public class StartScene : IScene
                 case 3:
                     OnSceneChangeRequested?.Invoke(new BattleScene());
                     break;
+                case 4:
+                    OnSceneChangeRequested?.Invoke(new QuestScene());
+                    break;
                 case 0:
                     Environment.Exit(0);
                     break;
