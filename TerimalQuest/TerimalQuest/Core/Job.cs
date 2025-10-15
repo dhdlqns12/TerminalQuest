@@ -14,7 +14,7 @@ namespace TerimalQuest.Core
         마법사
     }
 
-    public abstract class Job
+    public class Job
     {
         public JobType jobType { get; set; }
         public string name { get; set; }
@@ -26,12 +26,12 @@ namespace TerimalQuest.Core
         public float atk { get; set; }
         public float def { get; set; }
 
-        //public float critRate { get; set; }
-        //public float evadeRate { get; set; }
+        public float critRate { get; set; }
+        public float evadeRate { get; set; }
 
         public List<Skill> DefaultSkills { get; set; }          //기본 스킬(나중에 추가 위해 작성)
 
-        protected Job()                                     // 역직렬화용 생성자
+        protected Job()                                            // 역직렬화용 생성자
         {
             DefaultSkills = new List<Skill>();
         }
@@ -68,7 +68,8 @@ namespace TerimalQuest.Core
             maxMp = 50f;
             atk = 10f;
             def = 15f;
-
+            critRate = 0.1f;
+            evadeRate = 0.1f;
             //기본 스킬 추가
         }
 
@@ -80,6 +81,8 @@ namespace TerimalQuest.Core
             maxMp = 100f;
             atk = 20f;
             def = 5f;
+            critRate = 0.3f;
+            evadeRate = 0.2f;
             //기본 스킬 추가
         }
 
@@ -91,6 +94,8 @@ namespace TerimalQuest.Core
             maxMp = 150;
             atk = 25;
             def = 0f;
+            critRate = 0.1f;
+            evadeRate = 0f;
             //기본 스킬 추가
         }
         #endregion
