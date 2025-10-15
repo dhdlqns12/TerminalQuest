@@ -9,29 +9,29 @@ namespace TerimalQuest.Core
 {
     public class Player : Character
     {
-        public Job job { get; set; }                    // Job객체
-        public string jobName { get; set; }           // 플레이어 직업 이름
-        public int gold { get; set; }           // 플레이어 골드
+        public Job job { get; set; }                // Job객체
+        public string jobName { get; set; }     // 플레이어 직업 이름
+        public int gold { get; set; }               // 플레이어 골드
         public int maxStamina { get; set; }     // 플레이어 최대 스태미나
-        public int stamina;      // 플레이어 스태미나
-        public int curStage { get; set; }                 // 현재 스테이지
+        public int stamina;                         // 플레이어 스태미나
+        public int curStage { get; set; }         // 현재 스테이지
 
-        public List<Quest> questList { get; set; }            // 퀘스트 리스트
+        public List<Quest> questList { get; set; }     // 퀘스트 리스트
         public List<Skill> skillList { get; set; }          // 스킬 리스트
 
-        public Inventory inventory { get; set; }          // 플레이어 인벤토리
+        public Inventory inventory { get; set; }        // 플레이어 인벤토리
 
         public Weapon equippedWeapon { get; private set; }
         public Armor equippedArmor { get; private set; }
 
-        public float baseAtk { get; set; } //아이템 장착하지  않았을 때의 플레이어 공격력
-        public float baseDef { get; set; } //아이템 장착하지 않았을 때의 플레이어 방어력
-        public float baseCritRate { get; set; } //아이템 장착하지 않았을 때의 플레이어 치명타 확률
-        public float baseEvadeRate { get; set; } //아이템 장착하지 않았을 때의 플레이어 회피 확률
+        public float baseAtk { get; set; }              //아이템 장착하지  않았을 때의 플레이어 공격력
+        public float baseDef { get; set; }              //아이템 장착하지 않았을 때의 플레이어 방어력
+        public float baseCritRate { get; set; }         //아이템 장착하지 않았을 때의 플레이어 치명타 확률
+        public float baseEvadeRate { get; set; }      //아이템 장착하지 않았을 때의 플레이어 회피 확률
 
         public int[] requiredExp= { 10, 35, 65, 100 };
 
-        private int _exp { get; set; }            // 플레이어 경험치
+        private int _exp { get; set; }                      // 플레이어 경험치
         public int exp
         {
             get => _exp;
@@ -42,7 +42,7 @@ namespace TerimalQuest.Core
             }
         }
 
-        public Player() : base()                //기본 생성자
+        public Player() : base()                            //기본 생성자
         {
             questList = new List<Quest>();
             skillList = new List<Skill>();
@@ -76,16 +76,15 @@ namespace TerimalQuest.Core
             inventory.Add(ItemDatabase.GetWeapon("연습용 창"));
         }
 
-        public void Check_LevelUp()
+        #region 레벨업
+        public void Check_LevelUp()             // levelupCheck부분
         {
-            if (level == 0 || job == null) //player초기화 안됬을때(로드에서 오류 생김)
+            if (level == 0 || job == null)          // player초기화 안됬을때(로드에서 오류 생김)
                 return;
 
             while (level < requiredExp.Length + 1 && exp >= requiredExp[level-1])
             {
                 _exp -= requiredExp[level - 1];
-
-                level++;
                 LevelUp();
 
                 Console.WriteLine($"레벨업! Lv.{level}");
@@ -100,11 +99,13 @@ namespace TerimalQuest.Core
             UpdateStats();
         }
 
-        private void LevelUp()
+        private void LevelUp()                  // 레벨업 수치 변동 부분
         {
+            level++;
             baseAtk += 0.5f;
             baseDef += 1f;
         }
+        #endregion
 
         #region 스탯
         private void ApplyJobStat()
@@ -155,8 +156,6 @@ namespace TerimalQuest.Core
 
         private void ToggleEquipWeapon(Weapon  weapon)
         {
-            weapon.isEquipped = !weapon.isEquipped;
-
             if(weapon.isEquipped)
             {
                 if(equippedWeapon!=null&&equippedWeapon!=weapon)
@@ -176,13 +175,11 @@ namespace TerimalQuest.Core
 
         private void ToogleEquipArmor(Armor armor)
         {
-            armor.isEquipped = !armor.isEquipped;
-
             if (armor.isEquipped)
             {
                 if (equippedArmor != null && equippedArmor != armor)
                 {
-                    equippedWeapon.isEquipped = false;
+                    equippedArmor.isEquipped = false;
                 }
 
                 equippedArmor = armor;
@@ -194,7 +191,76 @@ namespace TerimalQuest.Core
                 UpdateStats();
             }
         }
+        #endregion
 
+        #region 소비 아이템 사용
+        public void UsePotion(Potion potion)
+        {
+            if (!IsUsePotion(potion, out string message)) // 체크
+            {
+                Console.WriteLine(message);
+                return;
+            }
+
+            Heal_Potion(potion); // 회복
+
+            potion.count--;
+            if (potion.count <= 0)
+            {
+                inventory.Remove(potion); // 제거
+            }
+        }
+
+        private bool IsUsePotion(Potion potion, out string message)
+        {
+            message = "";
+
+            switch (potion.potiontype)
+            {
+                case PotionType.HP:
+                    if (hp >= maxHp)
+                    {
+                        message = "HP최대";
+                        return false;
+                    }
+                    break;
+
+                case PotionType.MP:
+                    if (mp >= maxMp)
+                    {
+                        message = "MP최대";
+                        return false;
+                    }
+                    break;
+
+                case PotionType.Stamina:
+                    if (stamina >= maxStamina)
+                    {
+                        message = "스태미나최대";
+                        return false;
+                    }
+                    break;
+            }
+            return true;
+        }
+
+        private void Heal_Potion(Potion potion)
+        {
+            switch (potion.potiontype)
+            {
+                case PotionType.HP:
+                    hp = Math.Min(hp + potion.healAmount, maxHp);
+                    break;
+
+                case PotionType.MP:
+                    mp = Math.Min(mp + potion.healAmount, maxMp);
+                    break;
+
+                case PotionType.Stamina:
+                    stamina = (int)Math.Min(stamina + potion.healAmount, maxStamina);
+                    break;
+            }
+        }
         #endregion
     }
 }
