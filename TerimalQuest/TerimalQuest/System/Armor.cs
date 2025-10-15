@@ -9,7 +9,7 @@ namespace TerimalQuest.System
 {
     public class Armor : Item
     {
-        public float def;
+        public float def { get; set; }
 
         public Armor(int id, string name, string desc, int price, float def, ItemType type) : base(id, name, desc, price, type)
         {

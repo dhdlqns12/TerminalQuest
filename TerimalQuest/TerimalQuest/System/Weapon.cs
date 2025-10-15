@@ -8,7 +8,7 @@ namespace TerimalQuest.System
 {
     public class Weapon : Item
     {
-        public float atk;
+        public float atk { get; set; }
 
         public Weapon(int id, string name, string desc, int price, float atk, ItemType type) : base(id, name, desc, price, type)
         {

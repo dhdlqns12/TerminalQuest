@@ -21,14 +21,14 @@ namespace TerimalQuest.System
          * 
          */
 
-        public int Id { get; set; }     // 아이템 Id
-        public string name;             // 아이템 이름
-        public string desc;             // 아이템 설명
-        public int price;               // 아이템 가격
-        public int count;               // 아이템 수량
+        public int Id { get; set; }         // 아이템 Id
+        public string name { get; set; }    // 아이템 이름
+        public string desc { get; set; }    // 아이템 설명
+        public int price { get; set; }      // 아이템 가격
+        public int count { get; set; }      // 아이템 수량
 
-        public bool isEquipped;             // 아이템 착용 여부
-        public bool isPurchase;             // 아이템 구매 여부
+        public bool isEquipped { get; set; }    // 아이템 착용 여부
+        public bool isPurchase { get; set; }    // 아이템 구매 여부
 
         public ItemType type { get; private set; } // 아이템 타입
 

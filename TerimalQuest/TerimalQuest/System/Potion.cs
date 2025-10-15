@@ -15,8 +15,8 @@ namespace TerimalQuest.System
 
     public class Potion : Item
     {
-        public float healAmount;   // 회복량
-        public PotionType potiontype;
+        public float healAmount { get; set; }       // 회복량
+        public PotionType potiontype { get; set; }  // 포션 타입
 
         public Potion(int id, string name, string desc, int price, float healAmount, ItemType type, PotionType _potionType) : base(id, name, desc, price, type)
         {
