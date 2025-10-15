@@ -21,7 +21,7 @@ namespace TerimalQuest.Scenes
         public void Update()
         {
             string jobName = "";
-            UIManager.Instance.SetNameScripts();
+            UIManager.Instance.SetJobScripts();
             if (int.TryParse(Console.ReadLine(), out int index))
             {
                 switch (index)

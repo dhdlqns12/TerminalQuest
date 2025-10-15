@@ -16,13 +16,20 @@ namespace TerimalQuest.Core
         public int exp { get; set; }            // 플레이어 경험치
         public int maxStamina { get; set; }     // 플레이어 최대 스태미나
         public int stamina;      // 플레이어 스태미나
+        public int curStage;                 // 현재 스테이지
 
         public List<int> questList { get; set; }            // 퀘스트 리스트
         public List<Skill> skillList { get; set; }          // 스킬 리스트
 
         public Inventory inventory;          // 플레이어 인벤토리
 
-        public int curStage;                 // 현재 스테이지
+        public Weapon equippedWeapon { get; private set; }
+        public Armor equippedArmor { get; private set; }
+
+        public float baseAtk{ get; set; } //아이템 장착하지  않았을 때의 플레이어 공격력
+        public float baseDef { get; set; } //아이템 장착하지 않았을 때의 플레이어 방어력
+        public float baseCritRate{ get; set; } //아이템 장착하지 않았을 때의 플레이어 치명타 확률
+        public float baseEvadeRate { get; set; } //아이템 장착하지 않았을 때의 플레이어 회피 확률
 
         public Player() : base()                //기본 생성자
         {
@@ -54,11 +61,28 @@ namespace TerimalQuest.Core
             hp = job.maxHp;
             maxMp = job.maxMp;
             mp = job.maxMp;
-            atk = job.atk;
-            def = job.def;
+            baseAtk = job.atk;
+            baseDef = job.def;
             critRate = job.critRate;
             evadeRate = job.evadeRate;
-            //크리나 회피율 추가
+
+            UpdateStats();
+        }
+
+        public void UpdateStats()
+        {
+            atk = baseAtk;
+            def = baseDef;
+
+            if(equippedWeapon!=null)
+            {
+                atk += equippedWeapon.atk;
+            }
+
+            if (equippedArmor != null)
+            {
+                def += equippedArmor.def;
+            }
         }
     }
 }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TerimalQuest.Manager;
+using TerimalQuest.Scenes;
 
 namespace TerimalQuest.Scenes
 {
@@ -11,12 +8,30 @@ namespace TerimalQuest.Scenes
         public event Action<IScene> OnSceneChangeRequested;
         public void Enter()
         {
-
+            UIManager.Instance.ShowSection("상태창");
+            UIManager.Instance.ShowStatusSceneScripts();
         }
 
         public void Update()
         {
-
+            if (int.TryParse(Console.ReadLine(), out int answer))
+            {
+                switch (answer)
+                {
+                    case 0:
+                        OnSceneChangeRequested?.Invoke(new StartScene());
+                        break;
+                    default:
+                        Console.WriteLine("잘못된 입력입니다.");
+                        Console.ReadKey();
+                        break;
+                }
+            }
+            else
+            {
+                Console.WriteLine("잘못된 입력입니다.");
+                Console.ReadKey();
+            }
         }
 
         public void Exit()
