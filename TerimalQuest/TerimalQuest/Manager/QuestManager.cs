@@ -39,12 +39,13 @@ namespace TerimalQuest.Manager
         public void QuestListShow(List<Quest> quests)
         {
             Console.Clear();
+            curQuest = null;
             for (int i = 0; i < quests.Count; i++)
             {
                 //Random rand = new Random();
                 //Console.ForegroundColor = (ConsoleColor)rand.Next(0, 16);
-                //string questRunning = player.questList.Contains(quests[i].questNum) ? "[진행중]" : "";
-                Console.WriteLine($"{i+1}. {quests[i].name}");
+                string questRunning = player.questList.Contains(quests[i]) ? "[진행중]" : "";
+                Console.WriteLine($"{i+1}. {quests[i].name} {questRunning}");
                 //Console.ResetColor();
             }
         }
@@ -73,11 +74,43 @@ namespace TerimalQuest.Manager
             Console.WriteLine($"  {quest.rewardGold}G");
             Console.WriteLine($"  경험치 {quest.rewardExp}");
 
-            //보상받기 구현해야 함
             Console.WriteLine("\n1. 수락");
             Console.WriteLine("2. 거절");
-            /*if (player.questList.Contains(quest.questNum))
-                Console.WriteLine("3. 보상 받기");*/
-        }  
+            if (player.questList.Contains(quest))
+                Console.WriteLine("3. 보상 받기");
+        }
+        
+
+        /// <summary>
+        /// 퀘스트 수락
+        /// </summary>
+        public void AccepQuest()
+        {
+            player.questList.Add(curQuest);
+        }
+
+        /// <summary>
+        /// 퀘스트 수행 할 시 호출
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public bool CheckQuest(string name, int num = 1)
+        {
+            List<Quest> playerQuests = GameManager.Instance.player.questList;
+            for (int i = 0; i < playerQuests?.Count; i++)
+            {
+                if (playerQuests[i].currentCounts.ContainsKey(name))
+                {
+                    playerQuests[i].currentCounts[name] += num;
+                    if (playerQuests[i].currentCounts[name] >= playerQuests[i].successConditions[name])
+                    {
+                        playerQuests[i].isClear = true;
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
 }

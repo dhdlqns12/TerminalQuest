@@ -33,7 +33,7 @@ namespace TerimalQuest.Scenes
                 switch (input)
                 {
                     case "1":
-                        questManager.SelectQuest(questManager.curQuest);
+                        questManager.AccepQuest();
                         questManager.QuestListShow(quests);
                         isSelecting = false;
                         break;
@@ -42,6 +42,7 @@ namespace TerimalQuest.Scenes
                         isSelecting = false;
                         break;
                     case "3":
+                        questManager.CheckQuest("슬라임", 10);
                         Quest quest = questManager.curQuest;
                         if (quest.isClear)
                         {

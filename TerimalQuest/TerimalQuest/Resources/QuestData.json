@@ -1,7 +1,8 @@
 [
   {
-    "name": "슬라임 잡기",
+    "questNum": 1,
     "questType": "사냥",
+    "name": "슬라임 잡기",
     "description": "슬라임을 10마리 잡으세요",
     "successConditions": {
       "슬라임": 10
@@ -17,7 +18,7 @@
         "count": 1,
         "isEquipped": true,
         "isPurchase": false,
-        "type": "Weapon"
+        "type": 0
       },
       {
         "Id": 1,
@@ -27,13 +28,14 @@
         "count": 1,
         "isEquipped": true,
         "isPurchase": false,
-        "type": "Weapon"
+        "type": 1
       }
     ]
   },
   {
-    "name": "토템 잡기",
+    "questNum": 2,
     "questType": "사냥",
+    "name": "토템 잡기",
     "description": "토템을 5마리 잡으세요",
     "successConditions": {
       "토템": 5
@@ -43,8 +45,9 @@
     "rewardItem": null
   },
   {
-    "name": "스켈레톤 잡기",
+    "questNum": 3,
     "questType": "사냥",
+    "name": "스켈레톤 잡기",
     "description": "스켈레톤을 7마리 잡으세요",
     "successConditions": {
       "스켈레톤": 7
