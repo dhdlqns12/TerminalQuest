@@ -2,7 +2,7 @@
   {
     "questNum": 1,
     "questType": "사냥",
-    "name": "미니언 잡기",
+    "name": "마을을 위협하는 미니언 처치",
     "description": "미니언을 10마리 잡으세요",
     "successConditions": {
       "미니언": 10,
@@ -10,17 +10,19 @@
     },
     "rewardGold": 100,
     "rewardExp": 10,
-    "rewardItem": [
-      "무쇠갑옷","낡은 검", "빨간포션"
-    ]
+    "rewardItem": {
+      "무쇠갑옷": 1,
+      "낡은 검": 1,
+      "빨간포션": 4
+    }
   },
   {
     "questNum": 2,
-    "questType": "사냥",
-    "name": "대포미니언 잡기",
-    "description": "대포미니언을 5마리 잡으세요",
+    "questType": "장착",
+    "name": "장비를 장착해보자",
+    "description": "자네는 맨몸이군...\n그상태로 어떻게 몬스터를 잡으려 하는건가?\n아닛! 가방에 장비가 있는게 뭐하는 겐가!! 당장 끼지않고!!",
     "successConditions": {
-      "대포미니언": 5
+      "장착": 1
     },
     "rewardGold": 100,
     "rewardExp": 10,
@@ -28,11 +30,11 @@
   },
   {
     "questNum": 3,
-    "questType": "사냥",
-    "name": "공허충 잡기",
-    "description": "공허충을 7마리 잡으세요",
+    "questType": "레벨",
+    "name": "더욱 더 강해지기!",
+    "description": "너가 너무 약한것 같다고?\n뭐해 어서 레벨업을 하지않고!!",
     "successConditions": {
-      "공허충": 7
+      "레벨": 3
     },
     "rewardGold": 100,
     "rewardExp": 10,
