@@ -18,6 +18,8 @@ namespace TerimalQuest.System
         public int rewardExp { get; set; } //보상 경험치
         public List<Item> rewardItem { get; set; } //보상 아이템
 
+        public bool isClear; //클리어되었는지
+
         public Quest(int questNum, string questType, string name, string description, Dictionary<string, int> successConditions, int rewardGold = 0, int rewardExp = 0, List<Item> rewardItem = null)
         {
             this.questNum = questNum;
@@ -41,6 +43,7 @@ namespace TerimalQuest.System
             //인벤토리 추가
             for (int i = 0; i < rewardItem.Count; i++)
             {
+                player.inventory.Add(rewardItem[i]);
             }
             player.questList.Remove(questNum);
         }
