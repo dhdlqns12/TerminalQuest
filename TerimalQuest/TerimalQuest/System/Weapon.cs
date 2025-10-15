@@ -16,9 +16,19 @@ namespace TerimalQuest.System
             this.atk = atk;
         }
 
+        public override void Equip(bool isEquip)
+        {
+            //아이템 장착
+            //GameManager.Instance.player.ToggleEquipItem(this);
+
+            base.Equip(isEquip);
+
+            // 플레이어 방어구 장착
+
+        }
+
         public override void DisplayInfo()
         {
-            GameManager.Instance.player.ToggleEquipItem(this); //아이템 장착
             // 아이템 정보 표시
             // 현재 장착 관리 상태인지 확인 후 아이템 정보 표시
             string isEquippedTxt = (isEquipped) ? "[E]" : "";
@@ -53,10 +63,10 @@ namespace TerimalQuest.System
         }
 
         // 아이템 복제
-        public override Weapon Clone()
+        public override Item Clone()
         {
             this.Id += 1;   // 복제 시 Id 증가
-            return (Weapon)this.MemberwiseClone();
+            return new Weapon(Id, name, desc, price, atk, type);
         }
     }
 }

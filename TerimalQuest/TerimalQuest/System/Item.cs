@@ -53,10 +53,10 @@ namespace TerimalQuest.System
             this.count = 1;
         }
 
-        public virtual void Equip()
+        public virtual void Equip(bool isEquip)
         {
             // 아이템 착용/해제
-            isEquipped = !isEquipped;
+            isEquipped = isEquip;
         }
 
         public virtual void DisplayInfo()

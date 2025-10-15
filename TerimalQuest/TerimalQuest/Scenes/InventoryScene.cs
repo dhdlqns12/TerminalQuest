@@ -21,6 +21,12 @@ namespace TerimalQuest.Scenes
             inventory = GameManager.Instance.player.inventory;
 
             UIManager.Instance.InventoryScripts(inventory);
+
+
+            foreach (var item in inventory.Items)
+            {
+                Console.WriteLine(item.isEquipped);
+            }
         }
 
         public void Update()
@@ -31,20 +37,6 @@ namespace TerimalQuest.Scenes
         public void Exit()
         {
              
-        }
-
-        // 플레이어 인벤토리 창 : 플레이어의 인벤토리를 볼 수 있는 창. 아이템을 확인 할 수 있다.
-        private void InventoryView()
-        {
-            Inventory inventory = GameManager.Instance.player.inventory;
-
-            Console.WriteLine("[인벤토리]");
-            Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
-            Console.WriteLine();
-            inventory.DisplayInfo(false);
-            Console.WriteLine();
-            DisplayOption(["1. 장착 관리", "2. 아이템 정렬", "0. 나가기"]);
-
         }
 
         private void Process()
