@@ -79,13 +79,13 @@ namespace TerimalQuest.System
             switch (potiontype)
             {
                 case PotionType.HP:
-                    potionTypeTxt = "HP 회복";
+                    potionTypeTxt = "HP";
                     break;
                 case PotionType.MP:
-                    potionTypeTxt = "MP 회복";
+                    potionTypeTxt = "MP";
                     break;
                 case PotionType.Stamina:
-                    potionTypeTxt = "Stamina 회복";
+                    potionTypeTxt = "Stamina";
                     break;
                 default:
                     break;
