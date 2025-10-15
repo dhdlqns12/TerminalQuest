@@ -51,6 +51,8 @@ namespace TerimalQuest.Scenes
                         {
                             questManager.AccepQuest();
                             questManager.QuestListShow(quests);
+                            /*questManager.PlayQuest("미니언", 10);
+                            questManager.PlayQuest("슬라임", 5);*/
                             isSelecting = false;
                         }
                         break;

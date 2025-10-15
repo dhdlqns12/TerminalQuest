@@ -21,13 +21,13 @@ namespace TerimalQuest.System
 
         public int rewardGold { get; set; } //보상 골드
         public int rewardExp { get; set; } //보상 경험치
-        public List<Item> rewardItem { get; set; } //보상 아이템
+        public List<string> rewardItem { get; set; } //보상 아이템
 
         public bool isClear; //클리어되었는지
 
         public Dictionary<string, int> currentCounts;
 
-        public Quest(int questNum, string questType, string name, string description, Dictionary<string, int> successConditions, int rewardGold = 0, int rewardExp = 0, List<Item> rewardItem = null)
+        public Quest(int questNum, string questType, string name, string description, Dictionary<string, int> successConditions, int rewardGold = 0, int rewardExp = 0, List<string> rewardItem = null)
         {
             this.questNum = questNum;
             this.questType = questType;
@@ -59,7 +59,7 @@ namespace TerimalQuest.System
             {
                 for (int i = 0; i < rewardItem?.Count; i++)
                 {
-                    player.inventory.Add(rewardItem[i]);
+                    player.inventory.Add(ItemDatabase.GetItem(rewardItem[i]));
                 }
             }
             //QuestManager.Instance.questLists.Remove(quest);
@@ -82,7 +82,8 @@ namespace TerimalQuest.System
                 Console.WriteLine("획득 아이템");
                 for (int i = 0; i < quest.rewardItem?.Count; i++)
                 {
-                    Console.WriteLine($"{quest.rewardItem[i].name} x {quest.rewardItem[i].count}");
+                    Item item = ItemDatabase.GetItem(quest.rewardItem[i]);
+                    Console.WriteLine($"{item.name} x {item.count}");
                 }
             }
         }
