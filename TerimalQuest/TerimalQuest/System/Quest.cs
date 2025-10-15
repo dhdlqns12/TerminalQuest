@@ -49,7 +49,7 @@ namespace TerimalQuest.System
         /// 퀘스트 완료 함수
         /// </summary>
         /// <param name="player"></param>
-        public void QuestClear(Player player, Quest quest)
+        public void QuestClear(Player player)
         {
             RewardMessage();
             player.exp += rewardExp;
@@ -62,9 +62,14 @@ namespace TerimalQuest.System
                     player.inventory.Add(rewardItem[i]);
                 }
             }
-            player.questList.Remove(quest);
+            //QuestManager.Instance.questLists.Remove(quest);
+            QuestManager.Instance.InitializeQuest(this);
+            player.questList.Remove(this);
         }
 
+        /// <summary>
+        /// 보상메시지
+        /// </summary>
         public void RewardMessage()
         {
             Player player = GameManager.Instance.player;

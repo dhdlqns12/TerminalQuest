@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -42,12 +43,11 @@ namespace TerimalQuest.Manager
             curQuest = null;
             for (int i = 0; i < quests.Count; i++)
             {
-                //Random rand = new Random();
-                //Console.ForegroundColor = (ConsoleColor)rand.Next(0, 16);
+
                 string questRunning = player.questList.Contains(quests[i]) ? "[진행중]" : "";
                 Console.WriteLine($"{i+1}. {quests[i].name} {questRunning}");
-                //Console.ResetColor();
             }
+            Console.Write("\n원하시는 퀘스트를 선택해주세요.\n>>");
         }
 
 
@@ -63,7 +63,8 @@ namespace TerimalQuest.Manager
             Console.WriteLine($"\n{quest.description}\n");
             foreach(var questDic in quest.successConditions)
             {
-                Console.WriteLine($"- {questDic.Key} {questDic.Value}마리 처치");
+                int curNum = curQuest.currentCounts[questDic.Key];
+                Console.WriteLine($"- {questDic.Key} {questDic.Value}마리 처치 ({curNum}/{questDic.Value})");
             }
             Console.WriteLine("\n- 보상 -\n");
             if (quest.rewardItem?.Count != 0)
@@ -74,12 +75,24 @@ namespace TerimalQuest.Manager
             Console.WriteLine($"  {quest.rewardGold}G");
             Console.WriteLine($"  경험치 {quest.rewardExp}");
 
-            Console.WriteLine("\n1. 수락");
-            Console.WriteLine("2. 거절");
-            if (player.questList.Contains(quest))
-                Console.WriteLine("3. 보상 받기");
+            SelectChoice();
         }
         
+        public void SelectChoice()
+        {
+            if (player.questList.Contains(curQuest))
+            {
+                Console.WriteLine("\n1. 보상 받기");
+                Console.WriteLine("2. 돌아가기");
+            }
+            else
+            {
+                Console.WriteLine("\n1. 수락");
+                Console.WriteLine("2. 거절");
+            }
+            Console.Write("\n원하시는 행동을 입력해주세요.\n>>");
+        }
+
 
         /// <summary>
         /// 퀘스트 수락
@@ -95,22 +108,51 @@ namespace TerimalQuest.Manager
         /// <param name="name"></param>
         /// <param name="num"></param>
         /// <returns></returns>
-        public bool CheckQuest(string name, int num = 1)
+        public void PlayQuest(string name, int num = 1)
         {
             List<Quest> playerQuests = GameManager.Instance.player.questList;
             for (int i = 0; i < playerQuests?.Count; i++)
             {
-                if (playerQuests[i].currentCounts.ContainsKey(name))
+                Quest quest = playerQuests[i];
+                if (quest.currentCounts.ContainsKey(name))
                 {
-                    playerQuests[i].currentCounts[name] += num;
-                    if (playerQuests[i].currentCounts[name] >= playerQuests[i].successConditions[name])
+                    quest.currentCounts[name] += num;
+                    if (quest.currentCounts[name] >= quest.successConditions[name])
                     {
-                        playerQuests[i].isClear = true;
-                        return true;
+                        quest.currentCounts[name] = quest.successConditions[name];
                     }
                 }
+                quest.isClear = CheckQuest(quest);
             }
-            return false;
+        }
+
+
+
+        /// <summary>
+        /// 퀘스트 완료 여부 체크
+        /// </summary>
+        /// <param name="quest"></param>
+        /// <returns></returns>
+        public bool CheckQuest(Quest quest)
+        {
+            if (quest.successConditions.Count != quest.currentCounts.Count) return false;
+            foreach(var dic in quest.currentCounts)
+            {
+                if (!quest.successConditions.TryGetValue(dic.Key, out int value) || value != dic.Value)
+                    return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// 퀘스트를 깼을 때 초기화(만약 퀘스트를 없앨 시 쓰지않을 코드)
+        /// </summary>
+        /// <param name="quest"></param>
+        public void InitializeQuest(Quest quest)
+        {
+            quest.isClear = false;
+            foreach (var key in quest.currentCounts.Keys)
+                quest.currentCounts[key] = 0;
         }
     }
 }

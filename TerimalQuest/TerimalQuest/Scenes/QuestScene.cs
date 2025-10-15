@@ -17,6 +17,7 @@ namespace TerimalQuest.Scenes
 
         bool isSelecting = false;
 
+        bool isRewarding = false;
 
         public void Enter()
         {
@@ -28,28 +29,34 @@ namespace TerimalQuest.Scenes
         public void Update()
         {
             string input = Console.ReadLine();
-            if (isSelecting)
+            if (isSelecting && !isRewarding)
             {
                 switch (input)
                 {
                     case "1":
-                        questManager.AccepQuest();
-                        questManager.QuestListShow(quests);
-                        isSelecting = false;
+                        Quest quest = questManager.curQuest;
+                        
+                        if(GameManager.Instance.player.questList.Contains(quest))
+                        {
+                            if (quest.isClear)
+                            {
+                                quest.QuestClear(GameManager.Instance.player);
+                                isSelecting = false;
+                                isRewarding = true;
+                            }
+                            else
+                                Console.WriteLine("보상을 받을 수 없습니다");
+                        }
+                        else
+                        {
+                            questManager.AccepQuest();
+                            questManager.QuestListShow(quests);
+                            isSelecting = false;
+                        }
                         break;
                     case "2":
                         questManager.QuestListShow(quests);
                         isSelecting = false;
-                        break;
-                    case "3":
-                        questManager.CheckQuest("슬라임", 10);
-                        Quest quest = questManager.curQuest;
-                        if (quest.isClear)
-                        {
-                            quest.QuestClear(GameManager.Instance.player, quest);
-                        }
-                        else
-                            Console.WriteLine("잘못된 입력입니다.");
                         break;
                     default:
                         Console.WriteLine("잘못된 입력입니다.");
@@ -58,19 +65,27 @@ namespace TerimalQuest.Scenes
             }
             else
             {
-                if (int.TryParse(input, out int num))
+                if(isRewarding)
                 {
-                    if (num <= quests.Count && num > 0)
-                    {
-                        QuestManager.Instance.SelectQuest(quests[num-1]);
-                        isSelecting = true;
-                    }
-                    else
-                        Console.WriteLine("잘못된 입력입니다.");
+                    questManager.QuestListShow(quests);
+                    isRewarding = false;
                 }
                 else
                 {
-                    Console.WriteLine("잘못된 입력입니다.");
+                    if (int.TryParse(input, out int num))
+                    {
+                        if (num <= quests.Count && num > 0)
+                        {
+                            QuestManager.Instance.SelectQuest(quests[num - 1]);
+                            isSelecting = true;
+                        }
+                        else
+                            Console.WriteLine("잘못된 입력입니다.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("잘못된 입력입니다.");
+                    }
                 }
             }
         }
