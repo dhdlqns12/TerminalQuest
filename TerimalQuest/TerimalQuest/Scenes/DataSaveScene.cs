@@ -26,9 +26,9 @@ namespace TerimalQuest.Scenes
         {
             Console.Clear();
             Console.WriteLine("데이터를 저장할 슬롯을 골라주세요.\n");
-            DisplaySlot(0);
             DisplaySlot(1);
             DisplaySlot(2);
+            DisplaySlot(3);
             Console.Write("0.돌아가기 \n>>");
 
             if (int.TryParse(Console.ReadLine(), out int answer))
@@ -37,17 +37,17 @@ namespace TerimalQuest.Scenes
                 {
                     case 1:
                         //1번슬롯 저장
-                        SaveManager.GameSave(GameManager.Instance.player, 1);
+                        SaveManager.GameSave(1);
                         ConfirmQuit();
                         break;
                     case 2:
                         //2번슬롯 저장
-                        SaveManager.GameSave(GameManager.Instance.player, 2);
+                        SaveManager.GameSave(2);
                         ConfirmQuit();
                         break;
                     case 3:
                         //3번슬롯 저장
-                        SaveManager.GameSave(GameManager.Instance.player, 3);
+                        SaveManager.GameSave(3);
                         ConfirmQuit();
                         break;
                     case 0:
@@ -77,7 +77,7 @@ namespace TerimalQuest.Scenes
             if (SaveManager.HasSaveData(slotNumber))
             {
                 SaveData data = SaveManager.GetSlotInfo(slotNumber);
-                Console.WriteLine($"슬롯 {slotNumber} : 이름: {data.name} | 직업: {data.job.name} | 레벨: Lv.{data.level} | 골드: {data.gold}G");
+                Console.WriteLine($"슬롯 {slotNumber} : 이름: {data.name} | 직업: {data.jobType} | 레벨: Lv.{data.level} | 골드: {data.gold}G");
             }
             else
             {

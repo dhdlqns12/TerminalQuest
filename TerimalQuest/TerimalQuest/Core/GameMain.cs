@@ -10,12 +10,15 @@ namespace TerimalQuest.Core
             int saveDataCount = 0;
             for(int i =1; i<=3;i++)
             {
-                saveDataCount++;
+                if (SaveManager.HasSaveData(i))
+                {
+                    saveDataCount++;
+                }
             }
             if (saveDataCount >= 1)
             {
                 UIManager.Instance.EmptySaveDataScripts();
-                GameManager.Instance.Run(0);
+                GameManager.Instance.Run(1);
             }
             else
             {

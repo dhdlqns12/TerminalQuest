@@ -106,6 +106,11 @@ namespace TerimalQuest.Core
             baseAtk += 0.5f;
             baseDef += 1f;
         }
+
+        public void SetExpWithoutLevelUp(int value) //로드 전용
+        {
+            _exp = value;
+        }
         #endregion
 
         #region 스탯
