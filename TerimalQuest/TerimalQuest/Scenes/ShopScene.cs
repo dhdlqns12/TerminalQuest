@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using TerimalQuest.Core;
@@ -10,17 +9,19 @@ using TerimalQuest.System;
 
 namespace TerimalQuest.Scenes
 {
-    public class InventoryScene : IScene
+    public class ShopScene : IScene
     {
         public event Action<IScene> OnSceneChangeRequested;
 
-        private Inventory inventory;
+        private Shop shop;
+        private Player player;
 
         public void Enter()
         {
-            inventory = GameManager.Instance.player.inventory;
+            shop = new Shop();
+            player = GameManager.Instance.player;
 
-            UIManager.Instance.InventoryScripts(inventory);
+            UIManager.Instance.ShopScripts(player, shop);
         }
 
         public void Update()
@@ -30,14 +31,14 @@ namespace TerimalQuest.Scenes
 
         public void Exit()
         {
-             
+
         }
 
         private void Process()
         {
-            string choice = GetUserChoice(["0", "1", "2"]);
+            var choice = GetUserChoice(["0", "1", "2"]);
 
-            switch(choice)
+            switch (choice)
             {
                 case "1":
                     OnSceneChangeRequested?.Invoke(new InventoryEquipScene());

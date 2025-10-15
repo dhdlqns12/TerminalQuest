@@ -36,7 +36,7 @@ namespace TerimalQuest.Manager
 
         public void ShowStartSceneScripts()
         {
-            Console.Write("스파르타 던전에 오신 여러분 환영합니다. \n이제 전투를 시작할 수 있습니다. \n\n1.상태 보기 \n2.전투 시작\n0.게임 종료 \n\n원하시는 행동을 입력해주세요.\n>>");
+            Console.Write("스파르타 던전에 오신 여러분 환영합니다. \n이제 전투를 시작할 수 있습니다. \n\n1.상태 보기 \n2.전투 시작\n3.배틀 시작\n4.퀘스트\n0.게임 종료 \n\n원하시는 행동을 입력해주세요.\n>>");
         }
 
         public void ShowStatusSceneScripts()
@@ -167,7 +167,50 @@ namespace TerimalQuest.Manager
 
         #region ShopUI
 
-        
+        // 상점
+        public void ShopScripts(Player player, Shop shop)
+        {
+            Console.Clear();
+            Console.WriteLine("상점");
+            Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+            Console.WriteLine();
+            Console.WriteLine("[보유 골드]");
+            Console.WriteLine($"{player.gold} G");
+            Console.WriteLine();
+            shop.DisplayInfo(false);
+            Console.WriteLine();
+            DisplayOption(["1. 아이템 구매", "2. 아이템 판매", "0. 나가기"]);
+        }
+
+        // 상점 : 상품 구매
+        public void ShopPurchaseScripts(Player player, Shop shop)
+        {
+            Console.Clear();
+            Console.WriteLine("상점 - 아이템 구매");
+            Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+            Console.WriteLine();
+            Console.WriteLine("[보유 골드]");
+            Console.WriteLine($"{player.gold} G");
+            Console.WriteLine();
+            shop.DisplayInfo(true);
+            Console.WriteLine();
+            DisplayOption(["(번호). 해당 아이템 구매", "0. 나가기"]);
+        }
+
+        // 상점 : 아이템 판매
+        public void ShopSaleScripts(Player player)
+        {
+            Console.Clear();
+            Console.WriteLine("상점 - 아이템 판매");
+            Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+            Console.WriteLine();
+            Console.WriteLine("[보유 골드]");
+            Console.WriteLine($"{player.gold} G");
+            Console.WriteLine();
+            player.inventory.DisplayInfoWithGold();
+            Console.WriteLine();
+            DisplayOption(["(번호). 해당 아이템 판매", "0. 나가기"]);
+        }
 
         #endregion
 
