@@ -11,26 +11,7 @@
     "rewardGold": 100,
     "rewardExp": 10,
     "rewardItem": [
-      {
-        "Id": 1,
-        "name": "낡은 검",
-        "desc": "낡은 검",
-        "price": 1000,
-        "count": 1,
-        "isEquipped": false,
-        "isPurchase": false,
-        "type": 0
-      },
-      {
-        "Id": 1,
-        "name": "낡은 검",
-        "desc": "낡은 검",
-        "price": 1000,
-        "count": 1,
-        "isEquipped": false,
-        "isPurchase": false,
-        "type": 1
-      }
+      "무쇠갑옷","낡은 검", "빨간포션"
     ]
   },
   {

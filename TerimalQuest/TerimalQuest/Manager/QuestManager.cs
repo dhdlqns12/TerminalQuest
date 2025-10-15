@@ -70,7 +70,10 @@ namespace TerimalQuest.Manager
             if (quest.rewardItem?.Count != 0)
             {
                 for (int i = 0; i < quest.rewardItem?.Count; i++)
-                    Console.WriteLine($"  {quest.rewardItem[i].name} x {quest.rewardItem[i].count}");
+                {
+                    Item item = ItemDatabase.GetItem(quest.rewardItem[i]);
+                    Console.WriteLine($"  {item.name} x {item.count}");
+                }
             }
             Console.WriteLine($"  {quest.rewardGold}G");
             Console.WriteLine($"  경험치 {quest.rewardExp}");
