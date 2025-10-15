@@ -110,6 +110,27 @@ namespace TerimalQuest.Manager
             Console.WriteLine(attackResult);
         }
 
+        public void AttackTargetWithSkill(Character attacker, Character target, Skill skill)
+        {
+            Console.Clear();
+            Console.WriteLine("Battle!\n");
+            Console.WriteLine($"{target.name}에게 {attacker.name}의 {skill.name} 공격!");
+            string deadResult = target is Player ? "0" : "Dead";
+            string attackResult = "";
+            if (skill.damageType == SkillDamageType.FixedDamage)
+            {
+                attackResult =
+                    $"Lv.{target.level} {target.name} HP {target.hp} -> {(target.hp - skill.damage > 0 ? target.hp - skill.damage : deadResult)} [데미지 : {skill.damage}]";
+            }
+            else
+            {
+                attackResult =
+                    $"Lv.{target.level} {target.name} HP {target.hp} -> {(target.hp - skill.damage * attacker.atk > 0 ? target.hp - skill.damage * attacker.atk : deadResult)} [데미지 : {skill.damage * attacker.atk}]";
+            }
+
+            Console.WriteLine(attackResult);
+        }
+
         public void BattleEntrance(List<Monster> monsters, Player player)
         {
             Console.Clear();
@@ -132,7 +153,10 @@ namespace TerimalQuest.Manager
 
         public void SelectTarget()
         {
+            Console.WriteLine();
+            Console.WriteLine("0. 뒤로가기");
             Console.WriteLine("대상을 선택해주세요.\n>>");
+
         }
 
         public void SelectWrongSelection()
@@ -172,10 +196,55 @@ namespace TerimalQuest.Manager
             {
                 foreach (var itemPair in totalReward.totalRewardItems)
                 {
-                    Console.WriteLine($"{itemPair.Key} - {itemPair.Value}");
+                    Console.WriteLine($"{itemPair.Value} - {itemPair.Key}");
                 }
             }
         }
+
+        public void DisplayBattleChoice()
+        {
+            Console.WriteLine("1. 공격");
+            Console.WriteLine("2. 스킬");
+            Console.WriteLine("0. 후퇴");
+        }
+
+        public void DisplaySelectingSkill(List<Skill> skillList)
+        {
+            Console.WriteLine();
+            for (int i = 0; i < skillList.Count; i++)
+            {
+                Skill skill = skillList[i];
+                Console.WriteLine($"{i + 1}. {skill.name} - MP {skill.cost}");
+                Console.WriteLine($"{skill.description}");
+            }
+            Console.WriteLine("0. 취소");
+        }
+
+        public void DisplayNotEnoughMagicCost()
+        {
+            Console.WriteLine("MP가 부족합니다.");
+        }
+
+        public void DisplayUseSupportSkill(Player player ,Skill skill)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"{skill.name} 사용!");
+            Console.WriteLine($"{player.name}의 체력이 회복되었다.");
+            Console.WriteLine($"{player.hp} -> {(player.hp + skill.damage)}");
+        }
+
+        public void DisplayFullRangeAttackSkillResult(List<Monster> monsterList, Skill skill)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"모든 적에게 {skill.name} 시전!");
+            for (int i = 0; i < monsterList.Count; i++)
+            {
+                Monster monster = monsterList[i];
+                if (monster.hp < 0) continue;
+                Console.WriteLine($"{monster.name} - HP {monster.hp + skill.damage} -> {monster.hp}");
+            }
+        }
+
         #endregion
     }
 }

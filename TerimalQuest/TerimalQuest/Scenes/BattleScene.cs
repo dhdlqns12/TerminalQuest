@@ -13,17 +13,52 @@ namespace TerimalQuest.Scenes
         public event Action<IScene> OnSceneChangeRequested;
         private BattleManager battleManager;
         private BattleResultManager resultManager;
-        public async void Enter()
+        public void Enter()
         {
             battleManager = new BattleManager();
-            BattleResult battleResult = await battleManager.StartBattle();
             resultManager = new BattleResultManager();
-            resultManager.ProcessResult(battleResult);
+            battleManager.StartBattle();
         }
 
         public void Update()
         {
+            if (battleManager == null) return;
 
+            battleManager.BattleProcess();
+
+            if (battleManager.isTryingToEscape)
+            {
+                OnSceneChangeRequested?.Invoke(new StartScene());
+                battleManager = null;
+                return;
+            }
+
+            if (battleManager.IsBattleOver())
+            {
+                if (!battleManager.isTryingToEscape)
+                {
+                    BattleResult battleResult = battleManager.GetBattleResult();
+                    resultManager.ProcessResult(battleResult);
+                    while (true)
+                    {
+                        string input = Console.ReadLine();
+                        if (input == "0")
+                        {
+                          OnSceneChangeRequested?.Invoke(new StartScene());
+                          break;
+                        }
+                    }
+
+                }
+                battleManager = null;
+                return;
+            }
+
+            if (battleManager.IsWaitingForInput())
+            {
+                string input = Console.ReadLine();
+                battleManager.ProcessPlayerInput(input);
+            }
         }
 
         public void Exit()

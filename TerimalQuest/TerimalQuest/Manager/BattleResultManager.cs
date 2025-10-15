@@ -52,7 +52,39 @@ namespace TerimalQuest.Manager
         /// </summary>
         private void ProcessRandomReward(List<Monster> defeatedMonsters)
         {
+            totalReward.totalRewardItems = new Dictionary<string, int>();
+            Random random = new Random();
 
+            for (int i = 0; i < defeatedMonsters.Count; i++)
+            {
+                string monsterName = defeatedMonsters[i].name;
+                if (dropTable.ContainsKey(monsterName))
+                {
+                    List<DropItem> drops = dropTable[monsterName];
+                    for (int j = 0; j < drops.Count; j++)
+                    {
+                        float roll = (float)random.NextDouble();
+                        if (roll <= drops[j].dropRate)
+                        {
+                            int dropCount = random.Next(drops[j].minDropCount, drops[j].maxDropCount + 1);
+
+                            if (dropCount > 0)
+                            {
+                                string itemName = drops[j].itemName;
+
+                                if (totalReward.totalRewardItems.ContainsKey(itemName))
+                                {
+                                    totalReward.totalRewardItems[itemName] += dropCount;
+                                }
+                                else
+                                {
+                                    totalReward.totalRewardItems[itemName] = dropCount;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -64,16 +96,14 @@ namespace TerimalQuest.Manager
 
             dropTable.Add("미니언", new List<DropItem>
             {
-                new DropItem { itemName = "낡은 검", minDropCount = 0, maxDropCount = 1, dropRate = 0.5f},
-                new DropItem { itemName = "스파르타의 창", minDropCount = 0, maxDropCount = 1, dropRate = 0.1f  }
+                new DropItem { itemName = "낡은 검", minDropCount = 1, maxDropCount = 1, dropRate = 1f},
+                new DropItem { itemName = "스파르타의 창", minDropCount = 5, maxDropCount = 10, dropRate = 1f  }
             });
 
             dropTable.Add("대포미니언", new List<DropItem>
             {
-                new DropItem { itemName = "연습용 창", minDropCount = 0, maxDropCount = 1, dropRate = 0.5f }
+                new DropItem { itemName = "연습용 창", minDropCount = 1, maxDropCount = 2, dropRate = 1f }
             });
         }
-
-
     }
 }
