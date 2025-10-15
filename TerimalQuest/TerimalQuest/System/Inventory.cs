@@ -39,7 +39,7 @@ namespace TerimalQuest.System
         public void Add(Item item)
         {
             // 최대 아이템 개수 출력
-            if(items.Count < maxItemCount)
+            if(items.Count >= maxItemCount)
             {
                 Console.WriteLine("아이템을 최대 소지하였습니다.");
                 return;

@@ -35,11 +35,14 @@ namespace TerimalQuest.Core
         {
             questList = new List<int>();
             skillList = new List<Skill>();
+            inventory = new Inventory(50);
             level = 1;
             maxStamina = 100;
             gold = 0;
             exp = 0;
             curStage = 1;
+
+            Set_Item_Inveontory();
         }
 
         public void Init_Player_Name(string _name)
@@ -53,6 +56,13 @@ namespace TerimalQuest.Core
             jobName = _job.name;
 
             ApplyJobStat();
+        }
+
+        public void Set_Item_Inveontory()
+        {
+            inventory.Add(ItemDatabase.GetArmor("무쇠갑옷"));
+            inventory.Add(ItemDatabase.GetWeapon("낡은 검"));
+            inventory.Add(ItemDatabase.GetWeapon("연습용 창"));
         }
 
         private void ApplyJobStat()
