@@ -39,6 +39,8 @@ public class MonsterManager
         Monster monster = totalMonsterList[randomMonsterIndex].Clone();
         monster.evadeRate = 100;
         monster.critRate = 100;
+        monster.rewardExp = 10;
+        monster.rewardGold = 10;
         return monster;
     }
     /// <summary>

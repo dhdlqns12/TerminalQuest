@@ -12,10 +12,22 @@ namespace TerimalQuest.Core
         public int level { get; set; }          // 캐릭터 레벨
 
         public float maxHp { get; set; }        // 캐릭터 최대 체력
-        public float hp { get; set; }           // 캐릭터 체력
+        private float _hp;
+
+        public float hp
+        {
+            get { return _hp; }
+            set { _hp = Math.Max(0, value); }
+        }
 
         public float maxMp { get; set; }        // 캐릭터 최대 마나
-        public float mp { get; set; }           // 캐릭터 마나
+        private float _mp;
+
+        public float mp // 캐릭터 마나
+        {
+            get { return _mp; }
+            set { _mp = Math.Max(0, value); }
+        }
 
         public float atk { get; set; }          // 캐릭터 공격력
         public float def { get; set; }          // 캐릭터 방어력

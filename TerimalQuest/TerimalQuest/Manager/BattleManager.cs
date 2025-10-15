@@ -20,7 +20,7 @@ public class BattleManager
         player.jobName = "전사";
         player.atk = 10;
         player.def = 99;
-        player.hp = 9999;
+        player.hp = 1;
         player.maxHp = 9999;
         // player.critRate = 100;
         // player.evadeRate = 100;

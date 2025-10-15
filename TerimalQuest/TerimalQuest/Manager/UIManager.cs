@@ -129,6 +129,8 @@ namespace TerimalQuest.Manager
         public void WaitNextChoice()
         {
             Console.WriteLine("0. 다음");
+            Console.WriteLine();
+            Console.WriteLine(">>");
         }
 
         public void DisplayBattleResult(BattleResult result, Player player)
@@ -143,10 +145,22 @@ namespace TerimalQuest.Manager
             Console.WriteLine($"Lv.{player.level} {player.name}");
             Console.WriteLine($"HP {player.hp + result.hpReduction} -> {player.hp}");
             Console.WriteLine();
-            this.WaitNextChoice();
-            Console.WriteLine();
-            Console.WriteLine(">>");
 
+
+        }
+
+        public void DisplayBattleRewardResult(TotalReward totalReward)
+        {
+            Console.WriteLine("[획득 아이템]");
+            if (totalReward.totalRewardExp > 0)  Console.WriteLine($"{totalReward.totalRewardExp} Exp");
+            if (totalReward.totalRewardGold > 0)  Console.WriteLine($"{totalReward.totalRewardGold} Gold");
+            if (totalReward.totalRewardItems != null && totalReward.totalRewardItems.Count > 0)
+            {
+                foreach (var itemPair in totalReward.totalRewardItems)
+                {
+                    Console.WriteLine($"{itemPair.Key} - {itemPair.Value}");
+                }
+            }
         }
         #endregion
     }
