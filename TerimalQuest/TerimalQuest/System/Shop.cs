@@ -49,10 +49,10 @@ namespace TerimalQuest.System
 
             Item product = productList[idx];
 
-            // 이미 구매한 상품이라면 구매한 아이템입니다 출력
+            // 이미 품절된 상품이라면 품절된 아이템입니다 출력
             if (product.isPurchase)
             {
-                Console.WriteLine("이미 구매한 아이템입니다.");
+                Console.WriteLine("이미 품절된 아이템입니다.");
                 return false;
             }
 
@@ -66,6 +66,11 @@ namespace TerimalQuest.System
 
             // 아이템 구매
             PurchaseItem(product.Clone());
+
+            // 수량 감소 후 품절 체크
+            product.count -= 1;
+            product.CheckPurchase();
+
             return true;
         }
 
@@ -115,8 +120,14 @@ namespace TerimalQuest.System
             // 판매 및 골드 흭득 메세지 출력
             Console.WriteLine($"{item.name} 아이템을 판매하였습니다.");
 
-            // 플레이어 인벤토리에서 삭제
-            inventory.Items.RemoveAt(idx);
+            // 수량 감소
+            item.count -= 1;
+
+            // 수량이 0이면 플레이어 인벤토리에서 삭제
+            if(item.isPurchase == false)
+            {
+                inventory.Items.RemoveAt(idx);
+            }
         }
 
         // 상품 목록 보여주기

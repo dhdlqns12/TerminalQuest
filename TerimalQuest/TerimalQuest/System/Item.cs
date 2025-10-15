@@ -69,6 +69,12 @@ namespace TerimalQuest.System
             // 아이템 정보 표시 : 상점
         }
 
+        public void CheckPurchase()
+        {
+            // 수량이 0개가 되면 품절 체크
+            if (count <= 0) isPurchase = true;
+        }
+
         // 아이템 복제
         public virtual Item Clone()
         {
