@@ -29,11 +29,18 @@ namespace TerimalQuest.Manager
             sceneManager = new SceneManager();
         }
 
-        public void Run()
+        public void Run(int mode)
         {
             Init();
-
-            sceneManager.ChangeScene(new StartScene());
+            switch(mode)
+            {
+                case 0:
+                    sceneManager.ChangeScene(new SetNameScene());
+                    break;
+                case 1:
+                    sceneManager.ChangeScene(new SaveDataLoadingScene());
+                    break;
+            }
             while (true)
             {
                 sceneManager.Update();
