@@ -1,10 +1,12 @@
 [
   {
-    "name": "슬라임 잡기",
+    "questNum": 1,
     "questType": "사냥",
-    "description": "슬라임을 10마리 잡으세요",
+    "name": "미니언 잡기",
+    "description": "미니언을 10마리 잡으세요",
     "successConditions": {
-      "슬라임": 10
+      "미니언": 10,
+      "슬라임": 5
     },
     "rewardGold": 100,
     "rewardExp": 10,
@@ -15,9 +17,9 @@
         "desc": "낡은 검",
         "price": 1000,
         "count": 1,
-        "isEquipped": true,
+        "isEquipped": false,
         "isPurchase": false,
-        "type": "Weapon"
+        "type": 0
       },
       {
         "Id": 1,
@@ -25,29 +27,31 @@
         "desc": "낡은 검",
         "price": 1000,
         "count": 1,
-        "isEquipped": true,
+        "isEquipped": false,
         "isPurchase": false,
-        "type": "Weapon"
+        "type": 1
       }
     ]
   },
   {
-    "name": "토템 잡기",
+    "questNum": 2,
     "questType": "사냥",
-    "description": "토템을 5마리 잡으세요",
+    "name": "대포미니언 잡기",
+    "description": "대포미니언을 5마리 잡으세요",
     "successConditions": {
-      "토템": 5
+      "대포미니언": 5
     },
     "rewardGold": 100,
     "rewardExp": 10,
     "rewardItem": null
   },
   {
-    "name": "스켈레톤 잡기",
+    "questNum": 3,
     "questType": "사냥",
-    "description": "스켈레톤을 7마리 잡으세요",
+    "name": "공허충 잡기",
+    "description": "공허충을 7마리 잡으세요",
     "successConditions": {
-      "스켈레톤": 7
+      "공허충": 7
     },
     "rewardGold": 100,
     "rewardExp": 10,
