@@ -20,7 +20,7 @@ namespace TerimalQuest.Core
         public List<int> questList { get; set; }            // 퀘스트 리스트
         public List<Skill> skillList { get; set; }          // 스킬 리스트
 
-        protected Inventory inventory;          // 플레이어 인벤토리
+        public Inventory inventory;          // 플레이어 인벤토리
 
         public int curStage;                 // 현재 스테이지
 
