@@ -46,7 +46,7 @@ namespace TerimalQuest.Scenes
 
             // 인벤토리에서 idx로 검색하여 해당 아이템 장착
             equipIdx = int.Parse(choice.ToString());
-            inventory.EquipItemByIdx(equipIdx - 1);
+            inventory.EquipItemByIdx(equipIdx-1);
 
             // 업데이트 하여 갱신
             OnSceneChangeRequested?.Invoke(new InventoryEquipScene());

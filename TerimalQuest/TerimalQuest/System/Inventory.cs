@@ -38,13 +38,6 @@ namespace TerimalQuest.System
         // 아이템 추가
         public void Add(Item item)
         {
-            // 최대 아이템 개수 출력
-            if(items.Count >= maxItemCount)
-            {
-                Console.WriteLine("아이템을 최대 소지하였습니다.");
-                return;
-            }
-
             items.Add(item);
         }
 
@@ -79,18 +72,23 @@ namespace TerimalQuest.System
         // 장비 장착/해제 - 인덱스 검색
         public void EquipItemByIdx(int idx)
         {
-            if (items.Count <= 0 || idx >= items.Count) return;
-
-            // 이미 장착 중이라면 장착 해제
-            if (items[idx].isEquipped)
+            if (items.Count <= 0 || idx > items.Count)
             {
-                items[idx].Equip();
+                return;
+            }
+
+            Item item = items[idx];
+
+            // 이미 장착되어 있다면 장착 해제
+            if(item.isEquipped)
+            {
+                item.Equip(false);
             }
 
             // 장착 중인 상태가 아니라면 장착
             else
             {
-                items[idx].Equip();
+                item.Equip(true);
             }
         }
 

@@ -17,14 +17,16 @@ namespace TerimalQuest.System
             this.def = def;
         }
 
-        public override void Equip()
+        public override void Equip(bool isEquip)
         {
             //아이템 장착
-            GameManager.Instance.player.ToggleEquipItem(this);
-            //base.Equip();
+
+            //GameManager.Instance.player.ToggleEquipItem(this);
+
+            base.Equip(isEquip);
 
             // 플레이어 방어구 장착
-            
+
         }
 
         public override void DisplayInfo()
@@ -64,10 +66,10 @@ namespace TerimalQuest.System
         }
 
         // 아이템 복제
-        public override Armor Clone()
+        public override Item Clone()
         {
             this.Id += 1;   // 복제 시 Id 증가
-            return (Armor)this.MemberwiseClone();
+            return new Armor(Id, name, desc, price, def, type);
         }
     }
 }

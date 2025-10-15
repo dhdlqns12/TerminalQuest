@@ -44,8 +44,8 @@ namespace TerimalQuest.System
         }
 
         // 아이템 반환 : itemDatabase는 원본 데이털를 가지고 있으므로 복제본을 반환한다.
-        public static Weapon GetWeapon(string name) { if (itemDatabase.TryGetValue(name, out var item) && item is Weapon weapon) return weapon.Clone(); else return null; }
-        public static Armor GetArmor(string name) { if (itemDatabase.TryGetValue(name, out var item) && item is Armor armor) return armor.Clone(); else return null; }
+        public static Weapon GetWeapon(string name) { if (itemDatabase.TryGetValue(name, out var item) && item is Weapon weapon) return (Weapon)weapon.Clone(); else return null; }
+        public static Armor GetArmor(string name) { if (itemDatabase.TryGetValue(name, out var item) && item is Armor armor) return (Armor)armor.Clone(); else return null; }
         public static Potion GetPotion(string name) { if (itemDatabase.TryGetValue(name, out var item) && item is Potion potion) return potion.Clone(); else return null; }
         public static Item GetItem(string name) { return itemDatabase.TryGetValue(name, out var item) ? item.Clone() : null; }
     }

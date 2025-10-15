@@ -106,7 +106,7 @@ namespace TerimalQuest.System
             // 이미 장착 중인 아이템이라면 장착 해제
             if (item.isEquipped)
             {
-                item.Equip();
+                item.Equip(false);
             }
 
             // 판매 골드 흭득 : 85%
