@@ -36,7 +36,7 @@ namespace TerimalQuest.Manager
 
         public void ShowStartSceneScripts()
         {
-            Console.Write("스파르타 던전에 오신 여러분 환영합니다. \n이제 전투를 시작할 수 있습니다. \n\n1.상태 보기 \n2.인벤토리\n3.전투 시작\n4.퀘스트\n5.상점\n0.게임 종료 \n\n원하시는 행동을 입력해주세요.\n>>");
+            Console.Write($"스파르타 던전에 오신 여러분 환영합니다. \n이제 전투를 시작할 수 있습니다. \n\n1.상태 보기 \n2.인벤토리\n3.전투 시작(현재 진행 : {GameManager.Instance.player.curStage}층)\n4.퀘스트\n5.상점\n0.게임 종료 \n\n원하시는 행동을 입력해주세요.\n>>");
         }
 
         public void ShowStatusSceneScripts()
@@ -294,7 +294,7 @@ namespace TerimalQuest.Manager
                 return;
             }
 
-            int finalDamage = attacker.GetFinalDamage(out bool isCritical);
+            int finalDamage = attacker.GetFinalDamage(out bool isCritical, (int)target.def);
             string attackStr = $"{target.name} 을(를) 맞췄습니다. [데미지 : {finalDamage}]";
 
             if (isCritical) attackStr += " - 치명타 공격!!";
@@ -348,6 +348,7 @@ namespace TerimalQuest.Manager
             Console.WriteLine("[내정보]");
             Console.WriteLine($"Lv.{player.level} {player.name} ({player.jobName})");
             Console.WriteLine($"HP {player.hp}/{player.maxHp}");
+            Console.WriteLine($"MP {player.mp}/{player.maxMp}");
         }
 
         public void SelectTarget()
@@ -432,15 +433,15 @@ namespace TerimalQuest.Manager
             Console.WriteLine($"{player.hp} -> {(player.hp + skill.damage)}");
         }
 
-        public void DisplayFullRangeAttackSkillResult(List<Monster> monsterList, Skill skill)
+        public void DisplayFullRangeAttackSkillResult(List<Monster> monsterList, Skill skill, float finalSkillDamage)
         {
             Console.WriteLine();
-            Console.WriteLine($"모든 적에게 {skill.name} 시전!");
+            Console.WriteLine($"모든 적에게 {skill.name} 시전! {finalSkillDamage}의 데미지!");
             for (int i = 0; i < monsterList.Count; i++)
             {
                 Monster monster = monsterList[i];
                 if (monster.hp < 0) continue;
-                Console.WriteLine($"{monster.name} - HP {monster.hp + skill.damage} -> {monster.hp}");
+                Console.WriteLine($"{monster.name} - HP {monster.hp} -> {(monster.hp - finalSkillDamage >= 0 ? monster.hp -finalSkillDamage : "Dead")}");
             }
         }
 

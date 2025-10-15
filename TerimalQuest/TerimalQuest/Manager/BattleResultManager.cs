@@ -28,8 +28,11 @@ namespace TerimalQuest.Manager
                 ProcessFixedReward(result.defeatedMonsters);
                 ProcessRandomReward(result.defeatedMonsters);
                 uiManager.DisplayBattleRewardResult(totalReward);
+                player.curStage++;
             }
             uiManager.WaitNextChoice();
+
+            player.mp += 10;
 
         }
 

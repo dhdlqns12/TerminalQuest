@@ -39,9 +39,18 @@ namespace TerimalQuest.Manager
         /// </summary>
         public void StartBattle()
         {
+            if (player.hp <= 0)
+            {
+                Console.Clear();
+                Console.WriteLine("체력이 부족합니다. 체력을 회복하고 오세요!");
+                Thread.Sleep(1000);
+                isBattleProgress = false;
+                isTryingToEscape = true;
+                return;
+            }
             isPlayerTurn = true;
             isBattleProgress = true;
-            encounterMonsterList = monsterManager.CreateRandomMonsterList();
+            encounterMonsterList = monsterManager.CreateRandomMonsterList(player.curStage);
             oriHpPlayer = player.hp;
             currentState = BattleState.PlayerActionSelect;
             uiManager.BattleEntrance(encounterMonsterList, player);
@@ -175,7 +184,6 @@ namespace TerimalQuest.Manager
                     return;
                 }
                 selectedSkill = player.skillList[choice - 1];
-                Console.WriteLine($"선택된 스킬{selectedSkill.name}");
                 UseSkill();
             }
             else
@@ -272,13 +280,13 @@ namespace TerimalQuest.Manager
         /// <summary>
         /// 타겟과 대상 정보를 받아 공격 실행
         /// </summary>
-        private void AttackTarget(Character attacker, Character target) // skill 파라미터 제거
+        private void AttackTarget(Character attacker, Character target)
         {
             Random random = new Random();
             bool isEvade = random.NextDouble() < target.evadeRate;
             uiManager.AttackTarget(attacker, target, isEvade);
             if (isEvade) return;
-            target.hp -= attacker.GetFinalDamage(out bool ignore);
+            target.hp -= attacker.GetFinalDamage(out bool ignore, (int)target.def);
         }
 
 
@@ -289,21 +297,24 @@ namespace TerimalQuest.Manager
         {
             if (skill.rangeType == SkillRangeType.All)
             {
+                float finalSkillDamage = 0;
+                if (selectedSkill.damageType == SkillDamageType.FixedDamage)
+                {
+                    finalSkillDamage = skill.damage;
+                }
+                else if (selectedSkill.damageType == SkillDamageType.BaseAttack)
+                {
+                    finalSkillDamage = (skill.damage * player.atk);
+                }
+
+                uiManager.DisplayFullRangeAttackSkillResult(encounterMonsterList, skill, finalSkillDamage);
+                Thread.Sleep(1500);
                 for (int i = 0; i < encounterMonsterList.Count; i++)
                 {
                     Monster monster = encounterMonsterList[i];
-                    if(monster.hp <= 0) continue;
-            
-                    if (selectedSkill.damageType == SkillDamageType.FixedDamage)
-                    {
-                        monster.hp -= skill.damage;
-                    }
-                    else if (selectedSkill.damageType == SkillDamageType.BaseAttack)
-                    {
-                        monster.hp -= (skill.damage * player.atk);
-                    }
+                    monster.hp -= finalSkillDamage;
+
                 }
-                uiManager.DisplayFullRangeAttackSkillResult(encounterMonsterList, skill);
 
             }
             else if (skill.rangeType == SkillRangeType.One)
@@ -318,6 +329,8 @@ namespace TerimalQuest.Manager
                     target.hp -= (skill.damage * player.atk);
                 }
             }
+
+
             CheckBattleProgressByIsMonsterAlive();
             if (!isBattleProgress)
             {
