@@ -47,7 +47,72 @@ namespace TerimalQuest.Manager
 
         public void SetNameScripts()
         {
+            Console.OutputEncoding = global::System.Text.Encoding.UTF8;
             Console.Clear();
+            Console.CursorVisible = false;
+
+            string[] terminal = new string[]
+            {
+        " ▀█▀ █▀▀ █▀█ █▀▄▀█ █ █▄ █ ▄▀█ █   ",
+        "  █  ██▄ █▀▄ █ ▀ █ █ █ ▀█ █▀█ █▄▄ "
+            };
+
+            string[] quest = new string[]
+            {
+        "     █▀█ █ █ █▀▀ █▀ ▀█▀ ",
+        "     ▀▀█ █▄█ ██▄ ▄█  █  "
+            };
+
+            for (int step = 0; step <= 10; step++)
+            {
+                Console.Clear();
+                double scale = step / 10.0;
+
+                for (int i = 0; i < terminal.Length; i++)
+                {
+                    int lineLength = (int)(terminal[i].Length * scale);
+                    int startPos = (terminal[i].Length - lineLength) / 2;
+
+                    if (lineLength > 0)
+                    {
+                        string displayText = terminal[i].Substring(startPos, lineLength);
+
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        Console.SetCursorPosition(startPos, i );
+                        Console.Write(displayText);
+                    }
+                }
+
+                global::System.Threading.Thread.Sleep(50);
+            }
+
+            global::System.Threading.Thread.Sleep(200);
+
+            for (int step = 0; step <= 10; step++)
+            {
+                double scale = step / 10.0;
+
+                for (int i = 0; i < quest.Length; i++)
+                {
+                    int lineLength = (int)(quest[i].Length * scale);
+                    int startPos = (quest[i].Length - lineLength) / 2;
+
+                    if (lineLength > 0)
+                    {
+                        string displayText = quest[i].Substring(startPos, lineLength);
+
+                        Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                        Console.SetCursorPosition(startPos + 3, i + 3);
+                        Console.Write(displayText);
+                    }
+                }
+
+                global::System.Threading.Thread.Sleep(50);
+            }
+
+            Console.ResetColor();
+            Console.CursorVisible = true;
+            Console.SetCursorPosition(0, 7);
             Console.Write("원하시는 이름을 설정해주세요. \n>>");
         }
 
