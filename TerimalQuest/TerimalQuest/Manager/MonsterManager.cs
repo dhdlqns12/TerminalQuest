@@ -16,6 +16,9 @@ public class MonsterManager
     }
 
 
+    /// <summary>
+    /// 랜덤 몬스터 리스트 생성
+    /// </summary>
     public List<Monster> CreateRandomMonsterList()
     {
         List<Monster> monsterList = new List<Monster>();
@@ -27,13 +30,20 @@ public class MonsterManager
         }
         return monsterList;
     }
-
+    /// <summary>
+    /// 랜덤 몬스터 생성
+    /// </summary>
     public Monster CreateRandomMonster()
     {
         int randomMonsterIndex = random.Next(0, totalMonsterList.Count);
-        return totalMonsterList[randomMonsterIndex].Clone();
+        Monster monster = totalMonsterList[randomMonsterIndex].Clone();
+        monster.evadeRate = 100;
+        monster.critRate = 100;
+        return monster;
     }
-
+    /// <summary>
+    /// 전체 몬스터 목록 초기화
+    /// </summary>
     public void CreateTotalMonsterList()
     {
         Monster minion = new Monster("미니언", 2,15,0,5,0);
