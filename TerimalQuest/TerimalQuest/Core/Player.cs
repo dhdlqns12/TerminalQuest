@@ -198,9 +198,8 @@ namespace TerimalQuest.Core
         #region 소비 아이템 사용
         public void UsePotion(Potion potion)
         {
-            if (!IsUsePotion(potion, out string message)) // 체크
+            if (!IsUsePotion(potion)) // 체크
             {
-                Console.WriteLine(message);
                 return;
             }
 
@@ -213,32 +212,28 @@ namespace TerimalQuest.Core
             }
         }
 
-        private bool IsUsePotion(Potion potion, out string message)
+        private bool IsUsePotion(Potion potion)
         {
-            message = "";
-
             switch (potion.potiontype)
             {
                 case PotionType.HP:
                     if (hp >= maxHp)
                     {
-                        message = "HP최대";
+                        Console.WriteLine("HP최대");
                         return false;
                     }
                     break;
-
                 case PotionType.MP:
                     if (mp >= maxMp)
                     {
-                        message = "MP최대";
+                        Console.WriteLine("MP최대");
                         return false;
                     }
                     break;
-
                 case PotionType.Stamina:
                     if (stamina >= maxStamina)
                     {
-                        message = "스태미나최대";
+                        Console.WriteLine("스태미나최대");
                         return false;
                     }
                     break;
