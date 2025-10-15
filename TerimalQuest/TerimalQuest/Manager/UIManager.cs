@@ -167,7 +167,47 @@ namespace TerimalQuest.Manager
 
         #region ShopUI
 
-        
+        // 상점
+        public void ShopScripts(Player player, Shop shop)
+        {
+            Console.WriteLine("상점");
+            Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+            Console.WriteLine();
+            Console.WriteLine("[보유 골드]");
+            Console.WriteLine($"{player.gold} G");
+            Console.WriteLine();
+            shop.DisplayInfo(false);
+            Console.WriteLine();
+            DisplayOption(["1. 아이템 구매", "2. 아이템 판매", "0. 나가기"]);
+        }
+
+        // 상점 : 상품 구매
+        public void ShopPurchaseScripts(Player player, Shop shop)
+        {
+            Console.WriteLine("상점 - 아이템 구매");
+            Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+            Console.WriteLine();
+            Console.WriteLine("[보유 골드]");
+            Console.WriteLine($"{player.gold} G");
+            Console.WriteLine();
+            shop.DisplayInfo(true);
+            Console.WriteLine();
+            DisplayOption(["(번호). 해당 아이템 구매", "0. 나가기"]);
+        }
+
+        // 상점 : 아이템 판매
+        public void ShopSaleScripts(Player player)
+        {
+            Console.WriteLine("상점 - 아이템 판매");
+            Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+            Console.WriteLine();
+            Console.WriteLine("[보유 골드]");
+            Console.WriteLine($"{player.gold} G");
+            Console.WriteLine();
+            player.inventory.DisplayInfoWithGold();
+            Console.WriteLine();
+            DisplayOption(["(번호). 해당 아이템 판매", "0. 나가기"]);
+        }
 
         #endregion
 
