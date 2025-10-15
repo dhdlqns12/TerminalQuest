@@ -170,6 +170,7 @@ namespace TerimalQuest.Manager
         // 상점
         public void ShopScripts(Player player, Shop shop)
         {
+            Console.Clear();
             Console.WriteLine("상점");
             Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
             Console.WriteLine();
@@ -184,6 +185,7 @@ namespace TerimalQuest.Manager
         // 상점 : 상품 구매
         public void ShopPurchaseScripts(Player player, Shop shop)
         {
+            Console.Clear();
             Console.WriteLine("상점 - 아이템 구매");
             Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
             Console.WriteLine();
@@ -198,6 +200,7 @@ namespace TerimalQuest.Manager
         // 상점 : 아이템 판매
         public void ShopSaleScripts(Player player)
         {
+            Console.Clear();
             Console.WriteLine("상점 - 아이템 판매");
             Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
             Console.WriteLine();
