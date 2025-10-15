@@ -21,12 +21,6 @@ namespace TerimalQuest.Scenes
             inventory = GameManager.Instance.player.inventory;
 
             UIManager.Instance.InventoryScripts(inventory);
-
-
-            foreach (var item in inventory.Items)
-            {
-                Console.WriteLine(item.isEquipped);
-            }
         }
 
         public void Update()
@@ -41,7 +35,7 @@ namespace TerimalQuest.Scenes
 
         private void Process()
         {
-            string choice = GetUserChoice(["1", "2", "3"]);
+            string choice = GetUserChoice(["0", "1", "2"]);
 
             switch(choice)
             {
