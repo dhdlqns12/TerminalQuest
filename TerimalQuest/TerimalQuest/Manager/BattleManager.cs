@@ -1,4 +1,5 @@
 using TerimalQuest.Core;
+using TerimalQuest.System;
 
 namespace TerimalQuest.Manager;
 
@@ -9,43 +10,53 @@ public class BattleManager
     private MonsterManager monsterManager;
     private Player player;
     private List<Monster> encounterMonsterList;
-
+    private UIManager uiManager;
     public BattleManager()
     {
         monsterManager = new MonsterManager();
-
-        player = new Player("우탄이",JobType.전사);
+        uiManager = UIManager.Instance;
+        player = GameManager.Instance.player;
+        player.name = "민지";
+        player.jobName = "전사";
         player.atk = 10;
         player.def = 99;
         player.hp = 1;
         player.maxHp = 9999;
+        // player.critRate = 100;
+        // player.evadeRate = 100;
     }
 
-    public async Task StartBattle()
+    /// <summary>
+    /// 배틀시작
+    /// </summary>
+    public async Task<BattleResult> StartBattle()
     {
         isPlayerTurn = true;
         isBattleProgress = true;
         encounterMonsterList = monsterManager.CreateRandomMonsterList();
+        float oriHpPlayer = player.hp;
         while (isBattleProgress)
         {
-            CheckBattleProgress();
+            CheckBattleProgressByIsMonsterAlive();
             if(isPlayerTurn) await PlayerTurn();
             else await MonsterTurn();
         }
-        EndBattle();
+        return new BattleResult
+        {
+            isPlayerWin = (player.hp > 0),
+            defeatedMonsters = encounterMonsterList,
+            hpReduction = oriHpPlayer - player.hp
+        };
     }
 
-    public void EndBattle()
-    {
-        if(player.hp > 0) Console.Write("전투종료!!! \n플레이어승리!");
-        else Console.Write("전투종료!!! \n플레이어패배!");
-    }
-
-    public async Task PlayerTurn()
+    /// <summary>
+    /// 플레이어 턴 진행
+    /// </summary>
+    private async Task PlayerTurn()
     {
         if (!isPlayerTurn) return;
-        TempDisplayBattleUI();
-        Console.WriteLine("대상을 선택해주세요.\n>>");
+        uiManager.BattleEntrance(encounterMonsterList, player);
+        uiManager.SelectTarget();
 
         int choice;
         while (true)
@@ -53,10 +64,10 @@ public class BattleManager
             string input = Console.ReadLine();
             if (CheckPlayerInputInvalid(input, out choice))
             {
-                Console.WriteLine("잘못된 입력입니다.");
+                uiManager.SelectWrongSelection();
                 await Task.Delay(1000);
-                TempDisplayBattleUI();
-                Console.WriteLine("대상을 선택해주세요.\n>>");
+                uiManager.BattleEntrance(encounterMonsterList, player);
+                uiManager.SelectTarget();
             }
             else
             {
@@ -65,21 +76,8 @@ public class BattleManager
         }
 
         Monster targetMonster = encounterMonsterList[choice - 1];
-
-        float deviation = (float)Math.Ceiling(player.atk * 0.1);
-        int minDamage = (int)Math.Ceiling(player.atk - deviation);
-        int maxDamage = (int)Math.Ceiling(player.atk + deviation);
-        int finalDamage = new Random().Next(minDamage, maxDamage + 1);
-
-
-        Console.Clear();
-        Console.WriteLine($"{player.name}의 공격!");
-        Console.WriteLine($"Lv.{targetMonster.level} {targetMonster.name} 을(를) 맞췄습니다. [데미지 :{finalDamage}]");
-        Console.WriteLine($"Lv.{targetMonster.level} {targetMonster.name}");
-        Console.WriteLine($"HP {targetMonster.hp} -> {(targetMonster.hp - finalDamage > 0 ? targetMonster.hp - finalDamage : "Dead")}");
-        Console.WriteLine();
-        Console.WriteLine("0. 다음");
-        targetMonster.hp -= finalDamage;
+        this.AttackTarget(player, targetMonster);
+        uiManager.WaitNextChoice();
 
         while (true)
         {
@@ -88,31 +86,24 @@ public class BattleManager
             {
                 break;
             }
-            else
-            {
-                Console.WriteLine("잘못된 입력입니다.");
-                Console.Write(">> ");
-            }
+            uiManager.SelectWrongSelection();
         }
 
         isPlayerTurn = false;
     }
-
-    public async Task MonsterTurn()
+    /// <summary>
+    /// 몬스터 턴진쟇ㅇ
+    /// </summary>
+    private async Task MonsterTurn()
     {
         if (isPlayerTurn) return;
         for (int i = 0; i < encounterMonsterList.Count; i++)
         {
             Monster monster = encounterMonsterList[i];
             if (monster.hp < 0) continue;
-            Console.Clear();
-            Console.WriteLine("Battle!");
-            Console.WriteLine($"Lv.{monster.level} {monster.name} 의 공격!");
-            Console.WriteLine($"{player.name} 을(를) 맞췄습니다. [데미지 : {monster.atk}]");
-            Console.WriteLine($"Lv. {player.level} {player.name}");
-            Console.WriteLine($"HP {player.hp} -> {(player.hp - monster.atk > 0 ? player.hp - monster.hp : 0)}");
+            this.AttackTarget(monster, player);
             await Task.Delay(1000);
-            player.hp -= monster.atk;
+
             if (player.hp <= 0)
             {
                 isBattleProgress = false;
@@ -122,8 +113,10 @@ public class BattleManager
 
         isPlayerTurn = true;
     }
-
-    public void CheckBattleProgress()
+    /// <summary>
+    /// 몬스터 생존 여부로 배틀 진행여부 확인
+    /// </summary>
+    private void CheckBattleProgressByIsMonsterAlive()
     {
         bool isMonsterAlive = false;
         for (int i = 0; i < encounterMonsterList.Count; i++)
@@ -137,27 +130,10 @@ public class BattleManager
         isBattleProgress = isMonsterAlive;
     }
 
-    public void TempDisplayBattleUI()
-    {
-        Console.Clear();
-        Console.WriteLine("Battle!!\n");
-        for (int i = 0; i < encounterMonsterList.Count; i++)
-        {
-            if(encounterMonsterList[i].hp > 0)
-            {
-                Console.Write($"{i + 1}. ");
-            }
-            Console.Write($"Lv.{encounterMonsterList[i].level} {encounterMonsterList[i].name}  HP {(encounterMonsterList[i].hp > 0 ? encounterMonsterList[i].hp : "Dead")}\n");
-        }
-
-        Console.WriteLine();
-
-        Console.WriteLine("[내정보]");
-        Console.WriteLine($"Lv.{player.level} {player.name} ({player.jobName})");
-        Console.WriteLine($"HP {player.hp}/{player.maxHp}");
-    }
-
-    public bool CheckPlayerInputInvalid(string input, out int choice)
+    /// <summary>
+    /// 플레이어 입력 유효성 검사
+    /// </summary>
+    private bool CheckPlayerInputInvalid(string input, out int choice)
     {
         if (!int.TryParse(input, out choice))
         {
@@ -168,12 +144,19 @@ public class BattleManager
         {
             return true;
         }
+        return encounterMonsterList[choice - 1].hp <= 0;
+    }
 
-        if (encounterMonsterList[choice - 1].hp <= 0)
-        {
-            return true;
-        }
-
-        return false;
+    /// <summary>
+    /// 타겟과 대상 정보를 받아 공격 실행
+    /// </summary>
+    private void AttackTarget(Character attacker, Character target)
+    {
+        Random random = new Random();
+        bool isEvade = random.NextDouble() < target.evadeRate;
+        uiManager.AttackTarget(attacker, target, isEvade);
+        if (isEvade) return;
+        if(attacker is Player) target.hp -= player.GetFinalDamage(out bool isCritical);
+        else target.hp -= attacker.atk;
     }
 }

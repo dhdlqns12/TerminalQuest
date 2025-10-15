@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TerimalQuest.Core;
+using TerimalQuest.System;
 
 namespace TerimalQuest.Manager
 {
@@ -87,5 +88,101 @@ namespace TerimalQuest.Manager
             Console.Write(">>");
         }
 
+        #region BattleUI
+
+        public void AttackTarget(Character attacker, Character target, bool isEvade)
+        {
+            Console.Clear();
+            Console.WriteLine("Battle!");
+            Console.WriteLine($"Lv.{attacker.level} {attacker.name} 의 공격!");
+
+            if (isEvade)
+            {
+                Console.WriteLine($"Lv.{target.level} {target.name} 을(를) 공격했지만 아무일도 일어나지 않았습니다.");
+                return;
+            }
+
+            int finalDamage = attacker.GetFinalDamage(out bool isCritical);
+            string attackStr = $"{target.name} 을(를) 맞췄습니다. [데미지 : {finalDamage}]";
+
+            if (isCritical) attackStr += " - 치명타 공격!!";
+
+            Console.WriteLine(attackStr);
+            Console.WriteLine($"Lv. {target.level} {target.name}");
+
+            string deadResult = target is Player ? "0" : "Dead";
+            string attackResult =
+                $"HP {target.hp} -> {(target.hp - finalDamage > 0 ? target.hp - finalDamage : deadResult)}";
+
+            Console.WriteLine(attackResult);
+        }
+
+        public void BattleEntrance(List<Monster> monsters, Player player)
+        {
+            Console.Clear();
+            Console.WriteLine("Battle!!\n");
+            for (int i = 0; i < monsters.Count; i++)
+            {
+                if(monsters[i].hp > 0)
+                {
+                    Console.Write($"{i + 1}. ");
+                }
+                Console.Write($"Lv.{monsters[i].level} {monsters[i].name}  HP {(monsters[i].hp > 0 ? monsters[i].hp : "Dead")}\n");
+            }
+
+            Console.WriteLine();
+
+            Console.WriteLine("[내정보]");
+            Console.WriteLine($"Lv.{player.level} {player.name} ({player.jobName})");
+            Console.WriteLine($"HP {player.hp}/{player.maxHp}");
+        }
+
+        public void SelectTarget()
+        {
+            Console.WriteLine("대상을 선택해주세요.\n>>");
+        }
+
+        public void SelectWrongSelection()
+        {
+            Console.WriteLine("잘못된 입력입니다.");
+        }
+
+        public void WaitNextChoice()
+        {
+            Console.WriteLine("0. 다음");
+            Console.WriteLine();
+            Console.WriteLine(">>");
+        }
+
+        public void DisplayBattleResult(BattleResult result, Player player)
+        {
+            Console.Clear();
+            Console.WriteLine("Battle!! - Result\n");
+            Console.WriteLine($"{(result.isPlayerWin ? "Victory" : "You Lose")}");
+            if (result.isPlayerWin)
+            {
+                Console.WriteLine($"던전에서 몬스터 {result.defeatedMonsters.Count}마리를 잡았습니다.");
+            }
+            Console.WriteLine($"Lv.{player.level} {player.name}");
+            Console.WriteLine($"HP {player.hp + result.hpReduction} -> {player.hp}");
+            Console.WriteLine();
+
+
+        }
+
+        public void DisplayBattleRewardResult(TotalReward totalReward)
+        {
+            Console.WriteLine("[획득 아이템]");
+            if (totalReward.totalRewardExp > 0)  Console.WriteLine($"{totalReward.totalRewardExp} Exp");
+            if (totalReward.totalRewardGold > 0)  Console.WriteLine($"{totalReward.totalRewardGold} Gold");
+            if (totalReward.totalRewardItems != null && totalReward.totalRewardItems.Count > 0)
+            {
+                foreach (var itemPair in totalReward.totalRewardItems)
+                {
+                    Console.WriteLine($"{itemPair.Key} - {itemPair.Value}");
+                }
+            }
+        }
+        #endregion
     }
 }
