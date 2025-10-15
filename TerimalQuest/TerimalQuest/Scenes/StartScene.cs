@@ -7,11 +7,12 @@ public class StartScene : IScene
 
     public void Enter()
     {
-        UIManager.Instance.ShowStartSceneScripts();
     }
 
     public void Update()
     {
+        Console.Clear();
+        UIManager.Instance.ShowStartSceneScripts();
         if (int.TryParse(Console.ReadLine(), out int answer))
         {
             switch (answer)
@@ -49,6 +50,6 @@ public class StartScene : IScene
 
     public void Exit()
     {
-        // 나중에 UI 클리어, 리소스 해제 등 넣을 수 있음
+        Console.Clear();
     }
 }

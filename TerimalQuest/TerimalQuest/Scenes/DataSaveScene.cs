@@ -12,64 +12,51 @@ namespace TerimalQuest.Scenes
         public event Action<IScene> OnSceneChangeRequested;
         public void Enter()
         {
-            Console.WriteLine("데이터를 저장하시겠습니까?");
+            Console.Write("데이터를 저장하시겠습니까? \n\ny/n \n>>");
             bool answer = UIManager.Instance.YesOrNo();
-            if (answer)
-            {
-                Console.WriteLine("데이터를 저장할 슬롯을 골라주세요.");
-                DisplaySlot(0);
-                DisplaySlot(1);
-                DisplaySlot(2);
-                Console.WriteLine("0.돌아가기");
-            }
-            else
+            if (!answer)
             {
                 Console.WriteLine("시작화면으로 돌아갑니다...");
                 Console.ReadKey();
                 OnSceneChangeRequested?.Invoke(new StartScene());
             }
-
-
         }
 
         public void Update()
         {
+            Console.Clear();
+            Console.WriteLine("데이터를 저장할 슬롯을 골라주세요.\n");
+            DisplaySlot(0);
+            DisplaySlot(1);
+            DisplaySlot(2);
+            Console.Write("0.돌아가기 \n>>");
+
             if (int.TryParse(Console.ReadLine(), out int answer))
             {
-                if(SaveManager.HasSaveData(answer))
+                switch (answer)
                 {
-                    switch(answer) 
-                    {
-                        case 1:
-                            //1번슬롯 저장
-                            SaveManager.GameSave(GameManager.Instance.player, 1);
-                            ConfirmQuit();
-                            break;
-                        case 2:
-                            //2번슬롯 저장
-                            SaveManager.GameSave(GameManager.Instance.player, 2);
-                            ConfirmQuit();
-                            break;
-                        case 3:
-                            //3번슬롯 저장
-                            SaveManager.GameSave(GameManager.Instance.player, 3);
-                            ConfirmQuit();
-                            break;
-                        case 0:
-                            OnSceneChangeRequested?.Invoke(new StartScene());
-                            break;
-                        default:
-                            Console.WriteLine("데이터가 존재하지 않습니다.");
-                            Console.ReadKey();
-                            break;
-                    
-                    }
-
-                }
-                else
-                {
-                    Console.WriteLine("데이터가 존재하지 않습니다.");
-                    Console.ReadKey();
+                    case 1:
+                        //1번슬롯 저장
+                        SaveManager.GameSave(GameManager.Instance.player, 1);
+                        ConfirmQuit();
+                        break;
+                    case 2:
+                        //2번슬롯 저장
+                        SaveManager.GameSave(GameManager.Instance.player, 2);
+                        ConfirmQuit();
+                        break;
+                    case 3:
+                        //3번슬롯 저장
+                        SaveManager.GameSave(GameManager.Instance.player, 3);
+                        ConfirmQuit();
+                        break;
+                    case 0:
+                        OnSceneChangeRequested?.Invoke(new StartScene());
+                        break;
+                    default:
+                        Console.WriteLine("데이터가 존재하지 않습니다.");
+                        Console.ReadKey();
+                        break;
                 }
             }
             else
@@ -94,7 +81,7 @@ namespace TerimalQuest.Scenes
             }
             else
             {
-                Console.WriteLine("빈 슬롯");
+                Console.WriteLine($"슬롯 {slotNumber} : 빈 슬롯");
             }
         }
 
@@ -105,29 +92,24 @@ namespace TerimalQuest.Scenes
                 Console.Write("정말 종료하시겠습니까? \n\n1.종료한다. \n2.종료하지않는다. \n>>");
                 if (int.TryParse(Console.ReadLine(), out int answer))
                 {
-                    if (SaveManager.HasSaveData(answer))
+                    switch (answer)
                     {
-                        switch (answer)
-                        {
-                            case 1:
-                                Environment.Exit(0);
-                                break;
-                            case 2:
-                                break;
-                            default:
-                                Console.WriteLine("잘못된 입력입니다.");
-                                Console.ReadKey();
-                                continue;
-
-                        }
-
+                        case 1:
+                            Environment.Exit(0);
+                            break;
+                        case 2:
+                            break;
+                        default:
+                            Console.WriteLine("잘못된 입력입니다.");
+                            Console.ReadKey();
+                            continue;
                     }
-                    else
-                    {
-                        Console.WriteLine("잘못된 입력입니다.");
-                        Console.ReadKey();
-                        continue;
-                    }
+                }
+                else
+                {
+                    Console.WriteLine("잘못된 입력입니다.");
+                    Console.ReadKey();
+                    continue;
                 }
                 break;
             }
