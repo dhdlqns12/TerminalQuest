@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace TerimalQuest.System
@@ -20,27 +21,53 @@ namespace TerimalQuest.System
 
         static ItemDatabase()
         {
-            InitDatabase();
+            LoadItems();
         }
 
-        // 아이템 데이터베이스 : 아이템 생성
-        private static void InitDatabase()
+        // Item JSON 파일 로드
+        private static void LoadItems()
         {
-            // 무기
-            itemDatabase["낡은 검"] = new Weapon(1000, "낡은 검", "쉽게 볼 수 있는 낡은 검 입니다.", 600, 2, ItemType.Weapon);
-            itemDatabase["연습용 창"] = new Weapon(1100, "연습용 창", "검보다는 그래도 창이 다루기 쉽죠.", 700, 3, ItemType.Weapon);
-            itemDatabase["청동 도끼"] = new Weapon(1200, "청동 도끼", "어디선가 사용됐던거 같은 도끼입니다.", 1500, 5, ItemType.Weapon);
-            itemDatabase["스파르타의 창"] = new Weapon(1300, "스파르타의 창", "스파르타의 전사들이 사용했다는 전설의 창입니다.", 4000, 7, ItemType.Weapon);
+            List<ItemData> itemList;
+            try
+            {
+                string projectRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\");
+                string path = Path.Combine(projectRoot, "Resources", "ItemData.json");
 
-            // 방어구
-            itemDatabase["무쇠갑옷"] = new Armor(2000, "무쇠갑옷", "무쇠로 만들어져 튼튼한 갑옷입니다.", 800, 9, ItemType.Armor);
-            itemDatabase["수련자 갑옷"] = new Armor(2100, "수련자 갑옷", "수련에 도움을 주는 갑옷입니다.", 1000, 5, ItemType.Armor);
-            itemDatabase["스파르타의 갑옷"] = new Armor(2200, "스파르타의 갑옷", "스파르타의 전사들이 사용했다는 전설의 갑옷입니다.", 3500, 15, ItemType.Armor);
+                // JSON 파일 읽기
+                string json = File.ReadAllText(path);
 
-            // 포션
-            itemDatabase["빨간포션"] = new Potion(3000, "빨간포션", "마시면 생기가 돌며 체력이 회복됩니다.", 400, 30, ItemType.Potion, PotionType.HP);
-            itemDatabase["파랑포션"] = new Potion(3100, "파랑포션", "마시면 마력이 되살아나며 정신이 맑아집니다.", 400, 30, ItemType.Potion, PotionType.MP);
-            itemDatabase["노랑포션"] = new Potion(3200, "노랑포션", "마시면 온몸에 힘이 솟아오릅니다.", 400, 30, ItemType.Potion, PotionType.Stamina);
+                // 직렬화 옵션
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                itemList = JsonSerializer.Deserialize<List<ItemData>>(json, options);
+            }
+            catch(Exception ex) 
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+
+            // itemDatabase에 아이템 등록
+            foreach (var item in itemList)
+            {
+                switch (item.type)
+                {
+                    case "Weapon":
+                        itemDatabase[item.name] = new Weapon(item.id, item.name, item.desc, item.price, item.atk, ItemType.Weapon);
+                        break;
+
+                    case "Armor":
+                        itemDatabase[item.name] = new Armor(item.id, item.name, item.desc, item.price, item.def, ItemType.Armor);
+                        break;
+
+                    case "Potion":
+                        PotionType pType = Enum.Parse<PotionType>(item.potionType, true);
+                        itemDatabase[item.name] = new Potion(item.id, item.name, item.desc, item.price, item.healAmount, ItemType.Potion, pType);
+                        break;
+                }
+            }
         }
 
         // 아이템 반환 : itemDatabase는 원본 데이털를 가지고 있으므로 복제본을 반환한다.
