@@ -64,12 +64,12 @@ namespace TerimalQuest.System
                 return false;
             }
 
-            // 아이템 구매
-            PurchaseItem(product.Clone());
-
             // 수량 감소 후 품절 체크
             product.count -= 1;
-            product.CheckPurchase();
+            if (product.count <= 0) product.isPurchase = true;
+
+            // 아이템 구매
+            PurchaseItem(product.Clone());
 
             return true;
         }
@@ -77,8 +77,6 @@ namespace TerimalQuest.System
         // 상품 구매
         public void PurchaseItem(Item item)
         {
-            item.isPurchase = true;
-
             Player player = GameManager.Instance.player;
 
             // Player 골드 차감 및 인벤토리 추가
