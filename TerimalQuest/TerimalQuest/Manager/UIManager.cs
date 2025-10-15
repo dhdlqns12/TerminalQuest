@@ -376,5 +376,115 @@ namespace TerimalQuest.Manager
             }
         }
         #endregion
+
+
+        #region QuestUI
+        /// <summary>
+        /// 퀘스트 리스트업 함수
+        /// </summary>
+        /// <param name="quests"></param>
+        public void QuestListShow(List<Quest> quests)
+        {
+            Player player = GameManager.Instance.player;
+            Console.Clear();
+            Console.WriteLine("퀘스트 목록\n");
+            QuestManager.Instance.curQuest = null;
+            for (int i = 0; i < quests.Count; i++)
+            {
+
+                string questRunning = player.questList.Contains(quests[i]) ? "[진행중]" : "";
+                Console.WriteLine($"{i + 1}. {quests[i].name} {questRunning}");
+            }
+            Console.WriteLine("\n0. 돌아가기");
+            Console.Write("\n원하시는 퀘스트를 선택해주세요.\n>>");
+        }
+
+
+        /// <summary>
+        /// 퀘스트 정보 출력
+        /// </summary>
+        /// <param name="quest"></param>
+        public void SelectQuest(Quest quest)
+        {
+            Console.Clear();
+            QuestManager.Instance.curQuest = quest;
+            Console.WriteLine($"퀘스트 : {quest.name}\n");
+            Console.WriteLine($"{quest.description}\n");
+            QuestInfo(quest);
+            Console.WriteLine("\n- 보상 -\n");
+            if (quest.rewardItem != null && quest.rewardItem.Count != 0)
+            {
+                foreach (var dic in quest.rewardItem)
+                {
+                    Item item = ItemDatabase.GetItem(dic.Key);
+                    Console.WriteLine($"  {item.name} x {dic.Value}");
+                }
+            }
+            Console.WriteLine($"  {quest.rewardGold}G");
+            Console.WriteLine($"  경험치 {quest.rewardExp}");
+
+            SelectChoice();
+        }
+
+        public void QuestInfo(Quest quest)
+        {
+            switch (quest.questType)
+            {
+                case "사냥":
+                    foreach (var questDic in quest.successConditions)
+                    {
+                        int curNum = QuestManager.Instance.curQuest.currentCounts[questDic.Key];
+                        Console.WriteLine($"- {questDic.Key} {questDic.Value}마리 처치 ({curNum}/{questDic.Value})");
+                    }
+                    break;
+                case "장착":
+                    Console.WriteLine("장비를 장착해보세요");
+                    break;
+                case "레벨":
+                    Console.WriteLine($"레벨을 {quest.successConditions["레벨"]}올리세요");
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 퀘스트 수락, 보상 버튼 조건부 표출
+        /// </summary>
+        public void SelectChoice()
+        {
+            Player player = GameManager.Instance.player;
+            if (player.questList.Contains(QuestManager.Instance.curQuest))
+            {
+                Console.WriteLine("\n1. 보상 받기");
+                Console.WriteLine("2. 돌아가기");
+            }
+            else
+            {
+                Console.WriteLine("\n1. 수락");
+                Console.WriteLine("2. 거절");
+            }
+            Console.Write("\n원하시는 행동을 입력해주세요.\n>>");
+        }
+
+        /// <summary>
+        /// 보상메시지
+        /// </summary>
+        public void RewardMessage()
+        {
+            Player player = GameManager.Instance.player;
+            Quest quest = QuestManager.Instance.curQuest;
+            Console.WriteLine("보상을 획득하였습니다!");
+            Console.WriteLine($"경험치 : {player.exp} -> {player.exp + quest.rewardExp}");
+            Console.WriteLine($"골드 : {player.gold}G -> {player.gold + quest.rewardGold}G");
+            if (quest.rewardItem != null && quest.rewardItem.Count > 0)
+            {
+                Console.WriteLine("획득 아이템");
+                foreach (var dic in quest.rewardItem)
+                {
+                    Item item = ItemDatabase.GetItem(dic.Key);
+                    Console.WriteLine($"{item.name} x {dic.Value}");
+                }
+            }
+        }
+        #endregion
     }
 }
