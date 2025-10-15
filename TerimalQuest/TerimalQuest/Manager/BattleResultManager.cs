@@ -9,6 +9,7 @@ namespace TerimalQuest.Manager
         private UIManager uiManager;
         private TotalReward totalReward;
         private Dictionary<string, List<DropItem>> dropTable;
+        private Random random = new Random();
         public BattleResultManager()
         {
             player = GameManager.Instance.player;
@@ -46,6 +47,8 @@ namespace TerimalQuest.Manager
             }
             totalReward.totalRewardExp = totalRewardExp;
             totalReward.totalRewardGold = totalRewardGold;
+            player.exp += totalReward.totalRewardExp;
+            player.gold += totalReward.totalRewardGold;
         }
         /// <summary>
         /// 랜덤 보상 획득
@@ -53,7 +56,6 @@ namespace TerimalQuest.Manager
         private void ProcessRandomReward(List<Monster> defeatedMonsters)
         {
             totalReward.totalRewardItems = new Dictionary<string, int>();
-            Random random = new Random();
 
             for (int i = 0; i < defeatedMonsters.Count; i++)
             {
@@ -85,6 +87,17 @@ namespace TerimalQuest.Manager
                     }
                 }
             }
+
+            foreach (var rewardItem in totalReward.totalRewardItems)
+            {
+                string itemName = rewardItem.Key;
+                int itemCount = rewardItem.Value;
+                Item itemToAdd = ItemDatabase.GetItem(itemName);
+                for (int i = 0; i < itemCount; i++)
+                {
+                    player.inventory.Add(itemToAdd);
+                }
+            }
         }
 
         /// <summary>
@@ -96,13 +109,18 @@ namespace TerimalQuest.Manager
 
             dropTable.Add("미니언", new List<DropItem>
             {
-                new DropItem { itemName = "낡은 검", minDropCount = 1, maxDropCount = 1, dropRate = 1f},
-                new DropItem { itemName = "스파르타의 창", minDropCount = 5, maxDropCount = 10, dropRate = 1f  }
+                new DropItem { itemName = "낡은 검", minDropCount = 1, maxDropCount = 1, dropRate = 0.5f},
+
             });
 
             dropTable.Add("대포미니언", new List<DropItem>
             {
-                new DropItem { itemName = "연습용 창", minDropCount = 1, maxDropCount = 2, dropRate = 1f }
+                new DropItem { itemName = "연습용 창", minDropCount = 0, maxDropCount = 1, dropRate = 0.1f }
+            });
+
+            dropTable.Add("공허충", new List<DropItem>
+            {
+                new DropItem { itemName = "스파르타의 창", minDropCount = 0, maxDropCount = 1, dropRate = 0.01f  }
             });
         }
     }

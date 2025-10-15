@@ -37,8 +37,8 @@ public class MonsterManager
     {
         int randomMonsterIndex = random.Next(0, totalMonsterList.Count);
         Monster monster = totalMonsterList[randomMonsterIndex].Clone();
-        // monster.evadeRate = 100;
-        // monster.critRate = 100;
+        monster.evadeRate = 10;
+        monster.critRate = 15;
         monster.rewardExp = 10;
         monster.rewardGold = 10;
         return monster;
@@ -48,9 +48,9 @@ public class MonsterManager
     /// </summary>
     public void CreateTotalMonsterList()
     {
-        Monster minion = new Monster("미니언", 2,9999,0,5,0);
-        Monster voidInsect = new Monster("공허충", 2,9999,0,5,0);
-        Monster cannonMinion = new Monster("대포미니언", 2,9999,0,5,0);
+        Monster minion = new Monster("미니언", 2,15,0,5,0);
+        Monster voidInsect = new Monster("공허충", 2,15,0,5,0);
+        Monster cannonMinion = new Monster("대포미니언", 2,15,0,5,0);
         totalMonsterList.Add(minion);
         totalMonsterList.Add(voidInsect);
         totalMonsterList.Add(cannonMinion);

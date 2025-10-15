@@ -32,31 +32,6 @@ namespace TerimalQuest.Manager
             monsterManager = new MonsterManager();
             uiManager = UIManager.Instance;
             player = GameManager.Instance.player;
-            player.name = "민지";
-            player.jobName = "전사";
-            player.atk = 10;
-            player.def = 99;
-            player.hp = 9999;
-            player.maxHp = 9999;
-            player.maxMp = 9999;
-            player.mp = 9999;
-            // player.critRate = 100;
-            // player.evadeRate = 100;
-            isTryingToEscape = false;
-            List<Skill> skills = new List<Skill>();
-            Skill rapidArrow = new Skill("빨리쏘기", "화살을 강하게 발사해 100의 고정데미지", 100, SkillType.Attack, SkillDamageType.FixedDamage, SkillRangeType.One,  10);
-            Skill arrowRain = new Skill("화살비", "모든 적에게 공격력 *0.5의 데미지",  0.5f, SkillType.Attack,  SkillDamageType.BaseAttack, SkillRangeType.All, 15);
-            Skill arrowBomb = new Skill("폭발화살", "화살에 폭탄을 장착하고 발사해 모든 적에게 공격력 * 1.5의 데미지",  1.5f, SkillType.Attack,  SkillDamageType.BaseAttack, SkillRangeType.All, 20);
-            Skill eatRice = new Skill("밥먹기", "밥을 먹어 500의 체력을 회복",  500, SkillType.Support, SkillDamageType.FixedDamage, SkillRangeType.One, 10);
-            Skill bash = new Skill("배쉬", "힘을 세게주어 1.5배의 데미지",  1.5f, SkillType.Attack, SkillDamageType.BaseAttack, SkillRangeType.One, 10);
-            Skill powerBash = new Skill("파워배쉬", "온 힘을 다해 공격하여 공격력 5배의 데미지",  5, SkillType.Attack, SkillDamageType.BaseAttack, SkillRangeType.One,  30);
-            skills.Add(rapidArrow);
-            skills.Add(arrowRain);
-            skills.Add(arrowBomb);
-            skills.Add(eatRice);
-            skills.Add(bash);
-            skills.Add(powerBash);
-            player.skillList = skills;
         }
 
         /// <summary>
