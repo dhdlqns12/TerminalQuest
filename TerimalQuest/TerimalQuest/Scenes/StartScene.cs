@@ -28,8 +28,11 @@ public class StartScene : IScene
                 case 4:
                     OnSceneChangeRequested?.Invoke(new QuestScene());
                     break;
+                case 5:
+                    OnSceneChangeRequested?.Invoke(new ShopScene());
+                    break;
                 case 0:
-                    Environment.Exit(0);
+                    OnSceneChangeRequested?.Invoke(new DataSaveScene());
                     break;
                 default:
                     Console.WriteLine("잘못된 입력입니다.");

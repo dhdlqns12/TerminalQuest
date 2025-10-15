@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TerimalQuest.Core;
 using TerimalQuest.Scenes;
+using TerimalQuest.System;
 
 namespace TerimalQuest.Manager
 {
@@ -15,6 +16,7 @@ namespace TerimalQuest.Manager
         public static GameManager Instance => instance ??= new GameManager();
 
         public Player player;
+        public Shop shop;
 
         private SceneManager sceneManager;
         private UIManager uiManager => UIManager.Instance;
@@ -26,6 +28,7 @@ namespace TerimalQuest.Manager
         private void Init()
         {
             player = new Player();
+            shop = new Shop();
             sceneManager = new SceneManager();
         }
 

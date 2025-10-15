@@ -18,7 +18,7 @@ namespace TerimalQuest.Scenes
 
         public void Enter()
         {
-            shop = new Shop();
+            shop = GameManager.Instance.shop;
             player = GameManager.Instance.player;
 
             UIManager.Instance.ShopPurchaseScripts(player, shop);

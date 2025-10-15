@@ -36,14 +36,14 @@ namespace TerimalQuest.System
             string itemCount = $"수량: x{count}";
 
             Console.WriteLine(
-                string.Format("{0} | {1} | {2}",
+                string.Format("{0} | {1} | {2} | {3}",
                 ConsoleHelper.PadRightForConsole(itemName, offsetName),
                 ConsoleHelper.PadRightForConsole(itemEffect, offsetEffect),
                 ConsoleHelper.PadRightForConsole(desc, offsetDesc),
                 itemCount));
         }
 
-        public void DisplayInfoProduct()
+        public override void DisplayInfoProduct()
         {
             // 상품 목록에서 보여줄 아이템 정보 표시
             string itemEffect = $"공격력 +{atk}";
@@ -52,7 +52,7 @@ namespace TerimalQuest.System
             string isGoldIcon = (isPurchase) ? "" : "G";
 
             Console.WriteLine(
-                string.Format("{0} | {1} | {2} | {3} {4}",
+                string.Format("{0} | {1} | {2} | {3} | {4} {5}",
                 ConsoleHelper.PadRightForConsole(name, offsetName),
                 ConsoleHelper.PadRightForConsole(itemEffect, offsetEffect),
                 ConsoleHelper.PadRightForConsole(desc, offsetDesc),
