@@ -104,7 +104,7 @@ namespace TerimalQuest.System
             Console.WriteLine(
                 string.Format("{0}{1} | {2} | {3}",
                 equipMode,
-                ConsoleHelper.PadRightForConsole("[아이템 이름]", 20),
+                ConsoleHelper.PadRightForConsole("[아이템 이름]", 15),
                 ConsoleHelper.PadRightForConsole("[아이템 효과]", 15),
                 "[아이템 설명]\n"));
 
@@ -113,6 +113,27 @@ namespace TerimalQuest.System
                 string idxTxt = (isEquipMode) ? $"{i + 1} : " : "";
                 Console.Write($"- {idxTxt}");
                 items[i].DisplayInfo();
+            }
+        }
+
+        // 인벤토리 보여주기 - 아이템 판매
+        public void DisplayInfoWithGold()
+        {
+            Console.WriteLine("[아이템 목록]\n");
+
+            Console.WriteLine(
+                string.Format("{0}{1} | {2} | {3} | {4}",
+                ConsoleHelper.PadRightForConsole(" ", 6),
+                ConsoleHelper.PadRightForConsole("[아이템 이름]", 15),
+                ConsoleHelper.PadRightForConsole("[아이템 효과]", 15),
+                ConsoleHelper.PadRightForConsole("[아이템 설명]", 50),
+                "[아이템 가격]\n"));
+
+            for (int i = 0; i < items.Count; i++)
+            {
+                string idxTxt = $"{i + 1} : ";
+                Console.Write($"- {idxTxt}");
+                items[i].DisplayInfoProduct();
             }
         }
 

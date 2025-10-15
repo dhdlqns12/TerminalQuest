@@ -39,9 +39,9 @@ namespace TerimalQuest.System
 
             Console.WriteLine(
                 string.Format("{0} | {1} | {2}",
-                ConsoleHelper.PadRightForConsole(itemName, 20),
-                ConsoleHelper.PadRightForConsole(itemEffect, 15),
-                ConsoleHelper.PadRightForConsole(desc, 50),
+                ConsoleHelper.PadRightForConsole(itemName, offsetName),
+                ConsoleHelper.PadRightForConsole(itemEffect, offsetEffect),
+                ConsoleHelper.PadRightForConsole(desc, offsetDesc),
                 itemCount));
         }
 
@@ -55,11 +55,11 @@ namespace TerimalQuest.System
 
             Console.WriteLine(
                 string.Format("{0} | {1} | {2} | {3} {4}",
-                ConsoleHelper.PadRightForConsole(name, 20),
-                ConsoleHelper.PadRightForConsole(itemEffect, 15),
-                ConsoleHelper.PadRightForConsole(desc, 50),
-                ConsoleHelper.PadRightForConsole(itemCount, 6),
-                ConsoleHelper.PadRightForConsole(itemPurchase, 6),
+                ConsoleHelper.PadRightForConsole(name, offsetName),
+                ConsoleHelper.PadRightForConsole(itemEffect, offsetEffect),
+                ConsoleHelper.PadRightForConsole(desc, offsetDesc),
+                ConsoleHelper.PadRightForConsole(itemCount, offsetCount),
+                ConsoleHelper.PadRightForConsole(itemPurchase, offsetPurchase),
                 isGoldIcon));
         }
 
