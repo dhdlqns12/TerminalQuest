@@ -104,7 +104,7 @@ namespace TerimalQuest.System
             Console.WriteLine(
                 string.Format("{0}{1} | {2} | {3}",
                 equipMode,
-                ConsoleHelper.PadRightForConsole("[아이템 이름]", 20),
+                ConsoleHelper.PadRightForConsole("[아이템 이름]", 15),
                 ConsoleHelper.PadRightForConsole("[아이템 효과]", 15),
                 "[아이템 설명]\n"));
 

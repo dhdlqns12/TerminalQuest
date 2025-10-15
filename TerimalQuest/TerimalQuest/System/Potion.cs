@@ -38,14 +38,15 @@ namespace TerimalQuest.System
 
             Console.WriteLine(
                 string.Format("{0} | {1} | {2}",
-                ConsoleHelper.PadRightForConsole(name, 20),
-                ConsoleHelper.PadRightForConsole($"{potionTypeTxt} +{healAmount}", 15),
+                ConsoleHelper.PadRightForConsole(name, offsetName),
+                ConsoleHelper.PadRightForConsole($"{potionTypeTxt} +{healAmount}", offsetEffect),
                 desc));
         }
 
         public void DisplayInfoProduct()
         {
             // 상품 목록에서 보여줄 아이템 정보 표시
+            string itemCount = $"수량: x{count}";
             string itemPurchase = (isPurchase) ? "구매완료" : $"{price}";
             string isGoldIcon = (isPurchase) ? "" : "G";
 
@@ -53,10 +54,11 @@ namespace TerimalQuest.System
 
             Console.WriteLine(
                 string.Format("{0} | {1} | {2} | {3} {4}",
-                ConsoleHelper.PadRightForConsole(name, 20),
-                ConsoleHelper.PadRightForConsole($"{potionTypeTxt} +{healAmount}", 15),
-                ConsoleHelper.PadRightForConsole(desc, 50),
-                ConsoleHelper.PadRightForConsole(itemPurchase, 6),
+                ConsoleHelper.PadRightForConsole(name, offsetName),
+                ConsoleHelper.PadRightForConsole($"{potionTypeTxt} +{healAmount}", offsetEffect),
+                ConsoleHelper.PadRightForConsole(desc, offsetDesc),
+                ConsoleHelper.PadRightForConsole(itemCount, offsetCount),
+                ConsoleHelper.PadRightForConsole(itemPurchase, offsetPurchase),
                 isGoldIcon));
         }
 
