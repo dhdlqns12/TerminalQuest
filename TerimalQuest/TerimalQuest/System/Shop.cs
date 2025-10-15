@@ -43,6 +43,10 @@ namespace TerimalQuest.System
 
             productList.Add(ItemDatabase.GetPotion("빨간포션"));
             productList[productList.Count - 1].count = 99; // 포션 99개 설정
+            productList.Add(ItemDatabase.GetPotion("파랑포션"));
+            productList[productList.Count - 1].count = 99; // 포션 99개 설정
+            productList.Add(ItemDatabase.GetPotion("노랑포션"));
+            productList[productList.Count - 1].count = 99; // 포션 99개 설정
         }
 
         // 상품 구매 시도 - 인덱스 검색
