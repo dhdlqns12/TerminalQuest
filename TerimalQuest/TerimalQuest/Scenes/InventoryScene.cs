@@ -13,7 +13,7 @@ namespace TerimalQuest.Scenes
         public event Action<IScene> OnSceneChangeRequested;
         public void Enter()
         {
-
+            InventoryView();
         }
 
         public void Update()
@@ -34,8 +34,6 @@ namespace TerimalQuest.Scenes
             Console.Write("인벤토리 \n보유 중인 아이템을 관리할 수 있습니다. \n\n");
             inventory.DisplayInfo(false);
             Console.Write("\n\n1. 장착 관리 \n2. 아이템 정렬\n0. 나가기 \n\n원하시는 행동을 입력해주세요.\n>>");
-
-            
         }
 
         // 인벤토리 장착 관리 뷰

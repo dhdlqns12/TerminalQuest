@@ -20,6 +20,9 @@ public class StartScene : IScene
                     OnSceneChangeRequested?.Invoke(new ShowStatusScene());
                     break;
                 case 2:
+                    OnSceneChangeRequested?.Invoke(new InventoryScene());
+                    break;
+                case 3:
                     OnSceneChangeRequested?.Invoke(new BattleScene());
                     break;
                 case 0:
