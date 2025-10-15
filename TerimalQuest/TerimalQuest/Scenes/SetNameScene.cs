@@ -16,7 +16,7 @@ namespace TerimalQuest.Scenes
         }
 
         public void Update()
-        {
+        {           
             UIManager.Instance.SetNameScripts();
             string name = Console.ReadLine();
             if (string.IsNullOrEmpty(name))
@@ -31,6 +31,7 @@ namespace TerimalQuest.Scenes
                     switch(answer)
                     {
                         case 1:
+                            GameManager.Instance.player.Init_Player_Name(name);
                             OnSceneChangeRequested?.Invoke(new SetJobScene());
                             break;
                         case 2:

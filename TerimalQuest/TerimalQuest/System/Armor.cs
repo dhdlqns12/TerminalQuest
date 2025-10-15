@@ -64,7 +64,7 @@ namespace TerimalQuest.System
         public override Armor Clone()
         {
             this.Id += 1;   // 복제 시 Id 증가
-            return new Armor(Id, name, desc, price, def, type);
+            return (Armor)this.MemberwiseClone();
         }
     }
 }

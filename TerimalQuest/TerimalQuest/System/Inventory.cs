@@ -116,6 +116,28 @@ namespace TerimalQuest.System
             }
         }
 
+        // 아이템 정렬
+        public void SortItemByOption(int option)
+        {
+            switch (option)
+            {
+                case 1:     // 이름 정렬
+                    items = ItemSorter.SortByName(items);
+                    break;
+                case 2:     // 장착 순 정렬
+                    items = ItemSorter.SortByEquipped(items);
+                    break;
+                case 3:     // 공격력 정렬
+                    items = ItemSorter.SortByAtk(items);
+                    break;
+                case 4:     // 방어력 정렬
+                    items = ItemSorter.SortByDef(items);
+                    break;
+                default:
+                    break;
+            }
+        }
+
         // 프로퍼티 변수
         public List<Item> Items { get { return items; } set { items = value; } }
     }

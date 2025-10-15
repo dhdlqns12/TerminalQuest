@@ -65,7 +65,7 @@ namespace TerimalQuest.System
         // 아이템 복제
         public virtual Item Clone()
         {
-            return new Item(Id, name, desc, price, type);
+            return (Item)this.MemberwiseClone();
         }
     }
 }
