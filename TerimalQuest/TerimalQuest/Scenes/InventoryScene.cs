@@ -41,7 +41,7 @@ namespace TerimalQuest.Scenes
 
         private void Process()
         {
-            string choice = GetUserChoice(["1", "2", "0"]);
+            string choice = GetUserChoice(["1", "2", "3"]);
 
             switch(choice)
             {

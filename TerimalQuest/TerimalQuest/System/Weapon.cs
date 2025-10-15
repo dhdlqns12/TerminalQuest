@@ -18,8 +18,13 @@ namespace TerimalQuest.System
 
         public override void Equip(bool isEquip)
         {
+            //아이템 장착
+            //GameManager.Instance.player.ToggleEquipItem(this);
+
             base.Equip(isEquip);
-            GameManager.Instance.player.ToggleEquipItem(this);
+
+            // 플레이어 방어구 장착
+
         }
 
         public override void DisplayInfo()
