@@ -41,10 +41,10 @@ namespace TerimalQuest.Scenes
             switch (choice)
             {
                 case "1":
-                    OnSceneChangeRequested?.Invoke(new InventoryEquipScene());
+                    OnSceneChangeRequested?.Invoke(new ShopPurchaseScene());
                     break;
                 case "2":
-                    OnSceneChangeRequested?.Invoke(new InventorySortingScene());
+                    OnSceneChangeRequested?.Invoke(new ShopSaleScene());
                     break;
                 case "0":
                     OnSceneChangeRequested?.Invoke(new StartScene());

@@ -44,7 +44,7 @@ namespace TerimalQuest.Scenes
             // 아이템 구매
             while (true)
             {
-                if (choice == "0") { OnSceneChangeRequested?.Invoke(new StartScene()); return; }
+                if (choice == "0") { OnSceneChangeRequested?.Invoke(new ShopScene()); return; }
 
                 // 구매 가능한 아이템이면 구매 
                 if (shop.TryPurchaseItem(int.Parse(choice) - 1) == true) break;

@@ -21,7 +21,7 @@ namespace TerimalQuest.Scenes
             shop = new Shop();
             player = GameManager.Instance.player;
 
-            UIManager.Instance.ShopScripts(player, shop);
+            UIManager.Instance.ShopSaleScripts(player);
         }
 
         public void Update()
@@ -44,7 +44,7 @@ namespace TerimalQuest.Scenes
             // 아이템 판매
             while (true)
             {
-                if (choice == "0") { OnSceneChangeRequested?.Invoke(new StartScene()); return; }
+                if (choice == "0") { OnSceneChangeRequested?.Invoke(new ShopScene()); return; }
 
                 // 판매 가능한 아이템이면 판매 
                 if (shop.TrySaleItem(int.Parse(choice) - 1) == true) break;

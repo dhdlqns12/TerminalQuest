@@ -43,15 +43,17 @@ namespace TerimalQuest.System
             // 아이템 정보 표시
 
             string potionTypeTxt = GetPotionEffectTxt();
+            string itemCount = $"수량: x{count}";
 
             Console.WriteLine(
-                string.Format("{0} | {1} | {2}",
+                string.Format("{0} | {1} | {2} | {3}",
                 ConsoleHelper.PadRightForConsole(name, offsetName),
                 ConsoleHelper.PadRightForConsole($"{potionTypeTxt} +{healAmount}", offsetEffect),
-                desc));
+                ConsoleHelper.PadRightForConsole(desc, offsetDesc),
+                itemCount));
         }
 
-        public void DisplayInfoProduct()
+        public override void DisplayInfoProduct()
         {
             // 상품 목록에서 보여줄 아이템 정보 표시
             string itemCount = $"수량: x{count}";
