@@ -126,6 +126,7 @@ namespace TerimalQuest.System
             else
             {
                 item.Equip(true);
+                QuestManager.Instance.PlayQuest("장착");
             }
         }
 

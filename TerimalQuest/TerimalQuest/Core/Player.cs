@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerimalQuest.Manager;
 using TerimalQuest.System;
 
 namespace TerimalQuest.Core
@@ -105,6 +106,7 @@ namespace TerimalQuest.Core
             level++;
             baseAtk += 0.5f;
             baseDef += 1f;
+            QuestManager.Instance.PlayQuest("레벨", 1);
         }
         #endregion
 
