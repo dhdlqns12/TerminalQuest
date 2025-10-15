@@ -8,7 +8,28 @@
     },
     "rewardGold": 100,
     "rewardExp": 10,
-    "rewardItem": null
+    "rewardItem": [
+      {
+        "Id": 1,
+        "name": "낡은 검",
+        "desc": "낡은 검",
+        "price": 1000,
+        "count": 1,
+        "isEquipped": true,
+        "isPurchase": false,
+        "type": "Weapon"
+      },
+      {
+        "Id": 1,
+        "name": "낡은 검",
+        "desc": "낡은 검",
+        "price": 1000,
+        "count": 1,
+        "isEquipped": true,
+        "isPurchase": false,
+        "type": "Weapon"
+      }
+    ]
   },
   {
     "name": "토템 잡기",

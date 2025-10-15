@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TerimalQuest.Core;
+using TerimalQuest.Manager;
 
 namespace TerimalQuest.System
 {
@@ -18,6 +19,8 @@ namespace TerimalQuest.System
         public int rewardExp { get; set; } //보상 경험치
         public List<Item> rewardItem { get; set; } //보상 아이템
 
+        public bool isClear; //클리어되었는지
+
         public Quest(int questNum, string questType, string name, string description, Dictionary<string, int> successConditions, int rewardGold = 0, int rewardExp = 0, List<Item> rewardItem = null)
         {
             this.questNum = questNum;
@@ -30,19 +33,41 @@ namespace TerimalQuest.System
             this.rewardItem = rewardItem;
         }
 
-         /// <summary>
-         /// 퀘스트 완료 함수
-         /// </summary>
-         /// <param name="player"></param>
-        public void QuestClear(Player player)
+        /// <summary>
+        /// 퀘스트 완료 함수
+        /// </summary>
+        /// <param name="player"></param>
+        public void QuestClear(Player player, Quest quest)
         {
+            RewardMessage();
             player.exp += rewardExp;
             player.gold += rewardGold;
             //인벤토리 추가
-            for (int i = 0; i < rewardItem.Count; i++)
+            if(rewardItem?.Count > 0)
             {
+                for (int i = 0; i < rewardItem?.Count; i++)
+                {
+                    player.inventory.Add(rewardItem[i]);
+                }
             }
             player.questList.Remove(questNum);
+        }
+
+        public void RewardMessage()
+        {
+            Player player = GameManager.Instance.player;
+            Quest quest = QuestManager.Instance.curQuest;
+            Console.WriteLine("보상을 획득하였습니다!");
+            Console.WriteLine($"경험치 : {player.exp} -> {player.exp + quest.rewardExp}");
+            Console.WriteLine($"골드 : {player.gold} -> {player.gold + quest.rewardGold}");
+            if(quest.rewardItem?.Count > 0)
+            {
+                Console.WriteLine("획득 아이템");
+                for (int i = 0; i < quest.rewardItem?.Count; i++)
+                {
+                    Console.WriteLine($"{quest.rewardItem[i].name} x {quest.rewardItem[i].count}");
+                }
+            }
         }
     }
 }
