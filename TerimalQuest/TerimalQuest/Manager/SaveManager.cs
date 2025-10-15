@@ -18,7 +18,7 @@ namespace TerimalQuest.Manager
         public float hp { get; set; }
         public float atk { get; set; }
         public float def { get; set; }
-        public Job job { get; set; }
+        public JobType jobType { get; set; }
         public int gold { get; set; }
         public int stamina { get; set; }
         public int exp { get; set; }
@@ -41,7 +41,7 @@ namespace TerimalQuest.Manager
             hp = player.hp;
             atk = player.atk;
             def = player.def;
-            job = player.job;
+            jobType = player.job.jobType;
             gold = player.gold;
             stamina = player.stamina;
             exp = player.exp;
@@ -64,14 +64,14 @@ namespace TerimalQuest.Manager
             return $"SaveGame{slot}.json";
         }
 
-        public static void GameSave(Player player/*, List<Item> _playerInventory, List<Item> _equipItem,*/ , int _slot) //추후 아이템 관련 및 추가 저장 수정
+        public static void GameSave(/*, List<Item> _playerInventory, List<Item> _equipItem,*/int _slot) //추후 아이템 관련 및 추가 저장 수정
         {
             var options = new JsonSerializerOptions
             {
                 Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
                 WriteIndented = true
             };
-
+            Player player = GameManager.Instance.player;
             SaveData data = new SaveData(player/*, _playerInventory, _equipItem*/);
             string json_Serialize = JsonSerializer.Serialize(data, options);
             File.WriteAllText(SavePath(_slot), json_Serialize);
@@ -82,8 +82,36 @@ namespace TerimalQuest.Manager
             string path = SavePath(_slot);
 
             string json_Deserialize = File.ReadAllText(path);
-            SaveData data = JsonSerializer.Deserialize<SaveData>(json_Deserialize);
 
+            var options = new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                WriteIndented = true,
+            };
+
+            SaveData data = JsonSerializer.Deserialize<SaveData>(json_Deserialize, options);
+
+            Player loadedPlayer = new Player();
+
+            loadedPlayer.Init_Player_Name(data.name);
+            Job job = new Job(data.jobType);
+            loadedPlayer.Init_Player_job(job);
+
+            loadedPlayer.level = data.level;
+            loadedPlayer.hp = data.hp;
+            loadedPlayer.gold = data.gold;
+            loadedPlayer.stamina = data.stamina;
+            loadedPlayer.curStage = data.curStage;
+            loadedPlayer.baseAtk = data.baseAtk;
+            loadedPlayer.baseDef = data.baseDef;
+            loadedPlayer.baseCritRate = data.baseCritRate;
+            loadedPlayer.baseEvadeRate = data.baseEvadeRate;
+
+            loadedPlayer.SetExpWithoutLevelUp(data.exp);
+
+            loadedPlayer.UpdateStats();
+
+            GameManager.Instance.player = loadedPlayer;
             return data;
         }
 
@@ -98,7 +126,18 @@ namespace TerimalQuest.Manager
             {
                 return null;
             }
-            return GameLoad(_slot);
+
+            string path = SavePath(_slot);
+            string json_Deserialize = File.ReadAllText(path);
+
+            var options = new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                WriteIndented = true
+            };
+
+            SaveData data = JsonSerializer.Deserialize<SaveData>(json_Deserialize, options);
+            return data;
         }
     }
 }

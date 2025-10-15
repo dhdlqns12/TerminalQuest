@@ -108,6 +108,11 @@ namespace TerimalQuest.Core
             baseDef += 1f;
             QuestManager.Instance.PlayQuest("레벨", 1);
         }
+
+        public void SetExpWithoutLevelUp(int value) //로드 전용
+        {
+            _exp = value;
+        }
         #endregion
 
         #region 스탯
