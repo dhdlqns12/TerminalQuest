@@ -76,6 +76,7 @@ namespace TerimalQuest.Core
             inventory.Add(ItemDatabase.GetWeapon("연습용 창"));
         }
 
+        #region 레벨업
         public void Check_LevelUp()
         {
             if (level == 0 || job == null) //player초기화 안됬을때(로드에서 오류 생김)
@@ -85,7 +86,6 @@ namespace TerimalQuest.Core
             {
                 _exp -= requiredExp[level - 1];
 
-                level++;
                 LevelUp();
 
                 Console.WriteLine($"레벨업! Lv.{level}");
@@ -102,9 +102,11 @@ namespace TerimalQuest.Core
 
         private void LevelUp()
         {
+            level++;
             baseAtk += 0.5f;
             baseDef += 1f;
         }
+        #endregion
 
         #region 스탯
         private void ApplyJobStat()
@@ -155,8 +157,6 @@ namespace TerimalQuest.Core
 
         private void ToggleEquipWeapon(Weapon  weapon)
         {
-            weapon.isEquipped = !weapon.isEquipped;
-
             if(weapon.isEquipped)
             {
                 if(equippedWeapon!=null&&equippedWeapon!=weapon)
@@ -176,8 +176,6 @@ namespace TerimalQuest.Core
 
         private void ToogleEquipArmor(Armor armor)
         {
-            armor.isEquipped = !armor.isEquipped;
-
             if (armor.isEquipped)
             {
                 if (equippedArmor != null && equippedArmor != armor)
@@ -195,6 +193,76 @@ namespace TerimalQuest.Core
             }
         }
 
+        #endregion
+
+        #region 소비 아이템 사용
+        public void UsePotion(Potion potion)
+        {
+            if (!IsUsePotion(potion, out string message)) // 체크
+            {
+                Console.WriteLine(message);
+                return;
+            }
+
+            Heal_Potion(potion); // 회복
+
+            potion.count--;
+            if (potion.count <= 0)
+            {
+                inventory.Remove(potion); // 제거
+            }
+        }
+
+        private bool IsUsePotion(Potion potion, out string message)
+        {
+            message = "";
+
+            switch (potion.potiontype)
+            {
+                case PotionType.HP:
+                    if (hp >= maxHp)
+                    {
+                        message = "HP최대";
+                        return false;
+                    }
+                    break;
+
+                case PotionType.MP:
+                    if (mp >= maxMp)
+                    {
+                        message = "MP최대";
+                        return false;
+                    }
+                    break;
+
+                case PotionType.Stamina:
+                    if (stamina >= maxStamina)
+                    {
+                        message = "스태미나최대";
+                        return false;
+                    }
+                    break;
+            }
+            return true;
+        }
+
+        private void Heal_Potion(Potion potion)
+        {
+            switch (potion.potiontype)
+            {
+                case PotionType.HP:
+                    hp = Math.Min(hp + potion.healAmount, maxHp);
+                    break;
+
+                case PotionType.MP:
+                    mp = Math.Min(mp + potion.healAmount, maxMp);
+                    break;
+
+                case PotionType.Stamina:
+                    stamina = (int)Math.Min(stamina + potion.healAmount, maxStamina);
+                    break;
+            }
+        }
         #endregion
     }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerimalQuest.Core;
+using TerimalQuest.Manager;
 
 namespace TerimalQuest.System
 {
@@ -28,6 +30,12 @@ namespace TerimalQuest.System
         {
             // 같은 종류의 포션 들어오면 겹치기
             count++;
+        }
+
+        public override void Equip(bool isEquip)
+        {
+            Player player = GameManager.Instance.player;
+            player.UsePotion(this);
         }
 
         public override void DisplayInfo()
