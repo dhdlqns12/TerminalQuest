@@ -24,11 +24,17 @@ namespace TerimalQuest.Manager
         public int exp { get; set; }
         public int curStage { get; set; }
 
+        //아이템 장착 안한 기본 스탯들
+        public float baseAtk { get; set; }
+        public float baseDef { get; set; }
+        public float baseCritRate { get; set; }
+        public float baseEvadeRate { get; set; }
+
         public List<Item> playerInventory { get; set; } //배열로 구현하신다 하셧으니 배열로 변경
         public List<Item> equipItem { get; set; }
 
         public SaveData() { }
-        public SaveData(Player player, List<Item> _playerInventory, List<Item> _equipItem) //아이템 저장 및 장착 부분은 추후에 수정 예정
+        public SaveData(Player player/*, List<Item> _playerInventory, List<Item> _equipItem*/) //아이템 저장 및 장착 부분은 추후에 수정 예정
         {
             name = player.name;
             level = player.level;
@@ -41,8 +47,13 @@ namespace TerimalQuest.Manager
             exp = player.exp;
             curStage = player.curStage;
 
-            playerInventory = new List<Item>(_playerInventory);
-            equipItem = new List<Item>(_equipItem);
+            baseAtk = player.baseAtk;
+            baseDef = player.baseDef;
+            baseCritRate = player.baseCritRate;
+            baseEvadeRate = player.baseEvadeRate;
+
+            //playerInventory = new List<Item>(_playerInventory);
+            //equipItem = new List<Item>(_equipItem);
         }
     }
 
@@ -53,7 +64,7 @@ namespace TerimalQuest.Manager
             return $"SaveGame{slot}.json";
         }
 
-        public static void GameSave(Player player, List<Item> _playerInventory, List<Item> _equipItem, int _slot) //추후 아이템 관련 및 추가 저장 수정
+        public static void GameSave(Player player/*, List<Item> _playerInventory, List<Item> _equipItem,*/ , int _slot) //추후 아이템 관련 및 추가 저장 수정
         {
             var options = new JsonSerializerOptions
             {
@@ -61,7 +72,7 @@ namespace TerimalQuest.Manager
                 WriteIndented = true
             };
 
-            SaveData data = new SaveData(player, _playerInventory, _equipItem);
+            SaveData data = new SaveData(player/*, _playerInventory, _equipItem*/);
             string json_Serialize = JsonSerializer.Serialize(data, options);
             File.WriteAllText(SavePath(_slot), json_Serialize);
         }

@@ -11,14 +11,12 @@ namespace TerimalQuest.Core
     {
         public Job job { get; set; }                    // Job객체
         public string jobName { get; set; }           // 플레이어 직업 이름
-
         public int gold { get; set; }           // 플레이어 골드
-        public int exp { get; set; }            // 플레이어 경험치
         public int maxStamina { get; set; }     // 플레이어 최대 스태미나
         public int stamina;      // 플레이어 스태미나
         public int curStage { get; set; }                 // 현재 스테이지
 
-        public List<int> questList { get; set; }            // 퀘스트 리스트
+        public List<Quest> questList { get; set; }            // 퀘스트 리스트
         public List<Skill> skillList { get; set; }          // 스킬 리스트
 
         public Inventory inventory { get; set; }          // 플레이어 인벤토리
@@ -33,9 +31,20 @@ namespace TerimalQuest.Core
 
         public int[] requiredExp= { 10, 35, 65, 100 };
 
+        private int _exp { get; set; }            // 플레이어 경험치
+        public int exp
+        {
+            get => _exp;
+            set
+            {
+                _exp = value;
+                Check_LevelUp();
+            }
+        }
+
         public Player() : base()                //기본 생성자
         {
-            questList = new List<int>();
+            questList = new List<Quest>();
             skillList = new List<Skill>();
             inventory = new Inventory(50);
             level = 1;
@@ -69,9 +78,12 @@ namespace TerimalQuest.Core
 
         public void Check_LevelUp()
         {
+            if (level == 0 || job == null) //player초기화 안됬을때(로드에서 오류 생김)
+                return;
+
             while (level < requiredExp.Length + 1 && exp >= requiredExp[level-1])
             {
-                exp -= requiredExp[level - 1];
+                _exp -= requiredExp[level - 1];
 
                 level++;
                 LevelUp();

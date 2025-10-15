@@ -42,14 +42,17 @@ namespace TerimalQuest.Scenes
                     {
                         case 1:
                             //1번슬롯 저장
+                            SaveManager.GameSave(GameManager.Instance.player, 1);
                             ConfirmQuit();
                             break;
                         case 2:
                             //2번슬롯 저장
+                            SaveManager.GameSave(GameManager.Instance.player, 2);
                             ConfirmQuit();
                             break;
                         case 3:
                             //3번슬롯 저장
+                            SaveManager.GameSave(GameManager.Instance.player, 3);
                             ConfirmQuit();
                             break;
                         case 0:

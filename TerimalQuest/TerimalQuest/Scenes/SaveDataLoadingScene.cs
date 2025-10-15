@@ -29,14 +29,17 @@ namespace TerimalQuest.Scenes
                         case 1:
                             //1번슬롯 로드
                             OnSceneChangeRequested?.Invoke(new StartScene());
+                            SaveManager.GameLoad(answer);
                             break;
                         case 2:
                             //2번슬롯 로드
                             OnSceneChangeRequested?.Invoke(new StartScene());
+                            SaveManager.GameLoad(answer);
                             break;
                         case 3:
                             //3번슬롯 로드
                             OnSceneChangeRequested?.Invoke(new StartScene());
+                            SaveManager.GameLoad(answer);
                             break;
                         case 0:
                             OnSceneChangeRequested?.Invoke(new SetNameScene());
