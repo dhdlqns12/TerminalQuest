@@ -163,7 +163,7 @@ namespace TerimalQuest.System
                 ConsoleHelper.PadRightForConsole("[아이템 이름]", 15),
                 ConsoleHelper.PadRightForConsole("[아이템 효과]", 15),
                 ConsoleHelper.PadRightForConsole("[아이템 설명]", 50),
-                ConsoleHelper.PadRightForConsole("[수량]", 8),
+                ConsoleHelper.PadRightForConsole("[수량]", 10),
                 "[아이템 가격]\n"));
 
             for (int i = 0; i < items.Count; i++)

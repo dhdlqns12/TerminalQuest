@@ -40,6 +40,9 @@ namespace TerimalQuest.System
             productList.Add(ItemDatabase.GetWeapon("낡은 검"));
             productList.Add(ItemDatabase.GetWeapon("청동 도끼"));
             productList.Add(ItemDatabase.GetWeapon("스파르타의 창"));
+
+            productList.Add(ItemDatabase.GetPotion("빨간포션"));
+            productList[productList.Count - 1].count = 99; // 포션 99개 설정
         }
 
         // 상품 구매 시도 - 인덱스 검색
@@ -140,7 +143,7 @@ namespace TerimalQuest.System
                 ConsoleHelper.PadRightForConsole("[아이템 이름]", 15),
                 ConsoleHelper.PadRightForConsole("[아이템 효과]", 15),
                 ConsoleHelper.PadRightForConsole("[아이템 설명]", 50),
-                ConsoleHelper.PadRightForConsole("[수량]", 8),
+                ConsoleHelper.PadRightForConsole("[수량]", 10),
                 "[아이템 가격]\n"));
 
             for (int i = 0; i < productList.Count; i++)

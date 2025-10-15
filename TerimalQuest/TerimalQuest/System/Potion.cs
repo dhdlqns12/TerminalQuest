@@ -63,7 +63,7 @@ namespace TerimalQuest.System
             string potionTypeTxt = GetPotionEffectTxt();
 
             Console.WriteLine(
-                string.Format("{0} | {1} | {2} | {3} {4}",
+                string.Format("{0} | {1} | {2} | {3} | {4} {5}",
                 ConsoleHelper.PadRightForConsole(name, offsetName),
                 ConsoleHelper.PadRightForConsole($"{potionTypeTxt} +{healAmount}", offsetEffect),
                 ConsoleHelper.PadRightForConsole(desc, offsetDesc),
