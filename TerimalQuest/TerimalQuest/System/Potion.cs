@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerimalQuest.Core;
+using TerimalQuest.Manager;
 
 namespace TerimalQuest.System
 {
@@ -15,8 +17,8 @@ namespace TerimalQuest.System
 
     public class Potion : Item
     {
-        public float healAmount;   // 회복량
-        public PotionType potiontype;
+        public float healAmount { get; set; }       // 회복량
+        public PotionType potiontype { get; set; }  // 포션 타입
 
         public Potion(int id, string name, string desc, int price, float healAmount, ItemType type, PotionType _potionType) : base(id, name, desc, price, type)
         {
@@ -30,33 +32,43 @@ namespace TerimalQuest.System
             count++;
         }
 
+        public override void Equip(bool isEquip)
+        {
+            Player player = GameManager.Instance.player;
+            player.UsePotion(this);
+        }
+
         public override void DisplayInfo()
         {
             // 아이템 정보 표시
 
             string potionTypeTxt = GetPotionEffectTxt();
+            string itemCount = $"수량: x{count}";
 
             Console.WriteLine(
-                string.Format("{0} | {1} | {2}",
-                ConsoleHelper.PadRightForConsole(name, 20),
-                ConsoleHelper.PadRightForConsole($"{potionTypeTxt} +{healAmount}", 15),
-                desc));
+                string.Format("{0} | {1} | {2} | {3}",
+                ConsoleHelper.PadRightForConsole(name, offsetName),
+                ConsoleHelper.PadRightForConsole($"{potionTypeTxt} +{healAmount}", offsetEffect),
+                ConsoleHelper.PadRightForConsole(desc, offsetDesc),
+                itemCount));
         }
 
-        public void DisplayInfoProduct()
+        public override void DisplayInfoProduct()
         {
             // 상품 목록에서 보여줄 아이템 정보 표시
+            string itemCount = $"수량: x{count}";
             string itemPurchase = (isPurchase) ? "구매완료" : $"{price}";
             string isGoldIcon = (isPurchase) ? "" : "G";
 
             string potionTypeTxt = GetPotionEffectTxt();
 
             Console.WriteLine(
-                string.Format("{0} | {1} | {2} | {3} {4}",
-                ConsoleHelper.PadRightForConsole(name, 20),
-                ConsoleHelper.PadRightForConsole($"{potionTypeTxt} +{healAmount}", 15),
-                ConsoleHelper.PadRightForConsole(desc, 50),
-                ConsoleHelper.PadRightForConsole(itemPurchase, 6),
+                string.Format("{0} | {1} | {2} | {3} | {4} {5}",
+                ConsoleHelper.PadRightForConsole(name, offsetName),
+                ConsoleHelper.PadRightForConsole($"{potionTypeTxt} +{healAmount}", offsetEffect),
+                ConsoleHelper.PadRightForConsole(desc, offsetDesc),
+                ConsoleHelper.PadRightForConsole(itemCount, offsetCount),
+                ConsoleHelper.PadRightForConsole(itemPurchase, offsetPurchase),
                 isGoldIcon));
         }
 
@@ -67,13 +79,13 @@ namespace TerimalQuest.System
             switch (potiontype)
             {
                 case PotionType.HP:
-                    potionTypeTxt = "HP 회복";
+                    potionTypeTxt = "HP";
                     break;
                 case PotionType.MP:
-                    potionTypeTxt = "MP 회복";
+                    potionTypeTxt = "MP";
                     break;
                 case PotionType.Stamina:
-                    potionTypeTxt = "Stamina 회복";
+                    potionTypeTxt = "Stamina";
                     break;
                 default:
                     break;

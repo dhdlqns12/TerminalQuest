@@ -36,7 +36,7 @@ namespace TerimalQuest.Manager
 
         public void ShowStartSceneScripts()
         {
-            Console.Write("스파르타 던전에 오신 여러분 환영합니다. \n이제 전투를 시작할 수 있습니다. \n\n1.상태 보기 \n2.전투 시작\n0.게임 종료 \n\n원하시는 행동을 입력해주세요.\n>>");
+            Console.Write("스파르타 던전에 오신 여러분 환영합니다. \n이제 전투를 시작할 수 있습니다. \n\n1.상태 보기 \n2.인벤토리\n3.전투 시작\n4.퀘스트\n5.상점\n0.게임 종료 \n\n원하시는 행동을 입력해주세요.\n>>");
         }
 
         public void ShowStatusSceneScripts()
@@ -47,7 +47,72 @@ namespace TerimalQuest.Manager
 
         public void SetNameScripts()
         {
+            Console.OutputEncoding = global::System.Text.Encoding.UTF8;
             Console.Clear();
+            Console.CursorVisible = false;
+
+            string[] terminal = new string[]
+            {
+        " ▀█▀ █▀▀ █▀█ █▀▄▀█ █ █▄ █ ▄▀█ █   ",
+        "  █  ██▄ █▀▄ █ ▀ █ █ █ ▀█ █▀█ █▄▄ "
+            };
+
+            string[] quest = new string[]
+            {
+        "     █▀█ █ █ █▀▀ █▀ ▀█▀ ",
+        "     ▀▀█ █▄█ ██▄ ▄█  █  "
+            };
+
+            for (int step = 0; step <= 10; step++)
+            {
+                Console.Clear();
+                double scale = step / 10.0;
+
+                for (int i = 0; i < terminal.Length; i++)
+                {
+                    int lineLength = (int)(terminal[i].Length * scale);
+                    int startPos = (terminal[i].Length - lineLength) / 2;
+
+                    if (lineLength > 0)
+                    {
+                        string displayText = terminal[i].Substring(startPos, lineLength);
+
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        Console.SetCursorPosition(startPos, i );
+                        Console.Write(displayText);
+                    }
+                }
+
+                global::System.Threading.Thread.Sleep(50);
+            }
+
+            global::System.Threading.Thread.Sleep(200);
+
+            for (int step = 0; step <= 10; step++)
+            {
+                double scale = step / 10.0;
+
+                for (int i = 0; i < quest.Length; i++)
+                {
+                    int lineLength = (int)(quest[i].Length * scale);
+                    int startPos = (quest[i].Length - lineLength) / 2;
+
+                    if (lineLength > 0)
+                    {
+                        string displayText = quest[i].Substring(startPos, lineLength);
+
+                        Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                        Console.SetCursorPosition(startPos + 3, i + 3);
+                        Console.Write(displayText);
+                    }
+                }
+
+                global::System.Threading.Thread.Sleep(50);
+            }
+
+            Console.ResetColor();
+            Console.CursorVisible = true;
+            Console.SetCursorPosition(0, 7);
             Console.Write("원하시는 이름을 설정해주세요. \n>>");
         }
 
@@ -80,6 +145,140 @@ namespace TerimalQuest.Manager
             Console.WriteLine("새 캐릭터를 생성합니다...");
             Console.ReadKey();
         }
+
+        public void SaveDataLoadingScripts()
+        {
+            Console.WriteLine("0: 새게임");
+            Console.WriteLine("\n[불러올 세이브파일 숫자를 입력해주세요.]");
+            Console.Write(">>");
+        }
+
+        public bool YesOrNo()
+        {
+            while(true)
+            {
+
+                string answer = Console.ReadLine();
+                if (answer != null)
+                {
+                    if(answer == "y")
+                    {
+                        return true;
+                    }
+                    else if(answer == "n")
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("잘못된 입력입니다.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("잘못된 입력입니다.");
+                }
+            }
+        }
+
+        public void DisplayOption(string[] options)
+        {
+            foreach (var option in options)
+            {
+                Console.WriteLine(option);
+            }
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+        }
+
+        #region InventoryUI
+
+        // 플레이어 인벤토리 창 : 플레이어의 인벤토리를 볼 수 있는 창. 아이템을 확인 할 수 있다.
+        public void InventoryScripts(Inventory inventory)
+        {
+            Console.Clear();
+            Console.WriteLine("인벤토리");
+            Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
+            Console.WriteLine();
+            inventory.DisplayInfo(false);
+            Console.WriteLine();
+            DisplayOption(["1. 장착 관리", "2. 아이템 정렬", "0. 나가기"]);
+        }
+
+        // 플레이어 인벤토리 장착 관리 창 : 플레이어의 아이템을 장착/해제 할 수 있다.
+        public void InventoryEquipScripts(Inventory inventory)
+        {
+            Console.Clear();
+            Console.WriteLine("인벤토리 - 장착 관리");
+            Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
+            Console.WriteLine();
+            inventory.DisplayInfo(true);
+            Console.WriteLine();
+            DisplayOption(["(번호). 해당 장비 장착", "0. 나가기"]);
+        }
+
+        // 플레이어 인벤토리 정렬 창 : 인벤토리의 아이템들을 옵션에 따라 정렬할 수 있다.
+        public void InventorySortingScripts(Inventory inventory)
+        {
+            Console.Clear();
+            Console.WriteLine("[인벤토리 - 아이템 정렬]");
+            Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
+            Console.WriteLine();
+            inventory.DisplayInfo(false);
+            Console.WriteLine();
+            DisplayOption(["1. 이름", "2. 장착순", "3. 공격력", "4. 방어력", "0. 나가기"]);
+        }
+
+        #endregion
+
+        #region ShopUI
+
+        // 상점
+        public void ShopScripts(Player player, Shop shop)
+        {
+            Console.Clear();
+            Console.WriteLine("상점");
+            Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+            Console.WriteLine();
+            Console.WriteLine("[보유 골드]");
+            Console.WriteLine($"{player.gold} G");
+            Console.WriteLine();
+            shop.DisplayInfo(false);
+            Console.WriteLine();
+            DisplayOption(["1. 아이템 구매", "2. 아이템 판매", "0. 나가기"]);
+        }
+
+        // 상점 : 상품 구매
+        public void ShopPurchaseScripts(Player player, Shop shop)
+        {
+            Console.Clear();
+            Console.WriteLine("상점 - 아이템 구매");
+            Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+            Console.WriteLine();
+            Console.WriteLine("[보유 골드]");
+            Console.WriteLine($"{player.gold} G");
+            Console.WriteLine();
+            shop.DisplayInfo(true);
+            Console.WriteLine();
+            DisplayOption(["(번호). 해당 아이템 구매", "0. 나가기"]);
+        }
+
+        // 상점 : 아이템 판매
+        public void ShopSaleScripts(Player player)
+        {
+            Console.Clear();
+            Console.WriteLine("상점 - 아이템 판매");
+            Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+            Console.WriteLine();
+            Console.WriteLine("[보유 골드]");
+            Console.WriteLine($"{player.gold} G");
+            Console.WriteLine();
+            player.inventory.DisplayInfoWithGold();
+            Console.WriteLine();
+            DisplayOption(["(번호). 해당 아이템 판매", "0. 나가기"]);
+        }
+
+        #endregion
 
         #region BattleUI
 

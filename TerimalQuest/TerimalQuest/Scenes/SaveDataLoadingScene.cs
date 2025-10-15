@@ -15,16 +15,60 @@ namespace TerimalQuest.Scenes
             DisplaySlot(0);
             DisplaySlot(1);
             DisplaySlot(2);
+            UIManager.Instance.SaveDataLoadingScripts();
         }
 
         public void Update()
         {
-            
+            if (int.TryParse(Console.ReadLine(), out int answer))
+            {
+                if(SaveManager.HasSaveData(answer))
+                {
+                    switch(answer) 
+                    {
+                        case 1:
+                            //1번슬롯 로드
+                            OnSceneChangeRequested?.Invoke(new StartScene());
+                            SaveManager.GameLoad(answer);
+                            break;
+                        case 2:
+                            //2번슬롯 로드
+                            OnSceneChangeRequested?.Invoke(new StartScene());
+                            SaveManager.GameLoad(answer);
+                            break;
+                        case 3:
+                            //3번슬롯 로드
+                            OnSceneChangeRequested?.Invoke(new StartScene());
+                            SaveManager.GameLoad(answer);
+                            break;
+                        case 0:
+                            OnSceneChangeRequested?.Invoke(new SetNameScene());
+                            break;
+                        default:
+                            Console.WriteLine("데이터가 존재하지 않습니다.");
+                            Console.ReadKey();
+                            break;
+                    
+                    }
+
+                }
+                else
+                {
+                    Console.WriteLine("데이터가 존재하지 않습니다.");
+                    Console.ReadKey();
+                }
+            }
+            else
+            {
+                Console.WriteLine("잘못된 입력입니다.");
+                Console.ReadKey();
+            }
         }
+
 
         public void Exit()
         {
-
+            Console.Clear();
         }
 
         static void DisplaySlot(int slotNumber)

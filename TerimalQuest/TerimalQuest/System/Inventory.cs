@@ -35,17 +35,33 @@ namespace TerimalQuest.System
             items = new List<Item>();
         }
 
-        // 아이템 추가
+        // 아이템 추가 
         public void Add(Item item)
         {
-            // 최대 아이템 개수 출력
-            if(items.Count < maxItemCount)
-            {
-                Console.WriteLine("아이템을 최대 소지하였습니다.");
-                return;
-            }
+            AddByItemType(item);
+        }
 
-            items.Add(item);
+        // 아이템 타입에 따라 추가
+        private void AddByItemType(Item item)
+        {
+            if(item is Weapon weapon || item is Armor armor)
+            {
+                // 장비면 새로 추가
+                items.Add(item);
+            }
+            else
+            {
+                // 장비가 아니면 수량을 올려서 겹쳐서 사용
+                Item originItem = FindItemByName(item.name);
+                if(originItem == null)
+                {
+                    items.Add(item);
+                }
+                else
+                {
+                    originItem.count++;
+                }
+            }
         }
 
         // 아이템 삭제
@@ -76,21 +92,40 @@ namespace TerimalQuest.System
             return null;
         }
 
+        //  아이템 검색 : 이름으로 검색
+        public Item FindItemByName(string name)
+        {
+            foreach (var item in items)
+            {
+                if (item.name == name)
+                {
+                    return item;
+                }
+            }
+
+            return null;
+        }
+
         // 장비 장착/해제 - 인덱스 검색
         public void EquipItemByIdx(int idx)
         {
-            if (items.Count <= 0 || idx >= items.Count) return;
-
-            // 이미 장착 중이라면 장착 해제
-            if (items[idx].isEquipped)
+            if (items.Count <= 0 || idx > items.Count)
             {
-                items[idx].Equip();
+                return;
+            }
+
+            Item item = items[idx];
+
+            // 이미 장착되어 있다면 장착 해제
+            if(item.isEquipped)
+            {
+                item.Equip(false);
             }
 
             // 장착 중인 상태가 아니라면 장착
             else
             {
-                items[idx].Equip();
+                item.Equip(true);
             }
         }
 
@@ -102,17 +137,40 @@ namespace TerimalQuest.System
             string equipMode = (isEquipMode) ? ConsoleHelper.PadRightForConsole(" ", 6) : $"  ";
 
             Console.WriteLine(
-                string.Format("{0}{1} | {2} | {3}",
+                string.Format("{0}{1} | {2} | {3} | {4}",
                 equipMode,
-                ConsoleHelper.PadRightForConsole("[아이템 이름]", 20),
+                ConsoleHelper.PadRightForConsole("[아이템 이름]", 15),
                 ConsoleHelper.PadRightForConsole("[아이템 효과]", 15),
-                "[아이템 설명]\n"));
+                ConsoleHelper.PadRightForConsole("[아이템 설명]", 50),
+                "[수량]\n"));
 
             for (int i = 0; i < items.Count; i++)
             {
                 string idxTxt = (isEquipMode) ? $"{i + 1} : " : "";
                 Console.Write($"- {idxTxt}");
                 items[i].DisplayInfo();
+            }
+        }
+
+        // 인벤토리 보여주기 - 아이템 판매
+        public void DisplayInfoWithGold()
+        {
+            Console.WriteLine("[아이템 목록]\n");
+
+            Console.WriteLine(
+                string.Format("{0}{1} | {2} | {3} | {4} | {5}",
+                ConsoleHelper.PadRightForConsole(" ", 6),
+                ConsoleHelper.PadRightForConsole("[아이템 이름]", 15),
+                ConsoleHelper.PadRightForConsole("[아이템 효과]", 15),
+                ConsoleHelper.PadRightForConsole("[아이템 설명]", 50),
+                ConsoleHelper.PadRightForConsole("[수량]", 10),
+                "[아이템 가격]\n"));
+
+            for (int i = 0; i < items.Count; i++)
+            {
+                string idxTxt = $"{i + 1} : ";
+                Console.Write($"- {idxTxt}");
+                items[i].DisplayInfoProduct();
             }
         }
 

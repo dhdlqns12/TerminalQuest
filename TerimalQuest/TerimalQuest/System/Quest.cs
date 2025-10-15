@@ -14,14 +14,20 @@ namespace TerimalQuest.System
         public string questType { get; set; } //퀘스트 타입 -> 필요 시
         public string name { get; set; } //퀘스트 이름
         public string description { get; set; } //퀘스트 설명
-        public Dictionary<string, int> successConditions { get; set; } //성공조건 <몬스터 이름, 마릿 수>
+        
+        //성공조건 <몬스터 이름, 마릿 수> 단 레벨업과 장착 같은 경우는 int = 1로 진행
+        public Dictionary<string, int> successConditions { get; set; }
+
+
         public int rewardGold { get; set; } //보상 골드
         public int rewardExp { get; set; } //보상 경험치
-        public List<Item> rewardItem { get; set; } //보상 아이템
+        public List<string> rewardItem { get; set; } //보상 아이템
 
         public bool isClear; //클리어되었는지
 
-        public Quest(int questNum, string questType, string name, string description, Dictionary<string, int> successConditions, int rewardGold = 0, int rewardExp = 0, List<Item> rewardItem = null)
+        public Dictionary<string, int> currentCounts;
+
+        public Quest(int questNum, string questType, string name, string description, Dictionary<string, int> successConditions, int rewardGold = 0, int rewardExp = 0, List<string> rewardItem = null)
         {
             this.questNum = questNum;
             this.questType = questType;
@@ -31,13 +37,19 @@ namespace TerimalQuest.System
             this.rewardGold = rewardGold;
             this.rewardExp = rewardExp;
             this.rewardItem = rewardItem;
+            isClear = false;
+            currentCounts = new Dictionary<string, int>();
+            foreach (var key in successConditions.Keys)
+            {
+                currentCounts[key] = 0;
+            }
         }
 
         /// <summary>
         /// 퀘스트 완료 함수
         /// </summary>
         /// <param name="player"></param>
-        public void QuestClear(Player player, Quest quest)
+        public void QuestClear(Player player)
         {
             RewardMessage();
             player.exp += rewardExp;
@@ -47,12 +59,17 @@ namespace TerimalQuest.System
             {
                 for (int i = 0; i < rewardItem?.Count; i++)
                 {
-                    player.inventory.Add(rewardItem[i]);
+                    player.inventory.Add(ItemDatabase.GetItem(rewardItem[i]));
                 }
             }
-            player.questList.Remove(questNum);
+            //QuestManager.Instance.questLists.Remove(quest);
+            QuestManager.Instance.InitializeQuest(this);
+            player.questList.Remove(this);
         }
 
+        /// <summary>
+        /// 보상메시지
+        /// </summary>
         public void RewardMessage()
         {
             Player player = GameManager.Instance.player;
@@ -65,7 +82,8 @@ namespace TerimalQuest.System
                 Console.WriteLine("획득 아이템");
                 for (int i = 0; i < quest.rewardItem?.Count; i++)
                 {
-                    Console.WriteLine($"{quest.rewardItem[i].name} x {quest.rewardItem[i].count}");
+                    Item item = ItemDatabase.GetItem(quest.rewardItem[i]);
+                    Console.WriteLine($"{item.name} x {item.count}");
                 }
             }
         }

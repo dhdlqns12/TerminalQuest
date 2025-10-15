@@ -14,12 +14,12 @@ namespace TerimalQuest.Core
             }
             if (saveDataCount >= 1)
             {
-                UIManager.Instance.HasSaveDataScripts();
-                GameManager.Instance.Run(1);
+                UIManager.Instance.EmptySaveDataScripts();
+                GameManager.Instance.Run(0);
             }
             else
             {
-                UIManager.Instance.EmptySaveDataScripts();
+                UIManager.Instance.HasSaveDataScripts();
                 GameManager.Instance.Run(0);
             }
         }

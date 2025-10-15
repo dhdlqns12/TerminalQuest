@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using TerimalQuest.Core;
 using TerimalQuest.Manager;
 using TerimalQuest.System;
 
 namespace TerimalQuest.Scenes
 {
-    public class InventoryScene : IScene
+    public class InventorySortingScene : IScene
     {
         public event Action<IScene> OnSceneChangeRequested;
 
@@ -20,7 +18,7 @@ namespace TerimalQuest.Scenes
         {
             inventory = GameManager.Instance.player.inventory;
 
-            UIManager.Instance.InventoryScripts(inventory);
+            UIManager.Instance.InventorySortingScripts(inventory);
         }
 
         public void Update()
@@ -30,27 +28,21 @@ namespace TerimalQuest.Scenes
 
         public void Exit()
         {
-             
+
         }
 
         private void Process()
-        {
-            string choice = GetUserChoice(["0", "1", "2"]);
+        { 
+            var choice = GetUserChoice(["0", "1", "2", "3", "4"]);
 
-            switch(choice)
-            {
-                case "1":
-                    OnSceneChangeRequested?.Invoke(new InventoryEquipScene());
-                    break;
-                case "2":
-                    OnSceneChangeRequested?.Invoke(new InventorySortingScene());
-                    break;
-                case "0":
-                    OnSceneChangeRequested?.Invoke(new StartScene());
-                    break;
-                default:
-                    break;
-            }
+            // 나가기 설정
+            if (choice == "0") { OnSceneChangeRequested?.Invoke(new InventoryScene()); return; }
+
+            // 옵션에 따라 아이템 정렬
+            inventory.SortItemByOption(int.Parse(choice.ToString()));
+
+            // 업데이트 하여 갱신
+            OnSceneChangeRequested?.Invoke(new InventorySortingScene());
         }
 
         // 사용자 입력 체크

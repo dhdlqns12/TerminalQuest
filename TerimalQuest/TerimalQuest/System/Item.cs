@@ -21,16 +21,23 @@ namespace TerimalQuest.System
          * 
          */
 
-        public int Id { get; set; }     // 아이템 Id
-        public string name;             // 아이템 이름
-        public string desc;             // 아이템 설명
-        public int price;               // 아이템 가격
-        public int count;               // 아이템 수량
+        public int Id { get; set; }         // 아이템 Id
+        public string name { get; set; }    // 아이템 이름
+        public string desc { get; set; }    // 아이템 설명
+        public int price { get; set; }      // 아이템 가격
+        public int count { get; set; }      // 아이템 수량
 
-        public bool isEquipped;             // 아이템 착용 여부
-        public bool isPurchase;             // 아이템 구매 여부
+        public bool isEquipped { get; set; }    // 아이템 착용 여부
+        public bool isPurchase { get; set; }    // 아이템 구매 여부
 
         public ItemType type { get; private set; } // 아이템 타입
+
+        // 아이템 정렬 관련
+        protected int offsetName = 15;
+        protected int offsetEffect = 15;
+        protected int offsetDesc = 50;
+        protected int offsetCount = 10;
+        protected int offsetPurchase = 6;
 
         public Item(int id, string name, string desc, int price, ItemType type)
         {
@@ -46,10 +53,10 @@ namespace TerimalQuest.System
             this.count = 1;
         }
 
-        public virtual void Equip()
+        public virtual void Equip(bool isEquip)
         {
             // 아이템 착용/해제
-            isEquipped = !isEquipped;
+            isEquipped = isEquip;
         }
 
         public virtual void DisplayInfo()

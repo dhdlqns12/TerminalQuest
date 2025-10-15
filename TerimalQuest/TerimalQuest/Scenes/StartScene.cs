@@ -7,11 +7,12 @@ public class StartScene : IScene
 
     public void Enter()
     {
-        UIManager.Instance.ShowStartSceneScripts();
     }
 
     public void Update()
     {
+        Console.Clear();
+        UIManager.Instance.ShowStartSceneScripts();
         if (int.TryParse(Console.ReadLine(), out int answer))
         {
             switch (answer)
@@ -20,10 +21,19 @@ public class StartScene : IScene
                     OnSceneChangeRequested?.Invoke(new ShowStatusScene());
                     break;
                 case 2:
+                    OnSceneChangeRequested?.Invoke(new InventoryScene());
+                    break;
+                case 3:
                     OnSceneChangeRequested?.Invoke(new BattleScene());
                     break;
+                case 4:
+                    OnSceneChangeRequested?.Invoke(new QuestScene());
+                    break;
+                case 5:
+                    OnSceneChangeRequested?.Invoke(new ShopScene());
+                    break;
                 case 0:
-                    Environment.Exit(0);
+                    OnSceneChangeRequested?.Invoke(new DataSaveScene());
                     break;
                 default:
                     Console.WriteLine("잘못된 입력입니다.");
@@ -40,6 +50,6 @@ public class StartScene : IScene
 
     public void Exit()
     {
-        // 나중에 UI 클리어, 리소스 해제 등 넣을 수 있음
+        Console.Clear();
     }
 }

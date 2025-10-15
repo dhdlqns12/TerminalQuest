@@ -40,6 +40,13 @@ namespace TerimalQuest.System
             productList.Add(ItemDatabase.GetWeapon("낡은 검"));
             productList.Add(ItemDatabase.GetWeapon("청동 도끼"));
             productList.Add(ItemDatabase.GetWeapon("스파르타의 창"));
+
+            productList.Add(ItemDatabase.GetPotion("빨간포션"));
+            productList[productList.Count - 1].count = 99; // 포션 99개 설정
+            productList.Add(ItemDatabase.GetPotion("파랑포션"));
+            productList[productList.Count - 1].count = 99; // 포션 99개 설정
+            productList.Add(ItemDatabase.GetPotion("노랑포션"));
+            productList[productList.Count - 1].count = 99; // 포션 99개 설정
         }
 
         // 상품 구매 시도 - 인덱스 검색
@@ -49,10 +56,10 @@ namespace TerimalQuest.System
 
             Item product = productList[idx];
 
-            // 이미 구매한 상품이라면 구매한 아이템입니다 출력
+            // 이미 품절된 상품이라면 품절된 아이템입니다 출력
             if (product.isPurchase)
             {
-                Console.WriteLine("이미 구매한 아이템입니다.");
+                Console.WriteLine("이미 품절된 아이템입니다.");
                 return false;
             }
 
@@ -64,16 +71,19 @@ namespace TerimalQuest.System
                 return false;
             }
 
+            // 수량 감소 후 품절 체크
+            product.count -= 1;
+            if (product.count <= 0) product.isPurchase = true;
+
             // 아이템 구매
             PurchaseItem(product.Clone());
+
             return true;
         }
 
         // 상품 구매
         public void PurchaseItem(Item item)
         {
-            item.isPurchase = true;
-
             Player player = GameManager.Instance.player;
 
             // Player 골드 차감 및 인벤토리 추가
@@ -106,7 +116,7 @@ namespace TerimalQuest.System
             // 이미 장착 중인 아이템이라면 장착 해제
             if (item.isEquipped)
             {
-                item.Equip();
+                item.Equip(false);
             }
 
             // 판매 골드 흭득 : 85%
@@ -115,8 +125,14 @@ namespace TerimalQuest.System
             // 판매 및 골드 흭득 메세지 출력
             Console.WriteLine($"{item.name} 아이템을 판매하였습니다.");
 
-            // 플레이어 인벤토리에서 삭제
-            inventory.Items.RemoveAt(idx);
+            // 수량 감소
+            item.count -= 1;
+
+            // 수량이 0이면 플레이어 인벤토리에서 삭제
+            if(item.isPurchase == false)
+            {
+                inventory.Items.RemoveAt(idx);
+            }
         }
 
         // 상품 목록 보여주기
@@ -126,11 +142,12 @@ namespace TerimalQuest.System
             string purchase = (isPurchase) ? ConsoleHelper.PadRightForConsole(" ", 6) : $"  ";
 
             Console.WriteLine(
-                string.Format("{0}{1} | {2} | {3} | {4}",
+                string.Format("{0}{1} | {2} | {3} | {4} | {5}",
                 purchase,
-                ConsoleHelper.PadRightForConsole("[아이템 이름]", 20),
+                ConsoleHelper.PadRightForConsole("[아이템 이름]", 15),
                 ConsoleHelper.PadRightForConsole("[아이템 효과]", 15),
                 ConsoleHelper.PadRightForConsole("[아이템 설명]", 50),
+                ConsoleHelper.PadRightForConsole("[수량]", 10),
                 "[아이템 가격]\n"));
 
             for (int i = 0; i < productList.Count; i++)
