@@ -36,7 +36,7 @@ namespace TerimalQuest.System
         protected int offsetName = 15;
         protected int offsetEffect = 15;
         protected int offsetDesc = 50;
-        protected int offsetCount = 6;
+        protected int offsetCount = 8;
         protected int offsetPurchase = 6;
 
         public Item(int id, string name, string desc, int price, ItemType type)

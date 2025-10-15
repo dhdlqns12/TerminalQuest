@@ -126,11 +126,12 @@ namespace TerimalQuest.System
             string purchase = (isPurchase) ? ConsoleHelper.PadRightForConsole(" ", 6) : $"  ";
 
             Console.WriteLine(
-                string.Format("{0}{1} | {2} | {3} | {4}",
+                string.Format("{0}{1} | {2} | {3} | {4} | {5}",
                 purchase,
-                ConsoleHelper.PadRightForConsole("[아이템 이름]", 20),
+                ConsoleHelper.PadRightForConsole("[아이템 이름]", 15),
                 ConsoleHelper.PadRightForConsole("[아이템 효과]", 15),
                 ConsoleHelper.PadRightForConsole("[아이템 설명]", 50),
+                ConsoleHelper.PadRightForConsole("[수량]", 8),
                 "[아이템 가격]\n"));
 
             for (int i = 0; i < productList.Count; i++)
