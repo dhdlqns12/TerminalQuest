@@ -54,6 +54,7 @@ namespace TerimalQuest.System
         public void QuestClear(Player player)
         {
             UIManager.Instance.RewardMessage();
+            QuestManager questManager = QuestManager.Instance;
             player.exp += rewardExp;
             player.gold += rewardGold;
             //인벤토리 추가
@@ -73,7 +74,11 @@ namespace TerimalQuest.System
                     player.inventory.Add(ItemDatabase.GetItem(rewardItem[i]));
                 }*/
             }
-            QuestManager.Instance.questLists.Remove(this);
+            if(questManager.subQuests.Contains(this))
+                questManager.subQuests.Remove(this);
+            else
+                questManager.mainQuests.Remove(this);
+            questManager.questLists.Remove(this);
             player.clearQuestNums.Add(this.questNum);
             //QuestManager.Instance.InitializeQuest(this);
             player.questList.Remove(this.questNum);

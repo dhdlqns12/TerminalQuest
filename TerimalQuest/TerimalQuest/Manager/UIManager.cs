@@ -626,10 +626,14 @@ namespace TerimalQuest.Manager
         public void SelectQuest(Quest quest)
         {
             Console.Clear();
+            Player player = GameManager.Instance.player;
             QuestManager.Instance.curQuest = quest;
             Console.WriteLine($"퀘스트 : {quest.name}\n");
             Console.WriteLine($"{quest.description}\n");
-            QuestInfo(quest);
+            if (player.questList.ContainsKey(quest.questNum))
+                QuestInfo(player.questList[quest.questNum]);
+            else
+                QuestInfo(quest);
             Console.WriteLine("\n- 보상 -\n");
             if (quest.rewardItem != null && quest.rewardItem.Count != 0)
             {
@@ -647,12 +651,13 @@ namespace TerimalQuest.Manager
 
         public void QuestInfo(Quest quest)
         {
+            Player player = GameManager.Instance.player;
             switch (quest.questType)
             {
                 case "사냥":
                     foreach (var questDic in quest.successConditions)
                     {
-                        int curNum = QuestManager.Instance.curQuest.currentCounts[questDic.Key];
+                        int curNum = quest.currentCounts[questDic.Key];
                         Console.WriteLine($"- {questDic.Key}을(를) {questDic.Value}마리 처치하세요 ({curNum}/{questDic.Value})");
                     }
                     break;
@@ -705,7 +710,7 @@ namespace TerimalQuest.Manager
             }
         }
         #endregion
-        
+
         #region EndingUI
 
         public void DisplayShowEnding()
