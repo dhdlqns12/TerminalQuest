@@ -81,9 +81,14 @@ namespace TerimalQuest.Scenes
                 {
                     if (int.TryParse(input, out int num))
                     {
-                        if (num <= quests.Count && num > 0)
+                        if (num <= questManager.subQuests.Count+1 && num > 1)
                         {
-                            uiManager.SelectQuest(quests[num - 1]);
+                            uiManager.SelectQuest(questManager.subQuests[num-2]);
+                            isSelecting = true;
+                        }
+                        else if(num == 1)
+                        {
+                            uiManager.SelectQuest(questManager.mainQuests[0]);
                             isSelecting = true;
                         }
                         else if (num == 0)

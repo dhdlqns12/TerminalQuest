@@ -528,18 +528,39 @@ namespace TerimalQuest.Manager
             Console.Clear();
             Console.WriteLine("퀘스트 목록\n");
             QuestManager.Instance.curQuest = null;
-            for (int i = 0; i < quests.Count; i++)
+            ShowMainQuest(player);
+            Console.WriteLine();
+            ShowSubQuests(player);
+            Console.WriteLine("\n0. 돌아가기");
+            Console.Write("\n원하시는 퀘스트를 선택해주세요.\n>>");
+        }
+
+        public void ShowSubQuests(Player player)
+        {
+            List<Quest> subQuests = QuestManager.Instance.subQuests;
+            Console.WriteLine("서브 퀘스트\n");
+            for (int i = 0; i < subQuests.Count; i++)
             {
                 string questRunning = "";
                 if (player.questList != null)
                 {
-                    questRunning = player.questList.ContainsKey(quests[i].questNum) ? "[진행중]" : "";
+                    questRunning = player.questList.ContainsKey(subQuests[i].questNum) ? "[진행중]" : "";
                 }
-                Console.WriteLine($"{i + 1}. {quests[i].name} {questRunning}");
+                Console.WriteLine($"{i + 2}. {subQuests[i].name} {questRunning}");
             }
-            Console.WriteLine("\n0. 돌아가기");
-            Console.Write("\n원하시는 퀘스트를 선택해주세요.\n>>");
         }
+
+        public void ShowMainQuest(Player player)
+        {
+            List<Quest> mainQuests = QuestManager.Instance.mainQuests;
+            Console.WriteLine("메인 퀘스트\n");
+            if (player.questList != null && mainQuests.Count > 0)
+            {
+                string questRunning = player.questList.ContainsKey(mainQuests[0].questNum) ? "[진행중]" : "";
+                Console.WriteLine($"1. {mainQuests[0].name} {questRunning}");
+            }
+        }
+
 
 
         /// <summary>
@@ -576,14 +597,14 @@ namespace TerimalQuest.Manager
                     foreach (var questDic in quest.successConditions)
                     {
                         int curNum = QuestManager.Instance.curQuest.currentCounts[questDic.Key];
-                        Console.WriteLine($"- {questDic.Key} {questDic.Value}마리 처치 ({curNum}/{questDic.Value})");
+                        Console.WriteLine($"- {questDic.Key}을(를) {questDic.Value}마리 처치하세요 ({curNum}/{questDic.Value})");
                     }
                     break;
-                case "장착":
-                    Console.WriteLine("장비를 장착해보세요");
-                    break;
                 case "레벨":
-                    Console.WriteLine($"레벨을 {quest.successConditions["레벨"]}올리세요");
+                    Console.WriteLine($"- 레벨을 {quest.successConditions["레벨"]}올리세요");
+                    break;
+                default:
+                    Console.WriteLine($"- {quest.successDes}");
                     break;
             }
         }

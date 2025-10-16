@@ -22,6 +22,8 @@ namespace TerimalQuest.Manager
 
         Player player = new Player();
 
+        public List<Quest> mainQuests = new List<Quest>();
+        public List<Quest> subQuests = new List<Quest>();
         public QuestManager()
         {           
             string projectRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\");
@@ -31,7 +33,41 @@ namespace TerimalQuest.Manager
             var data = JsonSerializer.Deserialize<List<Quest>>(json);
             questLists = data;
             player = GameManager.Instance.player;
+            InitializeQuests(questLists);
+            QuestClassify(questLists);
         }
+
+        public void InitializeQuests(List<Quest> quests)
+        {
+            List<int> clearNums = player.clearQuestNums;
+            if (clearNums != null)
+            {
+                for(int i = 0; i < quests.Count; i++)
+                {
+                    if (clearNums.Contains(quests[i].questNum))
+                        quests.Remove(quests[i]);
+                }
+            }
+        }
+
+
+
+        public void QuestClassify(List<Quest> quests)
+        {
+            for (int i = 0; i < quests.Count; i++)
+            {
+                switch(quests[i].questType)
+                {
+                    case "보스":
+                        mainQuests.Add(quests[i]);
+                        break;
+                    default:
+                        subQuests.Add(quests[i]);
+                        break;
+                }
+            }
+        }
+
 
         /// <summary>
         /// 퀘스트 수락
