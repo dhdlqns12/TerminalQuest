@@ -13,6 +13,7 @@ namespace TerimalQuest.Scenes
         public event Action<IScene> OnSceneChangeRequested;
 
         QuestManager questManager;
+        UIManager uiManager;
         List<Quest> quests = new List<Quest>();
 
         bool isSelecting = false;
@@ -23,7 +24,8 @@ namespace TerimalQuest.Scenes
         {
             questManager = QuestManager.Instance;
             quests = QuestManager.Instance.questLists;
-            questManager.QuestListShow(quests);
+            uiManager = UIManager.Instance;
+            uiManager.QuestListShow(quests);
         }
 
         public void Update()
@@ -50,14 +52,14 @@ namespace TerimalQuest.Scenes
                         else
                         {
                             questManager.AccepQuest();
-                            questManager.QuestListShow(quests);
-                            /*questManager.PlayQuest("미니언", 10);
-                            questManager.PlayQuest("슬라임", 5);*/
+                            uiManager.QuestListShow(quests);
+                            questManager.PlayQuest("미니언", 10);
+                            questManager.PlayQuest("슬라임", 5);
                             isSelecting = false;
                         }
                         break;
                     case "2":
-                        questManager.QuestListShow(quests);
+                        uiManager.QuestListShow(quests);
                         isSelecting = false;
                         break;
                     default:
@@ -69,7 +71,7 @@ namespace TerimalQuest.Scenes
             {
                 if(isRewarding)
                 {
-                    questManager.QuestListShow(quests);
+                    uiManager.QuestListShow(quests);
                     isRewarding = false;
                 }
                 else
@@ -78,9 +80,11 @@ namespace TerimalQuest.Scenes
                     {
                         if (num <= quests.Count && num > 0)
                         {
-                            QuestManager.Instance.SelectQuest(quests[num - 1]);
+                            uiManager.SelectQuest(quests[num - 1]);
                             isSelecting = true;
                         }
+                        else if (num == 0)
+                            OnSceneChangeRequested?.Invoke(new StartScene());
                         else
                             Console.WriteLine("잘못된 입력입니다.");
                     }

@@ -21,13 +21,13 @@ namespace TerimalQuest.System
 
         public int rewardGold { get; set; } //보상 골드
         public int rewardExp { get; set; } //보상 경험치
-        public List<string> rewardItem { get; set; } //보상 아이템
+        public Dictionary<string, int> rewardItem { get; set; } //보상 아이템
 
         public bool isClear; //클리어되었는지
 
         public Dictionary<string, int> currentCounts;
 
-        public Quest(int questNum, string questType, string name, string description, Dictionary<string, int> successConditions, int rewardGold = 0, int rewardExp = 0, List<string> rewardItem = null)
+        public Quest(int questNum, string questType, string name, string description, Dictionary<string, int> successConditions, int rewardGold = 0, int rewardExp = 0, Dictionary<string, int> rewardItem = null)
         {
             this.questNum = questNum;
             this.questType = questType;
@@ -51,41 +51,29 @@ namespace TerimalQuest.System
         /// <param name="player"></param>
         public void QuestClear(Player player)
         {
-            RewardMessage();
+            UIManager.Instance.RewardMessage();
             player.exp += rewardExp;
             player.gold += rewardGold;
             //인벤토리 추가
             if(rewardItem?.Count > 0)
             {
-                for (int i = 0; i < rewardItem?.Count; i++)
+                foreach (var dic in rewardItem)
+                {
+                    string itemName = dic.Key;
+                    int count = dic.Value;
+                    for (int i = 0; i < count; i++)
+                    {
+                        player.inventory.Add(ItemDatabase.GetItem(dic.Key));
+                    }
+                }
+                /*for (int i = 0; i < rewardItem?.Count; i++)
                 {
                     player.inventory.Add(ItemDatabase.GetItem(rewardItem[i]));
-                }
+                }*/
             }
             //QuestManager.Instance.questLists.Remove(quest);
             QuestManager.Instance.InitializeQuest(this);
             player.questList.Remove(this);
-        }
-
-        /// <summary>
-        /// 보상메시지
-        /// </summary>
-        public void RewardMessage()
-        {
-            Player player = GameManager.Instance.player;
-            Quest quest = QuestManager.Instance.curQuest;
-            Console.WriteLine("보상을 획득하였습니다!");
-            Console.WriteLine($"경험치 : {player.exp} -> {player.exp + quest.rewardExp}");
-            Console.WriteLine($"골드 : {player.gold} -> {player.gold + quest.rewardGold}");
-            if(quest.rewardItem?.Count > 0)
-            {
-                Console.WriteLine("획득 아이템");
-                for (int i = 0; i < quest.rewardItem?.Count; i++)
-                {
-                    Item item = ItemDatabase.GetItem(quest.rewardItem[i]);
-                    Console.WriteLine($"{item.name} x {item.count}");
-                }
-            }
         }
     }
 }
