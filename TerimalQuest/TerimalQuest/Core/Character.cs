@@ -17,7 +17,7 @@ namespace TerimalQuest.Core
         public float hp
         {
             get { return _hp; }
-            set { _hp = Math.Max(0, value); }
+            set { _hp = Math.Clamp(value, 0, maxHp); }
         }
 
         public float maxMp { get; set; }        // 캐릭터 최대 마나
@@ -26,7 +26,7 @@ namespace TerimalQuest.Core
         public float mp // 캐릭터 마나
         {
             get { return _mp; }
-            set { _mp = Math.Max(0, value); }
+            set { _mp = Math.Clamp(value, 0, maxMp); }
         }
 
         public float atk { get; set; }          // 캐릭터 공격력
