@@ -28,12 +28,9 @@ public class StartScene : IScene
                     break;
                 case 4:
                     OnSceneChangeRequested?.Invoke(new QuestScene());
-                    break;                
+                    break;
                 case 5:
                     OnSceneChangeRequested?.Invoke(new ShopScene());
-                    break;
-                case 6:
-                    OnSceneChangeRequested?.Invoke(new TownActivityScene());
                     break;
                 case 0:
                     OnSceneChangeRequested?.Invoke(new DataSaveScene());
