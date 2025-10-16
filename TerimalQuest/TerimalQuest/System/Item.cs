@@ -32,13 +32,6 @@ namespace TerimalQuest.System
 
         public ItemType type { get; private set; } // 아이템 타입
 
-        // 아이템 정렬 관련
-        protected int offsetName = 15;
-        protected int offsetEffect = 15;
-        protected int offsetDesc = 50;
-        protected int offsetCount = 10;
-        protected int offsetPurchase = 6;
-
         public Item(int id, string name, string desc, int price, ItemType type)
         {
             Id = id;
@@ -58,6 +51,18 @@ namespace TerimalQuest.System
         {
             // 아이템 착용/해제
             isEquipped = isEquip;
+        }
+
+        public virtual string GetEffectText()
+        {
+            // 아이템 효과 텍스트 반환
+            return "";
+        }
+
+        public virtual string GetCountText()
+        {
+            // 아이템 개수 텍스트 반환
+            return $"수량: x{count}";
         }
 
         public virtual void DisplayInfo()

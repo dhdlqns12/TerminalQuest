@@ -141,17 +141,7 @@ namespace TerimalQuest.System
         // 상품 목록 보여주기
         public void DisplayInfo(bool isPurchase)
         {
-            Console.WriteLine("[아이템 목록]\n");
-            string purchase = (isPurchase) ? ConsoleHelper.PadRightForConsole(" ", 6) : $"  ";
-
-            Console.WriteLine(
-                string.Format("{0}{1} | {2} | {3} | {4} | {5}",
-                purchase,
-                ConsoleHelper.PadRightForConsole("[아이템 이름]", 15),
-                ConsoleHelper.PadRightForConsole("[아이템 효과]", 15),
-                ConsoleHelper.PadRightForConsole("[아이템 설명]", 50),
-                ConsoleHelper.PadRightForConsole("[수량]", 10),
-                "[아이템 가격]\n"));
+            UIManager.Instance.DisplayItemProductHeader(isPurchase);
 
             for (int i = 0; i < productList.Count; i++)
             {
