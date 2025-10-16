@@ -12,8 +12,7 @@
     "rewardExp": 10,
     "rewardItem": {
       "무쇠갑옷": 1,
-      "낡은 검": 1,
-      "빨간포션": 4
+      "빨간포션": 5
     }
   },
   {
@@ -69,7 +68,8 @@
     "rewardGold": 100,
     "rewardExp": 20,
     "rewardItem": {
-      "빨간포션": 5
+      "빨간포션": 5,
+      "노랑포션": 3
     }
   },
   {
@@ -115,6 +115,9 @@
     },
     "rewardGold": 150,
     "rewardExp": 20,
-    "rewardItem": null
+    "rewardItem": {
+      "청동 도끼": 1,
+      "강화석": 1
+    }
   }
 ]
