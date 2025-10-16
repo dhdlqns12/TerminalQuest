@@ -216,7 +216,7 @@ namespace TerimalQuest.Manager
         // 인벤토리 아이템 정보 표시
         public void DisplayItemInfo(Item item, bool isEquipMode = false)
         {
-            string equipTxt = (item.isEquipped && item.type == ItemType.Armor) ? "[E]" : "";
+            string equipTxt = (item.isEquipped && (item.type == ItemType.Armor || item.type == ItemType.Weapon)) ? "[E]" : "";
             string itemName = $"{equipTxt}{item.name}";
 
             string equipMode = (isEquipMode) ? ConsoleHelper.PadRightForConsole(" ", 6) : $"  ";
