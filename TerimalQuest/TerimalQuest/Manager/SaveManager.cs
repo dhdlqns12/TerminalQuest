@@ -32,7 +32,7 @@ namespace TerimalQuest.Manager
 
         public List<Item> playerInventory { get; set; } //배열로 구현하신다 하셧으니 배열로 변경
         public List<Item> equipItem { get; set; }
-
+        public Dictionary<int, Quest> questList { get; set; }
         public SaveData() { }
         public SaveData(Player player/*, List<Item> _playerInventory, List<Item> _equipItem*/) //아이템 저장 및 장착 부분은 추후에 수정 예정
         {
@@ -54,6 +54,7 @@ namespace TerimalQuest.Manager
 
             //playerInventory = new List<Item>(_playerInventory);
             //equipItem = new List<Item>(_equipItem);
+            questList = player.questList;
         }
     }
 
@@ -106,6 +107,8 @@ namespace TerimalQuest.Manager
             loadedPlayer.baseDef = data.baseDef;
             loadedPlayer.baseCritRate = data.baseCritRate;
             loadedPlayer.baseEvadeRate = data.baseEvadeRate;
+
+            loadedPlayer.questList = (data.questList != null) ? data.questList : new Dictionary<int, Quest>();
 
             loadedPlayer.SetExpWithoutLevelUp(data.exp);
 

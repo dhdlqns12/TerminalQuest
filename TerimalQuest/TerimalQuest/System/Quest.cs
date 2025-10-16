@@ -23,11 +23,11 @@ namespace TerimalQuest.System
         public int rewardExp { get; set; } //보상 경험치
         public Dictionary<string, int> rewardItem { get; set; } //보상 아이템
 
-        public bool isClear; //클리어되었는지
+        public bool isClear { get; set; } //클리어되었는지
 
         public Dictionary<string, int> currentCounts;
 
-        public Quest(int questNum, string questType, string name, string description, Dictionary<string, int> successConditions, int rewardGold = 0, int rewardExp = 0, Dictionary<string, int> rewardItem = null)
+        public Quest(int questNum, string questType, string name, string description, Dictionary<string, int> successConditions, bool isClear, int rewardGold = 0, int rewardExp = 0, Dictionary<string, int> rewardItem = null)
         {
             this.questNum = questNum;
             this.questType = questType;
@@ -37,7 +37,7 @@ namespace TerimalQuest.System
             this.rewardGold = rewardGold;
             this.rewardExp = rewardExp;
             this.rewardItem = rewardItem;
-            isClear = false;
+            this.isClear = isClear;
             currentCounts = new Dictionary<string, int>();
             foreach (var key in successConditions.Keys)
             {
@@ -73,7 +73,7 @@ namespace TerimalQuest.System
             }
             //QuestManager.Instance.questLists.Remove(quest);
             QuestManager.Instance.InitializeQuest(this);
-            player.questList.Remove(this);
+            player.questList.Remove(this.questNum);
         }
     }
 }

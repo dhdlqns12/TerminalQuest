@@ -461,8 +461,11 @@ namespace TerimalQuest.Manager
             QuestManager.Instance.curQuest = null;
             for (int i = 0; i < quests.Count; i++)
             {
-
-                string questRunning = player.questList.Contains(quests[i]) ? "[진행중]" : "";
+                string questRunning = "";
+                if (player.questList != null)
+                {
+                    questRunning = player.questList.ContainsKey(quests[i].questNum) ? "[진행중]" : "";
+                }
                 Console.WriteLine($"{i + 1}. {quests[i].name} {questRunning}");
             }
             Console.WriteLine("\n0. 돌아가기");
@@ -522,7 +525,7 @@ namespace TerimalQuest.Manager
         public void SelectChoice()
         {
             Player player = GameManager.Instance.player;
-            if (player.questList.Contains(QuestManager.Instance.curQuest))
+            if (player.questList.ContainsKey(QuestManager.Instance.curQuest.questNum))
             {
                 Console.WriteLine("\n1. 보상 받기");
                 Console.WriteLine("2. 돌아가기");

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerimalQuest.Core;
 using TerimalQuest.Manager;
 using TerimalQuest.System;
 
@@ -33,14 +34,16 @@ namespace TerimalQuest.Scenes
             string input = Console.ReadLine();
             if (isSelecting && !isRewarding)
             {
+                Player player = GameManager.Instance.player;
                 switch (input)
                 {
                     case "1":
                         Quest quest = questManager.curQuest;
-                        
-                        if(GameManager.Instance.player.questList.Contains(quest))
+                        Dictionary<int, Quest> playerQuest = player.questList;
+                        int questNum = quest.questNum;
+                        if (playerQuest.ContainsKey(questNum))
                         {
-                            if (quest.isClear)
+                            if (playerQuest[questNum].isClear)
                             {
                                 quest.QuestClear(GameManager.Instance.player);
                                 isSelecting = false;

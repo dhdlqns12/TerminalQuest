@@ -38,7 +38,7 @@ namespace TerimalQuest.Manager
         /// </summary>
         public void AccepQuest()
         {
-            player.questList.Add(curQuest);
+            player.questList.Add(curQuest.questNum, curQuest);
         }
 
         /// <summary>
@@ -49,19 +49,19 @@ namespace TerimalQuest.Manager
         /// <returns></returns>
         public void PlayQuest(string name, int num = 1)
         {
-            List<Quest> playerQuests = GameManager.Instance.player.questList;
-            for (int i = 0; i < playerQuests?.Count; i++)
+            Dictionary<int, Quest> playerQuests = GameManager.Instance.player.questList;
+            foreach(var quest in playerQuests)
             {
-                Quest quest = playerQuests[i];
-                if (quest.currentCounts.ContainsKey(name))
+                Quest curQuest = quest.Value;
+                if (curQuest.currentCounts.ContainsKey(name))
                 {
-                    quest.currentCounts[name] += num;
-                    if (quest.currentCounts[name] >= quest.successConditions[name])
+                    curQuest.currentCounts[name] += num;
+                    if (curQuest.currentCounts[name] >= curQuest.successConditions[name])
                     {
-                        quest.currentCounts[name] = quest.successConditions[name];
+                        curQuest.currentCounts[name] = curQuest.successConditions[name];
                     }
                 }
-                quest.isClear = CheckQuest(quest);
+                curQuest.isClear = CheckQuest(curQuest);
             }
         }
 

@@ -17,7 +17,7 @@ namespace TerimalQuest.Core
         public int stamina;      // 플레이어 스태미나
         public int curStage { get; set; }                 // 현재 스테이지
 
-        public List<Quest> questList { get; set; }            // 퀘스트 리스트
+        public Dictionary<int, Quest> questList { get; set; }            // 퀘스트 리스트
         public List<Skill> skillList { get; set; }          // 스킬 리스트
 
         public Inventory inventory { get; set; }          // 플레이어 인벤토리
@@ -45,7 +45,7 @@ namespace TerimalQuest.Core
 
         public Player() : base()                //기본 생성자
         {
-            questList = new List<Quest>();
+            questList = new Dictionary<int, Quest>();
             skillList = new List<Skill>();
             inventory = new Inventory(50);
             level = 1;
