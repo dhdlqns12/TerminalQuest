@@ -130,7 +130,7 @@ namespace TerimalQuest.Core
             evadeRate = job.evadeRate;
             skillList = job.DefaultSkills;
 
-            UpdateStats(); //처리가 이뤄질만한 작업이처리가 되면 특정 bool값을 true로 적게돌리는 방향성
+            UpdateStats();
         }
 
         public void UpdateStats()
