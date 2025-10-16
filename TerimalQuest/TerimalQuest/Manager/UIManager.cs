@@ -191,6 +191,75 @@ namespace TerimalQuest.Manager
             Console.WriteLine("원하시는 행동을 입력해주세요.");
         }
 
+        // 문자 사이 정렬 offset 값
+        private int offsetName = 15;
+        private int offsetEffect = 15;
+        private int offsetDesc = 50;
+        private int offsetCount = 10;
+        private int offsetPurchase = 10;
+
+        // 아이템 정보 표시 헤더
+        public void DisplayItemInfoHeader(bool isEquipMode = false)
+        {
+            string equipMode = isEquipMode ? ConsoleHelper.PadRightForConsole(" ", 6) : "  ";
+
+            Console.WriteLine(
+                string.Format("{0}{1} | {2} | {3} | {4}",
+                equipMode,
+                ConsoleHelper.PadRightForConsole("[아이템 이름]", offsetName),
+                ConsoleHelper.PadRightForConsole("[아이템 효과]", offsetEffect),
+                ConsoleHelper.PadRightForConsole("[아이템 설명]", offsetDesc),
+                "[수량]\n")
+            );
+        }
+
+        // 인벤토리 아이템 정보 표시
+        public void DisplayItemInfo(Item item, bool isEquipMode = false)
+        {
+            string equipTxt = (item.isEquipped && item.type == ItemType.Armor) ? "[E]" : "";
+            string itemName = $"{equipTxt}{item.name}";
+
+            string equipMode = (isEquipMode) ? ConsoleHelper.PadRightForConsole(" ", 6) : $"  ";
+
+            Console.WriteLine(string.Format("{0} | {1} | {2} | {3}",
+                ConsoleHelper.PadRightForConsole(itemName, offsetName),
+                ConsoleHelper.PadRightForConsole(item.GetEffectText(), offsetEffect),
+                ConsoleHelper.PadRightForConsole(item.desc, offsetDesc),
+                item.GetCountText()
+            ));
+        }
+
+        // 상점 아이템 정보 표시 헤더
+        public void DisplayItemProductHeader(bool isPurchase = true)
+        {
+            Console.WriteLine("[아이템 목록]\n");
+            string purchase = (isPurchase) ? ConsoleHelper.PadRightForConsole(" ", 6) : $"  ";
+
+            Console.WriteLine(
+                string.Format("{0}{1} | {2} | {3} | {4} | {5}",
+                purchase,
+                ConsoleHelper.PadRightForConsole("[아이템 이름]", 15),
+                ConsoleHelper.PadRightForConsole("[아이템 효과]", 15),
+                ConsoleHelper.PadRightForConsole("[아이템 설명]", 50),
+                ConsoleHelper.PadRightForConsole("[수량]", 10),
+                "[아이템 가격]\n"));
+        }
+
+        // 상점 아이템 정보 표시
+        public void DisplayItemProduct(Item item)
+        {
+            string itemPurchase = (item.isPurchase) ? "구매완료" : $"{item.price}";
+            string isGoldIcon = (item.isPurchase) ? "" : "G";
+
+            Console.WriteLine(string.Format("{0} | {1} | {2} | {3} | {4} {5}",
+                ConsoleHelper.PadRightForConsole(item.name, offsetName),
+                ConsoleHelper.PadRightForConsole(item.GetEffectText(), offsetEffect),
+                ConsoleHelper.PadRightForConsole(item.desc, offsetDesc),
+                ConsoleHelper.PadRightForConsole(item.GetCountText(), offsetCount),
+                ConsoleHelper.PadRightForConsole(itemPurchase, offsetPurchase),
+                isGoldIcon));
+        }
+
         #region InventoryUI
 
         // 플레이어 인벤토리 창 : 플레이어의 인벤토리를 볼 수 있는 창. 아이템을 확인 할 수 있다.
@@ -514,15 +583,39 @@ namespace TerimalQuest.Manager
             Console.Clear();
             Console.WriteLine("퀘스트 목록\n");
             QuestManager.Instance.curQuest = null;
-            for (int i = 0; i < quests.Count; i++)
-            {
-
-                string questRunning = player.questList.Contains(quests[i]) ? "[진행중]" : "";
-                Console.WriteLine($"{i + 1}. {quests[i].name} {questRunning}");
-            }
+            ShowMainQuest(player);
+            Console.WriteLine();
+            ShowSubQuests(player);
             Console.WriteLine("\n0. 돌아가기");
             Console.Write("\n원하시는 퀘스트를 선택해주세요.\n>>");
         }
+
+        public void ShowSubQuests(Player player)
+        {
+            List<Quest> subQuests = QuestManager.Instance.subQuests;
+            Console.WriteLine("서브 퀘스트\n");
+            for (int i = 0; i < subQuests.Count; i++)
+            {
+                string questRunning = "";
+                if (player.questList != null)
+                {
+                    questRunning = player.questList.ContainsKey(subQuests[i].questNum) ? "[진행중]" : "";
+                }
+                Console.WriteLine($"{i + 2}. {subQuests[i].name} {questRunning}");
+            }
+        }
+
+        public void ShowMainQuest(Player player)
+        {
+            List<Quest> mainQuests = QuestManager.Instance.mainQuests;
+            Console.WriteLine("메인 퀘스트\n");
+            if (player.questList != null && mainQuests.Count > 0)
+            {
+                string questRunning = player.questList.ContainsKey(mainQuests[0].questNum) ? "[진행중]" : "";
+                Console.WriteLine($"1. {mainQuests[0].name} {questRunning}");
+            }
+        }
+
 
 
         /// <summary>
@@ -559,14 +652,14 @@ namespace TerimalQuest.Manager
                     foreach (var questDic in quest.successConditions)
                     {
                         int curNum = QuestManager.Instance.curQuest.currentCounts[questDic.Key];
-                        Console.WriteLine($"- {questDic.Key} {questDic.Value}마리 처치 ({curNum}/{questDic.Value})");
+                        Console.WriteLine($"- {questDic.Key}을(를) {questDic.Value}마리 처치하세요 ({curNum}/{questDic.Value})");
                     }
                     break;
-                case "장착":
-                    Console.WriteLine("장비를 장착해보세요");
-                    break;
                 case "레벨":
-                    Console.WriteLine($"레벨을 {quest.successConditions["레벨"]}올리세요");
+                    Console.WriteLine($"- 레벨을 {quest.successConditions["레벨"]}올리세요");
+                    break;
+                default:
+                    Console.WriteLine($"- {quest.successDes}");
                     break;
             }
         }
@@ -577,7 +670,7 @@ namespace TerimalQuest.Manager
         public void SelectChoice()
         {
             Player player = GameManager.Instance.player;
-            if (player.questList.Contains(QuestManager.Instance.curQuest))
+            if (player.questList.ContainsKey(QuestManager.Instance.curQuest.questNum))
             {
                 Console.WriteLine("\n1. 보상 받기");
                 Console.WriteLine("2. 돌아가기");

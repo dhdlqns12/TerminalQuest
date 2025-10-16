@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerimalQuest.Core;
 using TerimalQuest.Manager;
 using TerimalQuest.System;
 
@@ -33,14 +34,16 @@ namespace TerimalQuest.Scenes
             string input = Console.ReadLine();
             if (isSelecting && !isRewarding)
             {
+                Player player = GameManager.Instance.player;
                 switch (input)
                 {
                     case "1":
                         Quest quest = questManager.curQuest;
-                        
-                        if(GameManager.Instance.player.questList.Contains(quest))
+                        Dictionary<int, Quest> playerQuest = player.questList;
+                        int questNum = quest.questNum;
+                        if (playerQuest.ContainsKey(questNum))
                         {
-                            if (quest.isClear)
+                            if (playerQuest[questNum].isClear)
                             {
                                 quest.QuestClear(GameManager.Instance.player);
                                 isSelecting = false;
@@ -53,8 +56,8 @@ namespace TerimalQuest.Scenes
                         {
                             questManager.AccepQuest();
                             uiManager.QuestListShow(quests);
-                            questManager.PlayQuest("미니언", 10);
-                            questManager.PlayQuest("슬라임", 5);
+                            /*questManager.PlayQuest("미니언", 10);
+                            questManager.PlayQuest("슬라임", 5);*/
                             isSelecting = false;
                         }
                         break;
@@ -78,9 +81,14 @@ namespace TerimalQuest.Scenes
                 {
                     if (int.TryParse(input, out int num))
                     {
-                        if (num <= quests.Count && num > 0)
+                        if (num <= questManager.subQuests.Count+1 && num > 1)
                         {
-                            uiManager.SelectQuest(quests[num - 1]);
+                            uiManager.SelectQuest(questManager.subQuests[num-2]);
+                            isSelecting = true;
+                        }
+                        else if(num == 1)
+                        {
+                            uiManager.SelectQuest(questManager.mainQuests[0]);
                             isSelecting = true;
                         }
                         else if (num == 0)

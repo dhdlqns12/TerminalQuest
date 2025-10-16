@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace TerimalQuest.System
 {
-    public enum ItemType { Weapon, Armor, Potion, Etc }
+    public enum ItemType { Weapon, Armor, Potion, EnhancementStone }
 
     public class Item
     {
-         /*
-         * Item 스크립트
-         * 
-         * 이 게임에서 사용하는 아이템 옵션은 다음과 같다.
-         * [Armor] 방어구
-         * [Weapon] 무기
-         * [Potion] 포션
-         * [Etc] 기타 아이템
-         * 
-         */
+        /*
+        * Item 스크립트
+        * 
+        * 이 게임에서 사용하는 아이템 옵션은 다음과 같다.
+        * [Armor] 방어구
+        * [Weapon] 무기
+        * [Potion] 포션
+        * [EnhancementStone] 강화석
+        * 
+        */
 
         public int Id { get; set; }         // 아이템 Id
         public string name { get; set; }    // 아이템 이름
@@ -32,13 +32,6 @@ namespace TerimalQuest.System
 
         public ItemType type { get; private set; } // 아이템 타입
 
-        // 아이템 정렬 관련
-        protected int offsetName = 15;
-        protected int offsetEffect = 15;
-        protected int offsetDesc = 50;
-        protected int offsetCount = 10;
-        protected int offsetPurchase = 6;
-
         public Item(int id, string name, string desc, int price, ItemType type)
         {
             Id = id;
@@ -50,6 +43,7 @@ namespace TerimalQuest.System
             this.isEquipped = false;
             this.isPurchase = false;
 
+            // 생성자 내 개수 1개로 설정
             this.count = 1;
         }
 
@@ -57,6 +51,18 @@ namespace TerimalQuest.System
         {
             // 아이템 착용/해제
             isEquipped = isEquip;
+        }
+
+        public virtual string GetEffectText()
+        {
+            // 아이템 효과 텍스트 반환
+            return "";
+        }
+
+        public virtual string GetCountText()
+        {
+            // 아이템 개수 텍스트 반환
+            return $"수량: x{count}";
         }
 
         public virtual void DisplayInfo()

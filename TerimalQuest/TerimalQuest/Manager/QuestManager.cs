@@ -22,6 +22,8 @@ namespace TerimalQuest.Manager
 
         Player player = new Player();
 
+        public List<Quest> mainQuests = new List<Quest>();
+        public List<Quest> subQuests = new List<Quest>();
         public QuestManager()
         {           
             string projectRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\");
@@ -31,14 +33,48 @@ namespace TerimalQuest.Manager
             var data = JsonSerializer.Deserialize<List<Quest>>(json);
             questLists = data;
             player = GameManager.Instance.player;
+            InitializeQuests(questLists);
+            QuestClassify(questLists);
         }
+
+        public void InitializeQuests(List<Quest> quests)
+        {
+            List<int> clearNums = player.clearQuestNums;
+            if (clearNums != null)
+            {
+                for(int i = 0; i < quests.Count; i++)
+                {
+                    if (clearNums.Contains(quests[i].questNum))
+                        quests.Remove(quests[i]);
+                }
+            }
+        }
+
+
+
+        public void QuestClassify(List<Quest> quests)
+        {
+            for (int i = 0; i < quests.Count; i++)
+            {
+                switch(quests[i].questType)
+                {
+                    case "보스":
+                        mainQuests.Add(quests[i]);
+                        break;
+                    default:
+                        subQuests.Add(quests[i]);
+                        break;
+                }
+            }
+        }
+
 
         /// <summary>
         /// 퀘스트 수락
         /// </summary>
         public void AccepQuest()
         {
-            player.questList.Add(curQuest);
+            player.questList.Add(curQuest.questNum, curQuest);
         }
 
         /// <summary>
@@ -49,19 +85,19 @@ namespace TerimalQuest.Manager
         /// <returns></returns>
         public void PlayQuest(string name, int num = 1)
         {
-            List<Quest> playerQuests = GameManager.Instance.player.questList;
-            for (int i = 0; i < playerQuests?.Count; i++)
+            Dictionary<int, Quest> playerQuests = GameManager.Instance.player.questList;
+            foreach(var quest in playerQuests)
             {
-                Quest quest = playerQuests[i];
-                if (quest.currentCounts.ContainsKey(name))
+                Quest curQuest = quest.Value;
+                if (curQuest.currentCounts.ContainsKey(name))
                 {
-                    quest.currentCounts[name] += num;
-                    if (quest.currentCounts[name] >= quest.successConditions[name])
+                    curQuest.currentCounts[name] += num;
+                    if (curQuest.currentCounts[name] >= curQuest.successConditions[name])
                     {
-                        quest.currentCounts[name] = quest.successConditions[name];
+                        curQuest.currentCounts[name] = curQuest.successConditions[name];
                     }
                 }
-                quest.isClear = CheckQuest(quest);
+                curQuest.isClear = CheckQuest(curQuest);
             }
         }
 

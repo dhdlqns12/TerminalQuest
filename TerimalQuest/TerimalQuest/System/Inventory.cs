@@ -26,7 +26,7 @@ namespace TerimalQuest.System
         private int maxItemCount;    // 최대 아이템 개수
 
         // 아이템 리스트
-        private List<Item> items;
+        public List<Item> items;
 
         // 생성자
         public Inventory(int maxItemCount)
@@ -132,18 +132,7 @@ namespace TerimalQuest.System
 
         public void DisplayInfo(bool isEquipMode)
         {
-            Console.WriteLine("[아이템 목록]\n");
-
-            // 장착 관리 상태인지에 따라 표시 변환
-            string equipMode = (isEquipMode) ? ConsoleHelper.PadRightForConsole(" ", 6) : $"  ";
-
-            Console.WriteLine(
-                string.Format("{0}{1} | {2} | {3} | {4}",
-                equipMode,
-                ConsoleHelper.PadRightForConsole("[아이템 이름]", 15),
-                ConsoleHelper.PadRightForConsole("[아이템 효과]", 15),
-                ConsoleHelper.PadRightForConsole("[아이템 설명]", 50),
-                "[수량]\n"));
+            UIManager.Instance.DisplayItemInfoHeader(isEquipMode);
 
             for (int i = 0; i < items.Count; i++)
             {
@@ -156,16 +145,7 @@ namespace TerimalQuest.System
         // 인벤토리 보여주기 - 아이템 판매
         public void DisplayInfoWithGold()
         {
-            Console.WriteLine("[아이템 목록]\n");
-
-            Console.WriteLine(
-                string.Format("{0}{1} | {2} | {3} | {4} | {5}",
-                ConsoleHelper.PadRightForConsole(" ", 6),
-                ConsoleHelper.PadRightForConsole("[아이템 이름]", 15),
-                ConsoleHelper.PadRightForConsole("[아이템 효과]", 15),
-                ConsoleHelper.PadRightForConsole("[아이템 설명]", 50),
-                ConsoleHelper.PadRightForConsole("[수량]", 10),
-                "[아이템 가격]\n"));
+            UIManager.Instance.DisplayItemProductHeader();
 
             for (int i = 0; i < items.Count; i++)
             {

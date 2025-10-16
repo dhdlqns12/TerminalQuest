@@ -3,10 +3,10 @@
     "questNum": 1,
     "questType": "사냥",
     "name": "마을을 위협하는 미니언 처치",
-    "description": "미니언을 10마리 잡으세요",
+    "description": "미니언을 3마리 잡으세요",
+    "successDes": "미니언 3마리 처치",
     "successConditions": {
-      "미니언": 10,
-      "슬라임": 5
+      "미니언": 3
     },
     "rewardGold": 100,
     "rewardExp": 10,
@@ -21,6 +21,7 @@
     "questType": "장착",
     "name": "장비를 장착해보자",
     "description": "자네는 맨몸이군...\n그상태로 어떻게 몬스터를 잡으려 하는건가?\n아닛! 가방에 장비가 있는게 뭐하는 겐가!! 당장 끼지않고!!",
+    "successDes": "장비를 장착해보세요",
     "successConditions": {
       "장착": 1
     },
@@ -33,11 +34,74 @@
     "questType": "레벨",
     "name": "더욱 더 강해지기!",
     "description": "너가 너무 약한것 같다고?\n뭐해 어서 레벨업을 하지않고!!",
+    "successDes": "레벨을 3올리세요",
     "successConditions": {
       "레벨": 3
     },
     "rewardGold": 100,
     "rewardExp": 10,
     "rewardItem": null
-  }   
+  },
+  {
+    "questNum": 4,
+    "questType": "소비",
+    "name": "오오...힘이 솓는다!!!",
+    "description": "힘이 들때면 이것을 먹어봐요!!",
+    "successDes": "빨간 포션을 먹어보세요",
+    "successConditions": {
+      "빨간 포션": 1
+    },
+    "rewardGold": 100,
+    "rewardExp": 10,
+    "rewardItem": {
+      "빨간포션": 5
+    }
+  },
+  {
+    "questNum": 5,
+    "questType": "훈련",
+    "name": "이 허수아비는 뭐지?",
+    "description": "들어 올 때는 마음대로지만, 나갈 때는 아니랍니다??^^",
+    "successDes": "훈련을 진행하세요",
+    "successConditions": {
+      "훈련": 1
+    },
+    "rewardGold": 100,
+    "rewardExp": 20,
+    "rewardItem": {
+      "빨간포션": 5
+    }
+  },
+  {
+    "questNum": 6,
+    "questType": "보스",
+    "name": "몬스터들의 단서",
+    "description": "몬스터의 근원지를 쫓아 던전을 돌아다니다보니 어느새 5층이다...\n5층엔 더욱 더 많은 시체들이 나뒹굴고 있다\n바닥에서 한 메모지가 보인다\n'여긴 지옥이야............살려줘'",
+    "successDes": "중간 보스를 처치하세요",
+    "successConditions": {
+      "중간보스": 1
+    },
+    "rewardGold": 2500,
+    "rewardExp": 100,
+    "rewardItem": {
+      "스파르타의 창": 1,
+      "스파르타의 갑옷": 1,
+      "빨간포션": 10,
+      "파랑포션": 5,
+      "노랑포션": 5
+    }
+  },
+  {
+    "questNum": 7,
+    "questType": "보스",
+    "name": "평화를 위한 마지막 한걸음",
+    "description": "드디어 끝이 보인다 마지막층에 다다랐다.\n여기까지 온 사람은 내가 처음인가\n내가 우리 마을의 평화를 가져오겠어!!",
+    "successDes": "최종 보스를 처치하세요",
+    "successConditions": {
+      "최종보스": 1
+    },
+    "rewardGold": 0,
+    "rewardExp": 0,
+    "rewardItem": null
+  }
 ]
