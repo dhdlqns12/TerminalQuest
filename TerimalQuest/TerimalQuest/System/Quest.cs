@@ -26,7 +26,7 @@ namespace TerimalQuest.System
 
         public bool isClear { get; set; } //클리어되었는지
 
-        public Dictionary<string, int> currentCounts;
+        public Dictionary<string, int> currentCounts { get; set; }
 
         public Quest(int questNum, string questType, string name, string description,string successDes, Dictionary<string, int> successConditions, bool isClear, int rewardGold = 0, int rewardExp = 0, Dictionary<string, int> rewardItem = null)
         {
@@ -54,6 +54,7 @@ namespace TerimalQuest.System
         public void QuestClear(Player player)
         {
             UIManager.Instance.RewardMessage();
+            QuestManager questManager = QuestManager.Instance;
             player.exp += rewardExp;
             player.gold += rewardGold;
             //인벤토리 추가
@@ -73,7 +74,11 @@ namespace TerimalQuest.System
                     player.inventory.Add(ItemDatabase.GetItem(rewardItem[i]));
                 }*/
             }
-            QuestManager.Instance.questLists.Remove(this);
+            if(questManager.subQuests.Contains(this))
+                questManager.subQuests.Remove(this);
+            else
+                questManager.mainQuests.Remove(this);
+            questManager.questLists.Remove(this);
             player.clearQuestNums.Add(this.questNum);
             //QuestManager.Instance.InitializeQuest(this);
             player.questList.Remove(this.questNum);

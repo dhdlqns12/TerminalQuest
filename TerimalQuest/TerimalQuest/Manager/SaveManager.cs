@@ -61,6 +61,7 @@ namespace TerimalQuest.Manager
             baseCritRate = player.baseCritRate;
             baseEvadeRate = player.baseEvadeRate;
 
+            //아이템 타입별 리스트 분리!
             weapons = player.inventory.Items.OfType<Weapon>().ToList();
             armors = player.inventory.Items.OfType<Armor>().ToList();
             potions = player.inventory.Items.OfType<Potion>().ToList();
@@ -171,9 +172,7 @@ namespace TerimalQuest.Manager
         {
             if (!string.IsNullOrEmpty(data.equippedWeapon))
             {
-                var weapon = player.inventory.Items
-                    .OfType<Weapon>()
-                    .FirstOrDefault(w => w.name == data.equippedWeapon);
+                var weapon = player.inventory.Items.OfType<Weapon>().FirstOrDefault(w => w.name == data.equippedWeapon);
 
                 if (weapon != null)
                 {
@@ -184,9 +183,7 @@ namespace TerimalQuest.Manager
 
             if (!string.IsNullOrEmpty(data.equippedArmor))
             {
-                var armor = player.inventory.Items
-                    .OfType<Armor>()
-                    .FirstOrDefault(a => a.name == data.equippedArmor);
+                var armor = player.inventory.Items.OfType<Armor>().FirstOrDefault(a => a.name == data.equippedArmor);
 
                 if (armor != null)
                 {

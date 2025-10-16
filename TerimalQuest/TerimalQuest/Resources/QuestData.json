@@ -8,12 +8,11 @@
     "successConditions": {
       "미니언": 3
     },
-    "rewardGold": 100,
-    "rewardExp": 10,
+    "rewardGold": 700,
+    "rewardExp": 30,
     "rewardItem": {
       "무쇠갑옷": 1,
-      "낡은 검": 1,
-      "빨간포션": 4
+      "빨간포션": 5
     }
   },
   {
@@ -38,8 +37,8 @@
     "successConditions": {
       "레벨": 3
     },
-    "rewardGold": 100,
-    "rewardExp": 10,
+    "rewardGold": 2000,
+    "rewardExp": 50,
     "rewardItem": null
   },
   {
@@ -69,7 +68,8 @@
     "rewardGold": 100,
     "rewardExp": 20,
     "rewardItem": {
-      "빨간포션": 5
+      "빨간포션": 5,
+      "노랑포션": 3
     }
   },
   {
@@ -103,5 +103,49 @@
     "rewardGold": 0,
     "rewardExp": 0,
     "rewardItem": null
+  },
+  {
+    "questNum": 8,
+    "questType": "사냥",
+    "name": "대포 미니언 사냥",
+    "description": "대포 미니언을 3마리 처치해줘",
+    "successDes": "대포 미니언을 처치하세요",
+    "successConditions": {
+      "대포미니언": 3
+    },
+    "rewardGold": 1000,
+    "rewardExp": 20,
+    "rewardItem": {
+      "청동 도끼": 1,
+      "강화석": 1
+    }
+  },
+  {
+    "questNum": 9,
+    "questType": "마을 순찰",
+    "name": "나는야 마을지킴이",
+    "description": "어디 마을에 도울일 없나??",
+    "successDes": "마을 순찰을 하세요",
+    "successConditions": {
+      "마을순찰": 1
+    },
+    "rewardGold": 500,
+    "rewardExp": 10,
+    "rewardItem": null
+  },
+  {
+    "questNum": 10,
+    "questType": "강화",
+    "name": "운빨존망겜",
+    "description": "역시 게임은 뭐다??\n운빨존망겜이다",
+    "successDes": "강화를 2회 성공하세요",
+    "successConditions": {
+      "강화": 2
+    },
+    "rewardGold": 0,
+    "rewardExp": 30,
+    "rewardItem": {
+      "강화석": 5
+    }
   }
 ]

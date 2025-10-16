@@ -51,6 +51,7 @@ namespace TerimalQuest.Core
             inventory = new Inventory(50);
             level = 1;
             maxStamina = 100;
+            stamina = maxStamina;
             gold = 0;
             exp = 0;
             curStage = 1;

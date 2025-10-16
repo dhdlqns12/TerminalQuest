@@ -22,7 +22,13 @@ namespace TerimalQuest.Scenes
         {
             if (int.TryParse(Console.ReadLine(), out int answer))
             {
-                if(SaveManager.HasSaveData(answer))
+                if (answer == 0)
+                {
+                    OnSceneChangeRequested?.Invoke(new SetNameScene());
+                    return;
+                }
+
+                if (SaveManager.HasSaveData(answer))
                 {
                     switch(answer) 
                     {
@@ -41,16 +47,11 @@ namespace TerimalQuest.Scenes
                             OnSceneChangeRequested?.Invoke(new StartScene());
                             SaveManager.GameLoad(answer);
                             break;
-                        case 0:
-                            OnSceneChangeRequested?.Invoke(new SetNameScene());
-                            break;
                         default:
                             Console.WriteLine("데이터가 존재하지 않습니다.");
                             Console.ReadKey();
-                            break;
-                    
+                            break;               
                     }
-
                 }
                 else
                 {
