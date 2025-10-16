@@ -129,16 +129,25 @@ namespace TerimalQuest.System
                 QuestManager.Instance.PlayQuest("장착");
             }
         }
-
-        public void DisplayInfo(bool isEquipMode)
+        
+        // 인벤토리 보여주기
+        public void DisplayInfo(bool isEquipMode, params ItemType[] filterTypes)
         {
             UIManager.Instance.DisplayItemInfoHeader(isEquipMode);
 
-            for (int i = 0; i < items.Count; i++)
+            IEnumerable<Item> displayList;
+
+            // filterType에 따라 보여줄 ItemList 갱신
+            if (filterTypes == null || filterTypes.Length == 0)
+                displayList = items;
+            else
+                displayList = items.Where(item => filterTypes.Contains(item.type));
+
+            foreach (var item in displayList)
             {
-                string idxTxt = (isEquipMode) ? $"{i + 1} : " : "";
+                string idxTxt = (isEquipMode) ? $"{items.IndexOf(item) + 1} : " : "";
                 Console.Write($"- {idxTxt}");
-                items[i].DisplayInfo();
+                item.DisplayInfo();
             }
         }
 
