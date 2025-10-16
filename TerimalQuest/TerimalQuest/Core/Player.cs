@@ -18,6 +18,7 @@ namespace TerimalQuest.Core
         public int curStage { get; set; }                 // 현재 스테이지
 
         public Dictionary<int, Quest> questList { get; set; }            // 퀘스트 리스트
+        public List<int> clearQuestNums { get; set; }
         public List<Skill> skillList { get; set; }          // 스킬 리스트
 
         public Inventory inventory { get; set; }          // 플레이어 인벤토리
@@ -222,7 +223,7 @@ namespace TerimalQuest.Core
 
         private bool IsUsePotion(Potion potion)
         {
-            switch (potion.potiontype)
+            switch (potion.potionType)
             {
                 case PotionType.HP:
                     if (hp >= maxHp)
@@ -251,7 +252,7 @@ namespace TerimalQuest.Core
 
         private void Heal_Potion(Potion potion)
         {
-            switch (potion.potiontype)
+            switch (potion.potionType)
             {
                 case PotionType.HP:
                     hp = Math.Min(hp + potion.healAmount, maxHp);

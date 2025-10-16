@@ -19,6 +19,7 @@ namespace TerimalQuest.Manager
         private bool isPlayerTurn;
         public bool isBattleProgress;
         private MonsterManager monsterManager;
+        private RecodeManager recodeManager;
         private Player player;
         private List<Monster> encounterMonsterList;
         private UIManager uiManager;
@@ -30,9 +31,13 @@ namespace TerimalQuest.Manager
         public BattleManager()
         {
             monsterManager = new MonsterManager();
+            recodeManager = RecodeManager.Instance;
             uiManager = UIManager.Instance;
             player = GameManager.Instance.player;
         }
+
+
+        #region Process
 
         /// <summary>
         /// 배틀시작
@@ -41,13 +46,16 @@ namespace TerimalQuest.Manager
         {
             if (player.hp <= 0)
             {
-                Console.Clear();
-                Console.WriteLine("체력이 부족합니다. 체력을 회복하고 오세요!");
+                uiManager.DisplayNotEnoughHp();
                 Thread.Sleep(1000);
                 isBattleProgress = false;
                 isTryingToEscape = true;
                 return;
             }
+
+            uiManager.DisplayStageClearStatus(player.curStage);
+            // player.mp = 9999;
+            // player.atk = 9999;
             isPlayerTurn = true;
             isBattleProgress = true;
             encounterMonsterList = monsterManager.CreateRandomMonsterList(player.curStage);
@@ -67,6 +75,37 @@ namespace TerimalQuest.Manager
             }
         }
 
+        #endregion
+
+        #region System
+        /// <summary>
+        /// 몬스터 턴진쟇ㅇ
+        /// </summary>
+        private void MonsterTurn()
+        {
+            for (int i = 0; i < encounterMonsterList.Count; i++)
+            {
+                Monster monster = encounterMonsterList[i];
+                if (monster.hp <= 0) continue;
+                this.AttackTarget(monster, player);
+                Thread.Sleep(1000);
+
+                if (player.hp <= 0)
+                {
+                    isBattleProgress = false;
+                    currentState = BattleState.BattleOver;
+                    break;
+                }
+            }
+
+            if (isBattleProgress)
+            {
+                currentState = BattleState.PlayerActionSelect;
+                uiManager.BattleEntrance(encounterMonsterList, player);
+                uiManager.DisplayBattleChoice();
+            }
+        }
+
         public bool IsWaitingForInput()
         {
             return currentState == BattleState.PlayerActionSelect || currentState == BattleState.PlayerTargetSelect || currentState == BattleState.PlayerSelectingSkill || currentState == BattleState.PlayerTargetSelectWithSkill;
@@ -77,7 +116,21 @@ namespace TerimalQuest.Manager
             return !isBattleProgress;
         }
 
-        public void ProcessPlayerInput(string input)
+
+        public BattleResult GetBattleResult()
+        {
+            return new BattleResult
+            {
+                isPlayerWin = (player.hp > 0),
+                defeatedMonsters = encounterMonsterList,
+                hpReduction = oriHpPlayer - player.hp
+            };
+        }
+        #endregion
+
+        #region PlayerInput
+
+         public void ProcessPlayerInput(string input)
         {
             switch (currentState)
             {
@@ -158,7 +211,7 @@ namespace TerimalQuest.Manager
                     this.AttackTarget(player, targetMonster);
                 }
 
-                Thread.Sleep(1000);
+                uiManager.DisplayPressAnyKeyToNext();
                 CheckBattleProgressByIsMonsterAlive();
                 if (!isBattleProgress)
                 {
@@ -194,43 +247,11 @@ namespace TerimalQuest.Manager
                 uiManager.DisplaySelectingSkill(player.skillList);
             }
         }
-        public BattleResult GetBattleResult()
-        {
-            return new BattleResult
-            {
-                isPlayerWin = (player.hp > 0),
-                defeatedMonsters = encounterMonsterList,
-                hpReduction = oriHpPlayer - player.hp
-            };
-        }
 
-        /// <summary>
-        /// 몬스터 턴진쟇ㅇ
-        /// </summary>
-        private void MonsterTurn()
-        {
-            for (int i = 0; i < encounterMonsterList.Count; i++)
-            {
-                Monster monster = encounterMonsterList[i];
-                if (monster.hp <= 0) continue;
-                this.AttackTarget(monster, player);
-                Thread.Sleep(1000);
+        #endregion
 
-                if (player.hp <= 0)
-                {
-                    isBattleProgress = false;
-                    currentState = BattleState.BattleOver;
-                    break;
-                }
-            }
+        #region CheckValid
 
-            if (isBattleProgress)
-            {
-                currentState = BattleState.PlayerActionSelect;
-                uiManager.BattleEntrance(encounterMonsterList, player);
-                uiManager.DisplayBattleChoice();
-            }
-        }
         /// <summary>
         /// 몬스터 생존 여부로 배틀 진행여부 확인
         /// </summary>
@@ -276,6 +297,9 @@ namespace TerimalQuest.Manager
             if (choice > player.skillList.Count) return false;
             return true;
         }
+        #endregion
+
+        #region BattleMechanic
 
         /// <summary>
         /// 타겟과 대상 정보를 받아 공격 실행
@@ -286,7 +310,16 @@ namespace TerimalQuest.Manager
             bool isEvade = random.NextDouble() < target.evadeRate;
             uiManager.AttackTarget(attacker, target, isEvade);
             if (isEvade) return;
-            target.hp -= attacker.GetFinalDamage(out bool ignore, (int)target.def);
+            float finalDamage =attacker.GetFinalDamage(out bool ignore, (int)target.def);
+            target.hp -= finalDamage;
+            if (attacker is Player)
+            {
+                recodeManager.RecordTotalDamage((int)finalDamage);
+            }
+            else
+            {
+                recodeManager.RecordTotalTakenDamage((int)finalDamage);
+            }
         }
 
 
@@ -295,9 +328,11 @@ namespace TerimalQuest.Manager
         /// </summary>
         private void AttackSkill(Skill skill, Character target = null)
         {
+            //광역 공격기
             if (skill.rangeType == SkillRangeType.All)
             {
                 float finalSkillDamage = 0;
+                float finalSkillTotalDamage = 0;
                 if (selectedSkill.damageType == SkillDamageType.FixedDamage)
                 {
                     finalSkillDamage = skill.damage;
@@ -308,18 +343,22 @@ namespace TerimalQuest.Manager
                 }
 
                 uiManager.DisplayFullRangeAttackSkillResult(encounterMonsterList, skill, finalSkillDamage);
-                Thread.Sleep(1500);
+                uiManager.DisplayPressAnyKeyToNext();
                 for (int i = 0; i < encounterMonsterList.Count; i++)
                 {
                     Monster monster = encounterMonsterList[i];
+                    if (monster.hp <= 0) continue;
                     monster.hp -= finalSkillDamage;
-
+                    finalSkillTotalDamage += finalSkillDamage;
                 }
+                recodeManager.RecordSkillUse(skill,(int)finalSkillTotalDamage);
 
             }
+            //단일 공격기
             else if (skill.rangeType == SkillRangeType.One)
             {
                 uiManager.AttackTargetWithSkill(player, target, skill);
+                float finalSkillDamage = 0;
                 if (selectedSkill.damageType == SkillDamageType.FixedDamage)
                 {
                     target.hp -= skill.damage;
@@ -328,6 +367,7 @@ namespace TerimalQuest.Manager
                 {
                     target.hp -= (skill.damage * player.atk);
                 }
+                recodeManager.RecordSkillUse(skill,(int)finalSkillDamage);
             }
 
 
@@ -339,6 +379,7 @@ namespace TerimalQuest.Manager
             }
             currentState = BattleState.MonsterTurn;
         }
+
         /// <summary>
         /// 스킬사용
         /// </summary>
@@ -363,8 +404,9 @@ namespace TerimalQuest.Manager
             {
                 uiManager.DisplayUseSupportSkill(player, selectedSkill);
                 player.hp += selectedSkill.damage;
-                Thread.Sleep(1000);
+                uiManager.DisplayPressAnyKeyToNext();
                 currentState = BattleState.MonsterTurn;
+                recodeManager.RecordSkillUse(selectedSkill,(int)selectedSkill.damage);
 
             }else if (selectedSkill.skillType == SkillType.Attack)
             {
@@ -380,5 +422,13 @@ namespace TerimalQuest.Manager
                 }
             }
         }
+
+        #endregion
+
+
+
+
+
+
     }
 }

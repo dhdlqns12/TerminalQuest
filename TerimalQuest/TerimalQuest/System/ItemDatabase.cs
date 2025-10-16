@@ -66,6 +66,10 @@ namespace TerimalQuest.System
                         PotionType pType = Enum.Parse<PotionType>(item.potionType, true);
                         itemDatabase[item.name] = new Potion(item.id, item.name, item.desc, item.price, item.healAmount, ItemType.Potion, pType);
                         break;
+
+                    case "EnhancementStone":
+                        itemDatabase[item.name] = new EnhancementStone(item.id, item.name, item.desc, item.price, ItemType.EnhancementStone);
+                        break;
                 }
             }
         }
@@ -74,6 +78,7 @@ namespace TerimalQuest.System
         public static Weapon GetWeapon(string name) { if (itemDatabase.TryGetValue(name, out var item) && item is Weapon weapon) return (Weapon)weapon.Clone(); else return null; }
         public static Armor GetArmor(string name) { if (itemDatabase.TryGetValue(name, out var item) && item is Armor armor) return (Armor)armor.Clone(); else return null; }
         public static Potion GetPotion(string name) { if (itemDatabase.TryGetValue(name, out var item) && item is Potion potion) return potion.Clone(); else return null; }
+        public static EnhancementStone GetEnhancementStone(string name) { if (itemDatabase.TryGetValue(name, out var item) && item is EnhancementStone enhancementStone) return (EnhancementStone)enhancementStone.Clone(); else return null; }
         public static Item GetItem(string name) { return itemDatabase.TryGetValue(name, out var item) ? item.Clone() : null; }
     }
 }

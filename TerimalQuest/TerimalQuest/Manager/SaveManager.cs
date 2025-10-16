@@ -39,6 +39,8 @@ namespace TerimalQuest.Manager
 
         public Dictionary<int, Quest> questList { get; set; }
 
+        public List<int> clearQuestNums { get; set; }
+
         public SaveData() { }
 
         public SaveData(Player player)
@@ -67,6 +69,7 @@ namespace TerimalQuest.Manager
             equippedArmor = player.equippedArmor?.name;
 
             questList = player.questList;
+            clearQuestNums = player.clearQuestNums;
         }
     }
 
@@ -121,6 +124,7 @@ namespace TerimalQuest.Manager
             loadedPlayer.baseEvadeRate = data.baseEvadeRate;
 
             loadedPlayer.questList = (data.questList != null) ? data.questList : new Dictionary<int, Quest>();
+            loadedPlayer.clearQuestNums = (data.clearQuestNums != null) ? data.clearQuestNums : new List<int> ();
 
             loadedPlayer.SetExpWithoutLevelUp(data.exp);
 

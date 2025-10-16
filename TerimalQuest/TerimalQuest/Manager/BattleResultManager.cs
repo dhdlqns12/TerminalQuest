@@ -10,10 +10,12 @@ namespace TerimalQuest.Manager
         private TotalReward totalReward;
         private Dictionary<string, List<DropItem>> dropTable;
         private Random random = new Random();
+        private RecodeManager recodeManager;
         public BattleResultManager()
         {
             player = GameManager.Instance.player;
             uiManager = UIManager.Instance;
+            recodeManager = RecodeManager.Instance;
             InitializeDropTable();
         }
         /// <summary>
@@ -25,6 +27,12 @@ namespace TerimalQuest.Manager
             uiManager.DisplayBattleResult(result, player);
             if (result.isPlayerWin)
             {
+                recodeManager.RecordDefeatedMonsters(result.defeatedMonsters);
+                if (player.curStage == 10)
+                {
+                    ProcessEnding();
+                    return;
+                }
                 ProcessFixedReward(result.defeatedMonsters);
                 ProcessRandomReward(result.defeatedMonsters);
                 uiManager.DisplayBattleRewardResult(totalReward);
@@ -34,6 +42,13 @@ namespace TerimalQuest.Manager
 
             player.mp += 10;
 
+        }
+
+        public void ProcessEnding()
+        {
+            recodeManager.SaveClearPlayer(player);
+            recodeManager.ShowEnding();
+            Environment.Exit(1);
         }
 
         /// <summary>

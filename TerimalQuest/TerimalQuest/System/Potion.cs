@@ -18,12 +18,12 @@ namespace TerimalQuest.System
     public class Potion : Item
     {
         public float healAmount { get; set; }       // 회복량
-        public PotionType potiontype { get; set; }  // 포션 타입
+        public PotionType potionType { get; set; }  // 포션 타입
 
         public Potion(int id, string name, string desc, int price, float healAmount, ItemType type, PotionType _potionType) : base(id, name, desc, price, type)
         {
             this.healAmount = healAmount;
-            this.potiontype = _potionType;
+            this.potionType = _potionType;
         }
 
         public void AddPotion()
@@ -38,45 +38,11 @@ namespace TerimalQuest.System
             player.UsePotion(this);
         }
 
-        public override void DisplayInfo()
-        {
-            // 아이템 정보 표시
-
-            string potionTypeTxt = GetPotionEffectTxt();
-            string itemCount = $"수량: x{count}";
-
-            Console.WriteLine(
-                string.Format("{0} | {1} | {2} | {3}",
-                ConsoleHelper.PadRightForConsole(name, offsetName),
-                ConsoleHelper.PadRightForConsole($"{potionTypeTxt} +{healAmount}", offsetEffect),
-                ConsoleHelper.PadRightForConsole(desc, offsetDesc),
-                itemCount));
-        }
-
-        public override void DisplayInfoProduct()
-        {
-            // 상품 목록에서 보여줄 아이템 정보 표시
-            string itemCount = $"수량: x{count}";
-            string itemPurchase = (isPurchase) ? "구매완료" : $"{price}";
-            string isGoldIcon = (isPurchase) ? "" : "G";
-
-            string potionTypeTxt = GetPotionEffectTxt();
-
-            Console.WriteLine(
-                string.Format("{0} | {1} | {2} | {3} | {4} {5}",
-                ConsoleHelper.PadRightForConsole(name, offsetName),
-                ConsoleHelper.PadRightForConsole($"{potionTypeTxt} +{healAmount}", offsetEffect),
-                ConsoleHelper.PadRightForConsole(desc, offsetDesc),
-                ConsoleHelper.PadRightForConsole(itemCount, offsetCount),
-                ConsoleHelper.PadRightForConsole(itemPurchase, offsetPurchase),
-                isGoldIcon));
-        }
-
-        private string GetPotionEffectTxt()
+        public override string GetEffectText()
         {
             string potionTypeTxt = "";
 
-            switch (potiontype)
+            switch (potionType)
             {
                 case PotionType.HP:
                     potionTypeTxt = "HP";
@@ -91,14 +57,26 @@ namespace TerimalQuest.System
                     break;
             }
 
-            return potionTypeTxt;
+            return $"{potionTypeTxt} + {healAmount}"; ;
+        }
+
+        public override void DisplayInfo()
+        {
+            // 아이템 정보 표시
+            UIManager.Instance.DisplayItemInfo(this);
+        }
+
+        public override void DisplayInfoProduct()
+        {
+            // 상품 목록에서 보여줄 아이템 정보 표시
+            UIManager.Instance.DisplayItemProduct(this);
         }
 
         // 아이템 복제
         public override Potion Clone()
         {
             this.Id += 1;   // 복제 시 Id 증가
-            return new Potion(Id, name, desc, price, healAmount, type, potiontype);
+            return new Potion(Id, name, desc, price, healAmount, type, potionType);
         }
     }
 }
