@@ -15,12 +15,17 @@ namespace TerimalQuest.Scenes
         private Action currentEnhancementView;
         private Inventory inventory;
         private EnhancementManager enhancementManager;
+        private UIManager uiManager;
+
+        private ItemType type;
 
         public void Enter()
         {
             enhancementManager = new EnhancementManager();
             inventory = GameManager.Instance.player.inventory;
+            uiManager = UIManager.Instance;
 
+            // 강화 시작 화면부터 시작
             currentEnhancementView = EnhanceStartView;
             currentEnhancementView?.Invoke();
         }
@@ -38,27 +43,21 @@ namespace TerimalQuest.Scenes
         // 강화 시작 화면
         private void EnhanceStartView()
         {
-            Console.Clear();
-            Console.WriteLine("장비 강화");
-            Console.WriteLine("보유 중인 장비를 강화할 수 있습니다.");
-            Console.WriteLine();
-            inventory.DisplayInfo(true, ItemType.Weapon, ItemType.Armor);
-            Console.WriteLine();
-            DisplayOption(["1. 무기 강화", "2. 방어구 강화", "0. 나가기"]);
+            uiManager.DisplayEnhancementStartScripts(inventory);
 
             string choice = ConsoleHelper.GetUserChoice(["0", "1", "2"]);
 
             switch (choice)
             {
                 case "1":
-                    enhancementManager.SetEnhancealbeItemList(ItemType.Weapon);
-                    currentEnhancementView = EnhanceView;
-                    currentEnhancementView?.Invoke();
+                    type = ItemType.Weapon;
+                    enhancementManager.SetEnhancealbeItemList(type);
+                    ChangeView(EnhanceView);
                     break;
                 case "2":
-                    enhancementManager.SetEnhancealbeItemList(ItemType.Armor);
-                    currentEnhancementView = EnhanceView;
-                    currentEnhancementView?.Invoke();
+                    type = ItemType.Armor;
+                    enhancementManager.SetEnhancealbeItemList(type);
+                    ChangeView(EnhanceView);
                     break;
                 case "0":
                     OnSceneChangeRequested?.Invoke(new StartScene());
@@ -72,15 +71,9 @@ namespace TerimalQuest.Scenes
         private void EnhanceView()
         {
             // 선택한 화면 보여주기
-            Console.Clear();
-            Console.WriteLine("장비 강화 - 무기");
-            Console.WriteLine("보유 중인 장비를 강화할 수 있습니다.");
-            Console.WriteLine();
-            enhancementManager.DisplayEnhancealbeItemList();
-            Console.WriteLine();
-            DisplayOption(["(번호). 해당 장비 강화", "0. 나가기"]);
+            uiManager.DisplayEnhancementScripts(enhancementManager, type);
 
-            // 상품 인덱스 정보 가져오기
+            // 강화 가능한 아이템 리스트 정보 가져오기
             int vaildCount = enhancementManager.enhanceableItems.Count;
             string[] vaildItemOption = Enumerable.Range(0, vaildCount + 1).Select(i => i.ToString()).ToArray();   // LINQ 문법
             var choice = ConsoleHelper.GetUserChoice(vaildItemOption);
@@ -89,8 +82,7 @@ namespace TerimalQuest.Scenes
             while (true)
             {
                 if (choice == "0") {
-                    currentEnhancementView = EnhanceStartView;
-                    currentEnhancementView?.Invoke(); 
+                    ChangeView(EnhanceStartView);
                     return; 
                 }
 
@@ -101,8 +93,7 @@ namespace TerimalQuest.Scenes
                     enhancementManager.EnhanceItem();
 
                     // 이후 결과 페이지로 이동
-                    currentEnhancementView = EnhanceResultView;
-                    currentEnhancementView?.Invoke();
+                    ChangeView(EnhanceResultView);
                     break;
                 }
 
@@ -113,16 +104,17 @@ namespace TerimalQuest.Scenes
         // 강화 결과 화면
         private void EnhanceResultView()
         {
-            Console.Clear();
-            Console.WriteLine("강화 결과");
-            Console.WriteLine();
             enhancementManager.EnhanceResult();
-            Console.WriteLine();
-            DisplayOption(["0. 나가기"]);
 
             string choice = ConsoleHelper.GetUserChoice(["0"]);
 
-            currentEnhancementView = EnhanceStartView;
+            ChangeView(EnhanceStartView);
+        }
+
+        // ViewChange
+        private void ChangeView(Action view)
+        {
+            currentEnhancementView = view;
             currentEnhancementView?.Invoke();
         }
 

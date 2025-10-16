@@ -24,7 +24,7 @@ public class StartScene : IScene
                     OnSceneChangeRequested?.Invoke(new InventoryScene());
                     break;
                 case 3:
-                    OnSceneChangeRequested?.Invoke(new BattleScene());
+                    OnSceneChangeRequested?.Invoke(new EnhancementScene());
                     break;
                 case 4:
                     OnSceneChangeRequested?.Invoke(new QuestScene());

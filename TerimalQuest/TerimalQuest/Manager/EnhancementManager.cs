@@ -58,6 +58,7 @@ namespace TerimalQuest.Manager
 
             enhanceableItems = new List<Item>();
 
+            // 변수 초기화
             random = new Random();
             maxEnhancementLevel = 10;
             enhancementStoneId = 4000;
@@ -83,7 +84,7 @@ namespace TerimalQuest.Manager
         // 아이템 리스트 보여주기
         public void DisplayEnhancealbeItemList()
         {
-            UIManager.Instance.DisplayItemInfoHeader(true);
+            uiManager.DisplayItemInfoHeader(true);
 
             foreach (var item in enhanceableItems)
             {
@@ -158,17 +159,7 @@ namespace TerimalQuest.Manager
         // 강화 결과
         public void EnhanceResult()
         {
-            if (enhanceSuccess)
-            {
-                // 강화 성공 텍스트 출력
-                Console.WriteLine("강화에 성공했습니다!");
-                Console.WriteLine($"[{enhancementLevel}강] -> [{enhanceItem.GetLevel()}강]");
-            }
-            else
-            {
-                // 강화 실패 텍스트 출력
-                Console.WriteLine("강화에 실패하였습니다..");
-            }
+            uiManager.DisplayEnhancementResultScripts(enhanceSuccess, enhancementLevel, enhanceItem);
         }
     }
 }
