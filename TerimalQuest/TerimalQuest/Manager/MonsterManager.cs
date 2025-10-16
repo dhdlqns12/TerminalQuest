@@ -21,7 +21,17 @@ public class MonsterManager
     /// </summary>
     public List<Monster> CreateRandomMonsterList(int playerStage)
     {
+
         List<Monster> monsterList = new List<Monster>();
+        if (playerStage == 5)
+        {
+            monsterList.Add(CreateBossMonster(false));
+            return monsterList;
+        }else if (playerStage == 10)
+        {
+            monsterList.Add(CreateBossMonster(true));
+            return monsterList;
+        }
         int encounterCount = random.Next(MinMonsterCount + playerStage, MaxMonsterCount + 1 + playerStage);
         for (int i = 0; i < encounterCount; i++)
         {
@@ -30,6 +40,7 @@ public class MonsterManager
         }
         return monsterList;
     }
+
     /// <summary>
     /// 랜덤 몬스터 생성
     /// </summary>
@@ -45,9 +56,10 @@ public class MonsterManager
         monster.evadeRate = 0.1f * playerStage;
         monster.critRate = 0.1f * playerStage;
         monster.rewardExp = 10 * playerStage;
-        monster.rewardGold = 10 * playerStage;
+        monster.rewardGold = 50 * playerStage;
         return monster;
     }
+
     /// <summary>
     /// 전체 몬스터 목록 초기화
     /// </summary>
@@ -59,6 +71,28 @@ public class MonsterManager
         totalMonsterList.Add(minion);
         totalMonsterList.Add(voidInsect);
         totalMonsterList.Add(cannonMinion);
+    }
+
+    public Monster CreateBossMonster(bool isLast)
+    {
+        if (!isLast)
+        {
+            Monster kefga = new Monster("케프가", 10, 800,0,50,10);
+            kefga.rewardExp = 1000;
+            kefga.rewardGold = 5000;
+            kefga.evadeRate = 0.3f;
+            kefga.critRate = 0.5f;
+            return kefga;
+        }
+        else
+        {
+            Monster labos = new Monster("라보스", 99, 1999,0,99,99);
+            labos.rewardExp = 9999;
+            labos.rewardGold = 9999;
+            labos.evadeRate = 0.3f;
+            labos.critRate = 0.5f;
+            return labos;
+        }
     }
 
 }
