@@ -36,7 +36,7 @@ namespace TerimalQuest.Manager
 
         public void ShowStartSceneScripts()
         {
-            Console.Write($"스파르타 던전에 오신 여러분 환영합니다. \n이제 전투를 시작할 수 있습니다. \n\n1.상태 보기 \n2.인벤토리\n3.전투 시작(현재 진행 : {GameManager.Instance.player.curStage}층)\n4.퀘스트\n5.상점\n6.마을활동\n0.게임 종료 \n\n원하시는 행동을 입력해주세요.\n>>");
+            Console.Write($"스파르타 던전에 오신 여러분 환영합니다. \n이제 전투를 시작할 수 있습니다. \n\n1.상태 보기 \n2.인벤토리\n3.전투 시작(현재 진행 : {GameManager.Instance.player.curStage}층)\n4.퀘스트\n5.상점\n6.마을활동\n7. 장비 강화\n0.게임 종료 \n\n원하시는 행동을 입력해주세요.\n>>");
         }
 
         public void ShowStatusSceneScripts()
