@@ -222,7 +222,7 @@ namespace TerimalQuest.Core
 
         private bool IsUsePotion(Potion potion)
         {
-            switch (potion.potiontype)
+            switch (potion.potionType)
             {
                 case PotionType.HP:
                     if (hp >= maxHp)
@@ -251,7 +251,7 @@ namespace TerimalQuest.Core
 
         private void Heal_Potion(Potion potion)
         {
-            switch (potion.potiontype)
+            switch (potion.potionType)
             {
                 case PotionType.HP:
                     hp = Math.Min(hp + potion.healAmount, maxHp);

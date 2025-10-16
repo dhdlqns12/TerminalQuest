@@ -26,39 +26,21 @@ namespace TerimalQuest.System
             GameManager.Instance.player.ToggleEquipItem(this);
         }
 
+        public override string GetEffectText()
+        {
+            return $"공격력 +{atk}";
+        }
+
         public override void DisplayInfo()
         {
             // 아이템 정보 표시
-            // 현재 장착 관리 상태인지 확인 후 아이템 정보 표시
-            string isEquippedTxt = (isEquipped) ? "[E]" : "";
-            string itemName = $"{isEquippedTxt}{name}";
-            string itemEffect = $"공격력 +{atk}";
-            string itemCount = $"수량: x{count}";
-
-            Console.WriteLine(
-                string.Format("{0} | {1} | {2} | {3}",
-                ConsoleHelper.PadRightForConsole(itemName, offsetName),
-                ConsoleHelper.PadRightForConsole(itemEffect, offsetEffect),
-                ConsoleHelper.PadRightForConsole(desc, offsetDesc),
-                itemCount));
+            UIManager.Instance.DisplayItemInfo(this);
         }
 
         public override void DisplayInfoProduct()
         {
             // 상품 목록에서 보여줄 아이템 정보 표시
-            string itemEffect = $"공격력 +{atk}";
-            string itemCount = $"수량: x{count}";
-            string itemPurchase = (isPurchase) ? "구매완료" : $"{price}";
-            string isGoldIcon = (isPurchase) ? "" : "G";
-
-            Console.WriteLine(
-                string.Format("{0} | {1} | {2} | {3} | {4} {5}",
-                ConsoleHelper.PadRightForConsole(name, offsetName),
-                ConsoleHelper.PadRightForConsole(itemEffect, offsetEffect),
-                ConsoleHelper.PadRightForConsole(desc, offsetDesc),
-                ConsoleHelper.PadRightForConsole(itemCount, offsetCount),
-                ConsoleHelper.PadRightForConsole(itemPurchase, offsetPurchase),
-                isGoldIcon));
+            UIManager.Instance.DisplayItemProduct(this);
         }
 
         // 아이템 복제

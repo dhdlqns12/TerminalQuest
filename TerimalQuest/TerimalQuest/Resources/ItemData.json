@@ -81,5 +81,12 @@
     "healAmount": 30,
     "type": "Potion",
     "potionType": "Stamina"
+  },
+  {
+    "id": 4000,
+    "name": "강화석",
+    "desc": "장비 강화에 사용되는 기본 재료입니다.",
+    "price": 10,
+    "type": "EnhancementStone"
   }
 ]
