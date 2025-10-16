@@ -10,10 +10,12 @@ namespace TerimalQuest.System
     public class Weapon : Item
     {
         public float atk { get; set; }
+        public int enhancementLevel { get; set; }
 
         public Weapon(int id, string name, string desc, int price, float atk, ItemType type) : base(id, name, desc, price, type)
         {
             this.atk = atk;
+            this.enhancementLevel = 0;
         }
 
         public override void Equip(bool isEquip)
@@ -31,6 +33,13 @@ namespace TerimalQuest.System
             return $"공격력 +{atk}";
         }
 
+        public override void Enhance(float enhanceValue)
+        {
+            // 강화 레벨 증가 후 방어력 증가
+            enhancementLevel++;
+            atk += enhanceValue;
+        }
+
         public override void DisplayInfo()
         {
             // 아이템 정보 표시
@@ -43,10 +52,11 @@ namespace TerimalQuest.System
             UIManager.Instance.DisplayItemProduct(this);
         }
 
+        public override int GetLevel() => enhancementLevel;
+
         // 아이템 복제
         public override Item Clone()
         {
-            this.Id += 1;   // 복제 시 Id 증가
             return new Weapon(Id, name, desc, price, atk, type);
         }
     }

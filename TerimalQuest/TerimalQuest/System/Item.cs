@@ -67,6 +67,11 @@ namespace TerimalQuest.System
             return $"수량: x{count}";
         }
 
+        public virtual void Enhance(float enhanceValue)
+        {
+            // 아이템 강화
+        }
+
         public virtual void DisplayInfo()
         {
             // 아이템 정보 표시
@@ -76,6 +81,8 @@ namespace TerimalQuest.System
         {
             // 아이템 정보 표시 : 상점
         }
+
+        public virtual int GetLevel() => 0;
 
         // 아이템 복제
         public virtual Item Clone()

@@ -36,7 +36,7 @@ namespace TerimalQuest.Manager
 
         public void ShowStartSceneScripts()
         {
-            Console.Write($"스파르타 던전에 오신 여러분 환영합니다. \n이제 전투를 시작할 수 있습니다. \n\n1.상태 보기 \n2.인벤토리\n3.전투 시작(현재 진행 : {GameManager.Instance.player.curStage}층)\n4.퀘스트\n5.상점\n6.마을활동\n0.게임 종료 \n\n원하시는 행동을 입력해주세요.\n>>");
+            Console.Write($"스파르타 던전에 오신 여러분 환영합니다. \n이제 전투를 시작할 수 있습니다. \n\n1.상태 보기 \n2.인벤토리\n3.전투 시작(현재 진행 : {GameManager.Instance.player.curStage}층)\n4.퀘스트\n5.상점\n6.마을활동\n7. 장비 강화\n0.게임 종료 \n\n원하시는 행동을 입력해주세요.\n>>");
         }
 
         public void ShowStatusSceneScripts()
@@ -192,11 +192,11 @@ namespace TerimalQuest.Manager
         }
 
         // 문자 사이 정렬 offset 값
-        private int offsetName = 15;
-        private int offsetEffect = 15;
+        private int offsetName = 20;
+        private int offsetEffect = 13;
         private int offsetDesc = 50;
         private int offsetCount = 10;
-        private int offsetPurchase = 10;
+        private int offsetPurchase = 5;
 
         // 아이템 정보 표시 헤더
         public void DisplayItemInfoHeader(bool isEquipMode = false)
@@ -216,10 +216,15 @@ namespace TerimalQuest.Manager
         // 인벤토리 아이템 정보 표시
         public void DisplayItemInfo(Item item, bool isEquipMode = false)
         {
-            string equipTxt = (item.isEquipped && (item.type == ItemType.Armor || item.type == ItemType.Weapon)) ? "[E]" : "";
-            string itemName = $"{equipTxt}{item.name}";
+            string itemName = item.name;
 
-            string equipMode = (isEquipMode) ? ConsoleHelper.PadRightForConsole(" ", 6) : $"  ";
+            if (item is Weapon || item is Armor)
+            {
+                itemName = GetEquipItemName(item);
+            }
+
+            // 번호 모드
+            string numberMode = (isEquipMode) ? ConsoleHelper.PadRightForConsole(" ", 6) : $"  ";
 
             Console.WriteLine(string.Format("{0} | {1} | {2} | {3}",
                 ConsoleHelper.PadRightForConsole(itemName, offsetName),
@@ -238,10 +243,10 @@ namespace TerimalQuest.Manager
             Console.WriteLine(
                 string.Format("{0}{1} | {2} | {3} | {4} | {5}",
                 purchase,
-                ConsoleHelper.PadRightForConsole("[아이템 이름]", 15),
-                ConsoleHelper.PadRightForConsole("[아이템 효과]", 15),
-                ConsoleHelper.PadRightForConsole("[아이템 설명]", 50),
-                ConsoleHelper.PadRightForConsole("[수량]", 10),
+                ConsoleHelper.PadRightForConsole("[아이템 이름]", offsetName),
+                ConsoleHelper.PadRightForConsole("[아이템 효과]", offsetEffect),
+                ConsoleHelper.PadRightForConsole("[아이템 설명]", offsetDesc),
+                ConsoleHelper.PadRightForConsole("[수량]", offsetCount),
                 "[아이템 가격]\n"));
         }
 
@@ -258,6 +263,17 @@ namespace TerimalQuest.Manager
                 ConsoleHelper.PadRightForConsole(item.GetCountText(), offsetCount),
                 ConsoleHelper.PadRightForConsole(itemPurchase, offsetPurchase),
                 isGoldIcon));
+        }
+
+        private string GetEquipItemName(Item item)
+        {
+            // 강화 레벨
+            string enhanceLevelTxt = $"(+{item.GetLevel()}강)";
+
+            // 착용 여부
+            string equipTxt = (item.isEquipped) ? "[E]" : "";
+
+            return $"{equipTxt}{enhanceLevelTxt}{item.name}";
         }
 
         #region InventoryUI
@@ -345,6 +361,60 @@ namespace TerimalQuest.Manager
             player.inventory.DisplayInfoWithGold();
             Console.WriteLine();
             DisplayOption(["(번호). 해당 아이템 판매", "0. 나가기"]);
+        }
+
+        #endregion
+
+        #region EnhancementUI
+
+        public void DisplayEnhancementStartScripts(Inventory inventory, EnhancementManager enhancementManager)
+        {
+            Console.Clear();
+            Console.WriteLine("장비 강화");
+            Console.WriteLine("보유 중인 장비를 강화할 수 있습니다.");
+            Console.WriteLine();
+            Console.WriteLine("[보유 강화석]");
+            Console.WriteLine($"강화석: {enhancementManager.GetPlayerEnhancementStoneCount()}개");
+            Console.WriteLine();
+            inventory.DisplayInfo(true, ItemType.Weapon, ItemType.Armor);
+            Console.WriteLine();
+            DisplayOption(["1. 무기 강화", "2. 방어구 강화", "0. 나가기"]);
+        }
+
+        public void DisplayEnhancementScripts(EnhancementManager enhancementManager, ItemType type)
+        {
+            string typeTxt = (type == ItemType.Weapon) ? "무기" : "방어구";
+
+            Console.Clear();
+            Console.WriteLine($"장비 강화 - {typeTxt}");
+            Console.WriteLine("보유 중인 장비를 강화할 수 있습니다.");
+            Console.WriteLine();
+            Console.WriteLine("[보유 강화석]");
+            Console.WriteLine($"강화석: {enhancementManager.GetPlayerEnhancementStoneCount()}개");
+            Console.WriteLine();
+            enhancementManager.DisplayEnhancealbeItemList();
+            Console.WriteLine();
+            DisplayOption(["(번호). 해당 장비 강화", "0. 나가기"]);
+        }
+
+        public void DisplayEnhancementResultScripts(bool success, int prevLevel, Item item)
+        {
+            Console.Clear();
+            Console.WriteLine("강화 결과");
+            Console.WriteLine();
+            if (success)
+            {
+                // 강화 성공 텍스트 출력
+                Console.WriteLine("강화에 성공했습니다!");
+                Console.WriteLine($"[{prevLevel}강] -> [{item.GetLevel()}강]");
+            }
+            else
+            {
+                // 강화 실패 텍스트 출력
+                Console.WriteLine("강화에 실패하였습니다..");
+            }
+            Console.WriteLine();
+            DisplayOption(["0. 나가기"]);
         }
 
         #endregion

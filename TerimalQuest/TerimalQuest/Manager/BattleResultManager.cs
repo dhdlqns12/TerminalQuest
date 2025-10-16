@@ -113,9 +113,9 @@ namespace TerimalQuest.Manager
             {
                 string itemName = rewardItem.Key;
                 int itemCount = rewardItem.Value;
-                Item itemToAdd = ItemDatabase.GetItem(itemName);
                 for (int i = 0; i < itemCount; i++)
                 {
+                    Item itemToAdd = ItemDatabase.GetItem(itemName);
                     player.inventory.Add(itemToAdd);
                 }
             }

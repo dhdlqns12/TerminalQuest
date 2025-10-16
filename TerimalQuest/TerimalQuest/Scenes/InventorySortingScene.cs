@@ -33,7 +33,7 @@ namespace TerimalQuest.Scenes
 
         private void Process()
         { 
-            var choice = GetUserChoice(["0", "1", "2", "3", "4"]);
+            var choice = ConsoleHelper.GetUserChoice(["0", "1", "2", "3", "4"]);
 
             // 나가기 설정
             if (choice == "0") { OnSceneChangeRequested?.Invoke(new InventoryScene()); return; }
@@ -43,22 +43,6 @@ namespace TerimalQuest.Scenes
 
             // 업데이트 하여 갱신
             OnSceneChangeRequested?.Invoke(new InventorySortingScene());
-        }
-
-        // 사용자 입력 체크
-        protected string GetUserChoice(string[] vaildOptions)
-        {
-            string choice;
-            while (true)
-            {
-                Console.Write(">> ");
-                choice = Console.ReadLine();
-                Console.WriteLine();
-
-                foreach (var option in vaildOptions) if (choice == option) return choice;
-
-                UIManager.Instance.SelectWrongSelection();
-            }
         }
     }
 }

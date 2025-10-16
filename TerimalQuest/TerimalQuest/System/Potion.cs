@@ -77,7 +77,6 @@ namespace TerimalQuest.System
         // 아이템 복제
         public override Potion Clone()
         {
-            this.Id += 1;   // 복제 시 Id 증가
             return new Potion(Id, name, desc, price, healAmount, type, potionType);
         }
     }
