@@ -36,7 +36,7 @@ namespace TerimalQuest.Scenes
 
         private void Process()
         {
-            var choice = GetUserChoice(["0", "1", "2"]);
+            var choice = ConsoleHelper.GetUserChoice(["0", "1", "2"]);
 
             switch (choice)
             {
@@ -51,22 +51,6 @@ namespace TerimalQuest.Scenes
                     break;
                 default:
                     break;
-            }
-        }
-
-        // 사용자 입력 체크
-        protected string GetUserChoice(string[] vaildOptions)
-        {
-            string choice;
-            while (true)
-            {
-                Console.Write(">> ");
-                choice = Console.ReadLine();
-                Console.WriteLine();
-
-                foreach (var option in vaildOptions) if (choice == option) return choice;
-
-                UIManager.Instance.SelectWrongSelection();
             }
         }
     }
