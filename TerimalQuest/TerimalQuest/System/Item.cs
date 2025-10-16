@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace TerimalQuest.System
 {
-    public enum ItemType { Weapon, Armor, Potion, Etc }
+    public enum ItemType { Weapon, Armor, Potion, EnhancementStone }
 
     public class Item
     {
-         /*
-         * Item 스크립트
-         * 
-         * 이 게임에서 사용하는 아이템 옵션은 다음과 같다.
-         * [Armor] 방어구
-         * [Weapon] 무기
-         * [Potion] 포션
-         * [Etc] 기타 아이템
-         * 
-         */
+        /*
+        * Item 스크립트
+        * 
+        * 이 게임에서 사용하는 아이템 옵션은 다음과 같다.
+        * [Armor] 방어구
+        * [Weapon] 무기
+        * [Potion] 포션
+        * [EnhancementStone] 강화석
+        * 
+        */
 
         public int Id { get; set; }         // 아이템 Id
         public string name { get; set; }    // 아이템 이름
@@ -50,6 +50,7 @@ namespace TerimalQuest.System
             this.isEquipped = false;
             this.isPurchase = false;
 
+            // 생성자 내 개수 1개로 설정
             this.count = 1;
         }
 
