@@ -22,10 +22,10 @@ namespace TerimalQuest.System
 
         public Potion() { }
 
-        public Potion(int id, string name, string desc, int price, float healAmount, ItemType type, PotionType _potionType) : base(id, name, desc, price, type)
+        public Potion(int id, string name, string desc, int price, float healAmount, ItemType type, PotionType potionType) : base(id, name, desc, price, type)
         {
             this.healAmount = healAmount;
-            this.potionType = _potionType;
+            this.potionType = potionType;
         }
 
         public void AddPotion()
