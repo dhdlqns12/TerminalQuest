@@ -20,6 +20,8 @@ namespace TerimalQuest.System
         public float healAmount { get; set; }       // 회복량
         public PotionType potionType { get; set; }  // 포션 타입
 
+        public Potion() { }
+
         public Potion(int id, string name, string desc, int price, float healAmount, ItemType type, PotionType _potionType) : base(id, name, desc, price, type)
         {
             this.healAmount = healAmount;

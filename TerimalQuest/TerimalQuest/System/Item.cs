@@ -32,6 +32,8 @@ namespace TerimalQuest.System
 
         public ItemType type { get; private set; } // 아이템 타입
 
+        public Item() { }
+
         public Item(int id, string name, string desc, int price, ItemType type)
         {
             Id = id;
