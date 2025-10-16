@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.Unicode;
 using System.Threading.Tasks;
 using TerimalQuest.Core;
@@ -59,6 +60,7 @@ namespace TerimalQuest.Manager
             baseCritRate = player.baseCritRate;
             baseEvadeRate = player.baseEvadeRate;
 
+            //타입별 리스트 분리
             weapons = player.inventory.Items.OfType<Weapon>().ToList();
             armors = player.inventory.Items.OfType<Armor>().ToList();
             potions = player.inventory.Items.OfType<Potion>().ToList();
@@ -82,6 +84,7 @@ namespace TerimalQuest.Manager
             var options = new JsonSerializerOptions
             {
                 Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                Converters = { new JsonStringEnumConverter() },
                 WriteIndented = true
             };
             Player player = GameManager.Instance.player;
@@ -98,6 +101,7 @@ namespace TerimalQuest.Manager
             var options = new JsonSerializerOptions
             {
                 Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                Converters = { new JsonStringEnumConverter() },
                 WriteIndented = true,
             };
 
@@ -167,9 +171,7 @@ namespace TerimalQuest.Manager
         {
             if (!string.IsNullOrEmpty(data.equippedWeapon))
             {
-                var weapon = player.inventory.Items
-                    .OfType<Weapon>()
-                    .FirstOrDefault(w => w.name == data.equippedWeapon);
+                var weapon = player.inventory.Items.OfType<Weapon>().FirstOrDefault(w => w.name == data.equippedWeapon);
 
                 if (weapon != null)
                 {
@@ -180,9 +182,7 @@ namespace TerimalQuest.Manager
 
             if (!string.IsNullOrEmpty(data.equippedArmor))
             {
-                var armor = player.inventory.Items
-                    .OfType<Armor>()
-                    .FirstOrDefault(a => a.name == data.equippedArmor);
+                var armor = player.inventory.Items.OfType<Armor>().FirstOrDefault(a => a.name == data.equippedArmor);
 
                 if (armor != null)
                 {
@@ -210,6 +210,7 @@ namespace TerimalQuest.Manager
             var options = new JsonSerializerOptions
             {
                 Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                Converters = { new JsonStringEnumConverter() },
                 WriteIndented = true
             };
 
