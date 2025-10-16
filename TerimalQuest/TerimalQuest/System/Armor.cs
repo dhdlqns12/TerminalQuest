@@ -11,10 +11,12 @@ namespace TerimalQuest.System
     public class Armor : Item
     {
         public float def { get; set; }
+        public int enhancementLevel { get; set; }
 
         public Armor(int id, string name, string desc, int price, float def, ItemType type) : base(id, name, desc, price, type)
         {
             this.def = def;
+            this.enhancementLevel = 0;
         }
 
         public override void Equip(bool isEquip)
@@ -31,6 +33,13 @@ namespace TerimalQuest.System
             return $"방어력 +{def}";
         }
 
+        public override void Enhance(float enhanceValue)
+        {
+            // 강화 레벨 증가 후 방어력 증가
+            enhancementLevel++;
+            def += enhanceValue;
+        }
+
         public override void DisplayInfo()
         {
             // 아이템 정보 표시
@@ -42,6 +51,8 @@ namespace TerimalQuest.System
             // 상품 목록에서 보여줄 아이템 정보 표시
             UIManager.Instance.DisplayItemProduct(this);
         }
+
+        public override int GetLevel() => enhancementLevel;
 
         // 아이템 복제
         public override Item Clone()

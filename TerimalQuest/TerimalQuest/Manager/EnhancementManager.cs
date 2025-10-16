@@ -31,9 +31,7 @@ namespace TerimalQuest.Manager
 
         private UIManager uiManager;
 
-        private List<Item> enhanceableItems;
-
-        private Action currentEnhancementAction;
+        public List<Item> enhanceableItems { get; set; }
 
         public EnhanceState currentState { get; private set; }
 
@@ -44,9 +42,12 @@ namespace TerimalQuest.Manager
         private float[] enhancementRatePerLevel = { 1f, 1f, 2f, 2f, 3f, 3f, 4f, 4f, 5f, 7f }; // 0~10강 증가량
 
         // 강화 시 사용하는 변수
-        Random random;
-        int enhancementLevel;
-        EnhancementStone enhancementStone;
+        private Random random;
+        private int enhancementLevel;
+        private EnhancementStone enhancementStone { get; set; }
+        private int enhancementStoneId;
+        private bool enhanceSuccess;
+        Item enhanceItem;
 
         public EnhancementManager() 
         {
@@ -59,38 +60,42 @@ namespace TerimalQuest.Manager
 
             random = new Random();
             maxEnhancementLevel = 10;
+            enhancementStoneId = 4000;
+            enhanceSuccess = false;
+
+            // 인벤토리에서 강화석 찾기
+            enhancementStone = (EnhancementStone)inventory.FindItemById(enhancementStoneId);
         }
 
-        public void StartEnhanceProcess()
+        // 강화 할 수 있는 아이템 리스트에 저장
+        public void SetEnhancealbeItemList(params ItemType[] filterTypes)
         {
-            DisplayEnhanceableItems();
+            enhanceableItems.Clear();
 
-            var choice = ConsoleHelper.GetUserChoice(["0", "1", "2"]);
+            List<Item> items = inventory.items;
 
-            switch (choice)
+            if (filterTypes == null || filterTypes.Length == 0) return;
+
+            // 필터링된 아이템만 추가
+            enhanceableItems.AddRange(items.Where(item => filterTypes.Contains(item.type)));
+        }
+
+        // 아이템 리스트 보여주기
+        public void DisplayEnhancealbeItemList()
+        {
+            UIManager.Instance.DisplayItemInfoHeader(true);
+
+            foreach (var item in enhanceableItems)
             {
-                case "1":
-                    break;
-                case "2":
-                    break;
-                case "0":
-                    break;
+                string idxTxt = $"{enhanceableItems.IndexOf(item) + 1} : ";
+                Console.Write($"- {idxTxt}");
+                item.DisplayInfo();
             }
-        }
-
-        // 강화 할 수 있는 아이템(소유하고 있는 무기, 방어구) 보여주기
-        public void DisplayEnhanceableItems()
-        {
-            // 강화 할 수 있는 아이템(소유하고 있는 무기, 방어구) 보여주기
-            inventory.DisplayInfo(true, ItemType.Weapon, ItemType.Armor);
         }
 
         // 강화석 재료가 충분한지 체크
         private bool HasEnoughEnhancementStones(int level)
         {
-            // 인벤토리에서 강화석 찾기
-            enhancementStone = (EnhancementStone)inventory.FindItemById(4000);
-
             // 강화석 null 값 체크
             if (enhancementStone == null || enhancementStone.count == 0)
             { 
@@ -101,50 +106,68 @@ namespace TerimalQuest.Manager
             return (enhancementStone.count >= stoneRequiredPerLevel[level]);
         }
 
-        // 강화 시도
-        public void TryEnhanceItem(Item item)
+        // 강화석 개수 얻기
+        public int GetPlayerEnhancementStoneCount()
         {
+            return (enhancementStone == null) ? 0 : enhancementStone.count;
+        }
+
+        // 강화 시도
+        public bool TryEnhanceItem(int idx)
+        {
+            // 아이템 정보 가져오기
+            enhanceItem = enhanceableItems[idx];
+
+            if(enhanceItem == null) return false;
+
             // 아이템 강화 단계 가져오기
-            enhancementLevel = item switch
-            {
-                //Weapon w => w.enhancementLevel,
-                //Armor a => a.enhancementLevel,
-                _ => 0
-            };
+            enhancementLevel = enhanceItem.GetLevel();
 
             // 장비 레벨 체크
             if (enhancementLevel >= maxEnhancementLevel)
             {
                 Console.WriteLine("더이상 강화를 진행할 수 있습니다.");
-                return;
+                return false;
             }
 
             // 강화석 재료 체크
             if (!HasEnoughEnhancementStones(enhancementLevel))
             {
                 Console.WriteLine("강화석 재료가 부족합니다.");
-                return;
+                return false;
             }
 
-            EnhanceItem(item);
+            return true;
         }
 
         // 강화 시작
-        private void EnhanceItem(Item item)
+        public void EnhanceItem()
         {
             // 강화석 소모
             int requiredStoneCount = stoneRequiredPerLevel[enhancementLevel + 1]; // 다음 단계 필요 강화석
             enhancementStone.count -= requiredStoneCount;
 
-            // 장비 옵션 가져오기
-
             // 강화 확률 계산
             float successRate = successRatePerLevel[enhancementLevel + 1];
-            bool isSuccess = random.NextDouble() < successRate;
+            enhanceSuccess = random.NextDouble() < successRate;
 
-            if(isSuccess)
+            // 성공 시 강화 레벨 증가
+            enhanceItem.Enhance(enhancementRatePerLevel[enhancementLevel]);
+        }
+
+        // 강화 결과
+        public void EnhanceResult()
+        {
+            if (enhanceSuccess)
             {
-
+                // 강화 성공 텍스트 출력
+                Console.WriteLine("강화에 성공했습니다!");
+                Console.WriteLine($"[{enhancementLevel}강] -> [{enhanceItem.GetLevel()}강]");
+            }
+            else
+            {
+                // 강화 실패 텍스트 출력
+                Console.WriteLine("강화에 실패하였습니다..");
             }
         }
     }
