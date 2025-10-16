@@ -15,10 +15,11 @@ namespace TerimalQuest.Scenes
 
         public event Action<IScene> OnSceneChangeRequested;
 
+        QuestManager questManager;
         public void Enter()
         {
+            questManager = QuestManager.Instance;
             UIManager.Instance.ShowSection("마을 활동");
-
             Console.WriteLine("\n마을에서 할 활동을 선택해 주세요.\n");
             UIManager.Instance.TownActivityScripts();
         }
@@ -56,7 +57,7 @@ namespace TerimalQuest.Scenes
         private void TownPatrol()
         {
             Random ran = new Random();
-
+            
             var events = new[]
             {
                 (20,"마을 주민과 만나서 심부름을 했다.",1000),
@@ -73,6 +74,8 @@ namespace TerimalQuest.Scenes
                 {
                     if (ranNum <= percent)
                     {
+                        if (gold > 0)
+                            questManager.PlayQuest("마을순찰");
                         Console.WriteLine($"{message} {gold}골드 흭득");
                         player.gold += gold;
                         break;
@@ -107,6 +110,7 @@ namespace TerimalQuest.Scenes
                     {
                         Console.WriteLine($"{message} {exp}경험치 획득");
                         player.exp += exp;
+                        questManager.PlayQuest("훈련");
                         break;
                     }
                 }
