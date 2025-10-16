@@ -11,11 +11,13 @@ namespace TerimalQuest.Manager
         private Dictionary<string, List<DropItem>> dropTable;
         private Random random = new Random();
         private RecodeManager recodeManager;
+        private QuestManager questManager;
         public BattleResultManager()
         {
             player = GameManager.Instance.player;
             uiManager = UIManager.Instance;
             recodeManager = RecodeManager.Instance;
+            questManager = QuestManager.Instance;
             InitializeDropTable();
         }
         /// <summary>
@@ -35,6 +37,7 @@ namespace TerimalQuest.Manager
                 }
                 ProcessFixedReward(result.defeatedMonsters);
                 ProcessRandomReward(result.defeatedMonsters);
+                BattleQuestResult(result.defeatedMonsters);
                 uiManager.DisplayBattleRewardResult(totalReward);
                 player.curStage++;
             }
@@ -118,6 +121,14 @@ namespace TerimalQuest.Manager
             }
         }
 
+
+        private void BattleQuestResult(List<Monster> defeatedMonsters)
+        {
+            for (int i = 0; i < defeatedMonsters.Count; i++)
+            {
+                questManager.PlayQuest(defeatedMonsters[i].name);
+            }
+        }
         /// <summary>
         /// 드랍테이블 생성
         /// </summary>

@@ -103,5 +103,18 @@
     "rewardGold": 0,
     "rewardExp": 0,
     "rewardItem": null
+  },
+  {
+    "questNum": 8,
+    "questType": "사냥",
+    "name": "대포 미니언 사냥",
+    "description": "대포 미니언을 3마리 처치해줘",
+    "successDes": "대포 미니언을 처치하세요",
+    "successConditions": {
+      "대포미니언": 3
+    },
+    "rewardGold": 150,
+    "rewardExp": 20,
+    "rewardItem": null
   }
 ]
