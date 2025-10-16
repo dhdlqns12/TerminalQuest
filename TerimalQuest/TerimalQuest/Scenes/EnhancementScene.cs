@@ -43,7 +43,7 @@ namespace TerimalQuest.Scenes
         // 강화 시작 화면
         private void EnhanceStartView()
         {
-            uiManager.DisplayEnhancementStartScripts(inventory);
+            uiManager.DisplayEnhancementStartScripts(inventory, enhancementManager);
 
             string choice = ConsoleHelper.GetUserChoice(["0", "1", "2"]);
 

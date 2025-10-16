@@ -367,11 +367,14 @@ namespace TerimalQuest.Manager
 
         #region EnhancementUI
 
-        public void DisplayEnhancementStartScripts(Inventory inventory)
+        public void DisplayEnhancementStartScripts(Inventory inventory, EnhancementManager enhancementManager)
         {
             Console.Clear();
             Console.WriteLine("장비 강화");
             Console.WriteLine("보유 중인 장비를 강화할 수 있습니다.");
+            Console.WriteLine();
+            Console.WriteLine("[보유 강화석]");
+            Console.WriteLine($"강화석: {enhancementManager.GetPlayerEnhancementStoneCount()}개");
             Console.WriteLine();
             inventory.DisplayInfo(true, ItemType.Weapon, ItemType.Armor);
             Console.WriteLine();
@@ -385,6 +388,9 @@ namespace TerimalQuest.Manager
             Console.Clear();
             Console.WriteLine($"장비 강화 - {typeTxt}");
             Console.WriteLine("보유 중인 장비를 강화할 수 있습니다.");
+            Console.WriteLine();
+            Console.WriteLine("[보유 강화석]");
+            Console.WriteLine($"강화석: {enhancementManager.GetPlayerEnhancementStoneCount()}개");
             Console.WriteLine();
             enhancementManager.DisplayEnhancealbeItemList();
             Console.WriteLine();
