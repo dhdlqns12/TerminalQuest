@@ -1,3 +1,4 @@
+using System.Drawing;
 using TerimalQuest.Core;
 
 namespace TerimalQuest.Manager;
@@ -65,12 +66,12 @@ public class MonsterManager
     /// </summary>
     public void CreateTotalMonsterList()
     {
-        Monster minion = new Monster("미니언", 1,10,0,10,1);
-        Monster voidInsect = new Monster("공허충", 1,10,0,15,2);
-        Monster cannonMinion = new Monster("대포미니언", 1,10,0,20,3);
-        totalMonsterList.Add(minion);
-        totalMonsterList.Add(voidInsect);
-        totalMonsterList.Add(cannonMinion);
+        Monster slime = new Monster("슬라임", 1,10,0,10,1);
+        Monster orc = new Monster("오크", 1,10,0,15,2);
+        Monster troll = new Monster("트롤", 1,10,0,20,3);
+        totalMonsterList.Add(slime);
+        totalMonsterList.Add(orc);
+        totalMonsterList.Add(troll);
     }
 
     public Monster CreateBossMonster(bool isLast)

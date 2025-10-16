@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerimalQuest.System;
 
 namespace TerimalQuest.Core
 {
@@ -14,6 +15,11 @@ namespace TerimalQuest.Core
         public Monster(string name, int level, float maxHp, float maxMp, float atk, float def) : base(name, level, maxHp, maxMp, atk, def)
         {
         }
+
+        public string[] GetIdleAnimation() => MonsterAnimation.GetAnimation(name, AnimationType.Idle);
+        public string[] GetAttackAnimation() => MonsterAnimation.GetAnimation(name, AnimationType.Attack);
+        public string[] GetHitAnimation() => MonsterAnimation.GetAnimation(name, AnimationType.Hit);
+        public string[] GetDeathAnimation() => MonsterAnimation.GetAnimation(name, AnimationType.Death);
 
         public Monster Clone()
         {
