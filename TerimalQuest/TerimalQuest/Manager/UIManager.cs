@@ -499,6 +499,7 @@ namespace TerimalQuest.Manager
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("HP가 부족해서 전투가 불가능합니다.");
+            Console.ResetColor();
         }
 
         public void DisplayUseSupportSkill(Player player ,Skill skill)
