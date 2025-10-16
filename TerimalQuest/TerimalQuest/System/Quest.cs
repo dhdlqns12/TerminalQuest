@@ -26,7 +26,7 @@ namespace TerimalQuest.System
 
         public bool isClear { get; set; } //클리어되었는지
 
-        public Dictionary<string, int> currentCounts;
+        public Dictionary<string, int> currentCounts { get; set; }
 
         public Quest(int questNum, string questType, string name, string description,string successDes, Dictionary<string, int> successConditions, bool isClear, int rewardGold = 0, int rewardExp = 0, Dictionary<string, int> rewardItem = null)
         {
