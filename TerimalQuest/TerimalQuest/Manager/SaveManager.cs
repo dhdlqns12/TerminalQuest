@@ -30,11 +30,18 @@ namespace TerimalQuest.Manager
         public float baseCritRate { get; set; }
         public float baseEvadeRate { get; set; }
 
-        public List<Item> playerInventory { get; set; } //배열로 구현하신다 하셧으니 배열로 변경
-        public List<Item> equipItem { get; set; }
+        public List<Weapon> weapons { get; set; }
+        public List<Armor> armors { get; set; }
+        public List<Potion> potions { get; set; }
+
+        public string equippedWeapon { get; set; }
+        public string equippedArmor { get; set; }
+
         public Dictionary<int, Quest> questList { get; set; }
+
         public SaveData() { }
-        public SaveData(Player player/*, List<Item> _playerInventory, List<Item> _equipItem*/) //아이템 저장 및 장착 부분은 추후에 수정 예정
+
+        public SaveData(Player player)
         {
             name = player.name;
             level = player.level;
@@ -52,8 +59,13 @@ namespace TerimalQuest.Manager
             baseCritRate = player.baseCritRate;
             baseEvadeRate = player.baseEvadeRate;
 
-            //playerInventory = new List<Item>(_playerInventory);
-            //equipItem = new List<Item>(_equipItem);
+            weapons = player.inventory.Items.OfType<Weapon>().ToList();
+            armors = player.inventory.Items.OfType<Armor>().ToList();
+            potions = player.inventory.Items.OfType<Potion>().ToList();
+
+            equippedWeapon = player.equippedWeapon?.name;
+            equippedArmor = player.equippedArmor?.name;
+
             questList = player.questList;
         }
     }
@@ -65,7 +77,7 @@ namespace TerimalQuest.Manager
             return $"SaveGame{slot}.json";
         }
 
-        public static void GameSave(/*, List<Item> _playerInventory, List<Item> _equipItem,*/int _slot) //추후 아이템 관련 및 추가 저장 수정
+        public static void GameSave(int _slot)
         {
             var options = new JsonSerializerOptions
             {
@@ -73,7 +85,7 @@ namespace TerimalQuest.Manager
                 WriteIndented = true
             };
             Player player = GameManager.Instance.player;
-            SaveData data = new SaveData(player/*, _playerInventory, _equipItem*/);
+            SaveData data = new SaveData(player);
             string json_Serialize = JsonSerializer.Serialize(data, options);
             File.WriteAllText(SavePath(_slot), json_Serialize);
         }
@@ -81,7 +93,6 @@ namespace TerimalQuest.Manager
         public static SaveData GameLoad(int _slot)
         {
             string path = SavePath(_slot);
-
             string json_Deserialize = File.ReadAllText(path);
 
             var options = new JsonSerializerOptions
@@ -103,6 +114,7 @@ namespace TerimalQuest.Manager
             loadedPlayer.gold = data.gold;
             loadedPlayer.stamina = data.stamina;
             loadedPlayer.curStage = data.curStage;
+
             loadedPlayer.baseAtk = data.baseAtk;
             loadedPlayer.baseDef = data.baseDef;
             loadedPlayer.baseCritRate = data.baseCritRate;
@@ -112,10 +124,72 @@ namespace TerimalQuest.Manager
 
             loadedPlayer.SetExpWithoutLevelUp(data.exp);
 
+            LoadInventory(loadedPlayer, data);
+
+            EquippedItems(loadedPlayer, data);
+
             loadedPlayer.UpdateStats();
 
             GameManager.Instance.player = loadedPlayer;
             return data;
+        }
+
+        private static void LoadInventory(Player player, SaveData data)
+        {
+            player.inventory.Clear();
+
+            if (data.weapons != null)
+            {
+                foreach (var weapon in data.weapons)
+                {
+                    player.inventory.Items.Add(weapon);
+                }
+            }
+
+            if (data.armors != null)
+            {
+                foreach (var armor in data.armors)
+                {
+                    player.inventory.Items.Add(armor);
+                }
+            }
+
+            if (data.potions != null)
+            {
+                foreach (var potion in data.potions)
+                {
+                    player.inventory.Items.Add(potion);
+                }
+            }
+        }
+
+        private static void EquippedItems(Player player, SaveData data)
+        {
+            if (!string.IsNullOrEmpty(data.equippedWeapon))
+            {
+                var weapon = player.inventory.Items
+                    .OfType<Weapon>()
+                    .FirstOrDefault(w => w.name == data.equippedWeapon);
+
+                if (weapon != null)
+                {
+                    weapon.isEquipped = true;
+                    player.equippedWeapon = weapon;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(data.equippedArmor))
+            {
+                var armor = player.inventory.Items
+                    .OfType<Armor>()
+                    .FirstOrDefault(a => a.name == data.equippedArmor);
+
+                if (armor != null)
+                {
+                    armor.isEquipped = true;
+                    player.equippedArmor = armor;
+                }
+            }
         }
 
         public static bool HasSaveData(int _slot)
