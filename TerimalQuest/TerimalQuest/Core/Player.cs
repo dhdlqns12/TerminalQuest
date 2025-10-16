@@ -26,10 +26,38 @@ namespace TerimalQuest.Core
         public Weapon equippedWeapon { get; set; }
         public Armor equippedArmor { get; set; }
 
-        public float baseAtk { get; set; } //아이템 장착하지  않았을 때의 플레이어 공격력
-        public float baseDef { get; set; } //아이템 장착하지 않았을 때의 플레이어 방어력
+        private float _baseAtk { get; set; } //아이템 장착하지  않았을 때의 플레이어 공격력
+        public float baseAtk
+        {
+            get => _baseAtk;
+            set
+            {
+                if (_baseAtk != value)
+                {
+                    _baseAtk = value;
+                    IsChangeStat();
+                }
+            }
+        }
+
+        private float _baseDef { get; set; } //아이템 장착하지 않았을 때의 플레이어 방어력
+        public float baseDef
+        {
+            get => _baseDef;
+            set
+            {
+                if (_baseDef != value)
+                {
+                    _baseDef = value;
+                    IsChangeStat();
+                }
+            }
+        }
+
         public float baseCritRate { get; set; } //아이템 장착하지 않았을 때의 플레이어 치명타 확률
         public float baseEvadeRate { get; set; } //아이템 장착하지 않았을 때의 플레이어 회피 확률
+
+        private bool isChangeStat = false;
 
         public int[] requiredExp= { 10, 35, 65, 100 };
 
@@ -129,11 +157,23 @@ namespace TerimalQuest.Core
             critRate = job.critRate;
             evadeRate = job.evadeRate;
             skillList = job.DefaultSkills;
-
-            UpdateStats();
         }
 
-        public void UpdateStats()
+        public void IsChangeStat()  // 음 옛날에 해봤던 Dirty Flag패턴이랑 유사한데....
+        {
+            isChangeStat = true;
+        }
+
+        public void RefreshStat()
+        {
+            if (isChangeStat)
+            {
+                UpdateStats();
+                isChangeStat = false;
+            }
+        }
+
+        public void UpdateStats() //처리가 이뤄질만한 작업이처리가 되면 특정 bool값을 true로 적게돌리는 방향성
         {
             atk = baseAtk;
             def = baseDef;
@@ -175,13 +215,12 @@ namespace TerimalQuest.Core
                 }
 
                 equippedWeapon = weapon;
-                UpdateStats();
             }
             else
             {
                 equippedWeapon = null;
-                UpdateStats();
             }
+            IsChangeStat();
         }
 
         private void ToogleEquipArmor(Armor armor)
@@ -190,17 +229,16 @@ namespace TerimalQuest.Core
             {
                 if (equippedArmor != null && equippedArmor != armor)
                 {
-                    equippedWeapon.isEquipped = false;
+                    equippedArmor.isEquipped = false;
                 }
 
                 equippedArmor = armor;
-                UpdateStats();
             }
             else
             {
                 equippedArmor = null;
-                UpdateStats();
             }
+            IsChangeStat();
         }
 
         #endregion
