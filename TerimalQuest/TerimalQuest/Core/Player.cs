@@ -22,8 +22,8 @@ namespace TerimalQuest.Core
 
         public Inventory inventory { get; set; }          // 플레이어 인벤토리
 
-        public Weapon equippedWeapon { get; private set; }
-        public Armor equippedArmor { get; private set; }
+        public Weapon equippedWeapon { get; set; }
+        public Armor equippedArmor { get; set; }
 
         public float baseAtk { get; set; } //아이템 장착하지  않았을 때의 플레이어 공격력
         public float baseDef { get; set; } //아이템 장착하지 않았을 때의 플레이어 방어력
