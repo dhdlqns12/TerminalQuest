@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerimalQuest.Core;
 using TerimalQuest.Manager;
 using TerimalQuest.System;
 
@@ -13,6 +14,7 @@ namespace TerimalQuest.Scenes
         public event Action<IScene> OnSceneChangeRequested;
 
         QuestManager questManager;
+        UIManager uiManager;
         List<Quest> quests = new List<Quest>();
 
         bool isSelecting = false;
@@ -23,7 +25,8 @@ namespace TerimalQuest.Scenes
         {
             questManager = QuestManager.Instance;
             quests = QuestManager.Instance.questLists;
-            questManager.QuestListShow(quests);
+            uiManager = UIManager.Instance;
+            uiManager.QuestListShow(quests);
         }
 
         public void Update()
@@ -31,14 +34,16 @@ namespace TerimalQuest.Scenes
             string input = Console.ReadLine();
             if (isSelecting && !isRewarding)
             {
+                Player player = GameManager.Instance.player;
                 switch (input)
                 {
                     case "1":
                         Quest quest = questManager.curQuest;
-                        
-                        if(GameManager.Instance.player.questList.Contains(quest))
+                        Dictionary<int, Quest> playerQuest = player.questList;
+                        int questNum = quest.questNum;
+                        if (playerQuest.ContainsKey(questNum))
                         {
-                            if (quest.isClear)
+                            if (playerQuest[questNum].isClear)
                             {
                                 quest.QuestClear(GameManager.Instance.player);
                                 isSelecting = false;
@@ -50,14 +55,14 @@ namespace TerimalQuest.Scenes
                         else
                         {
                             questManager.AccepQuest();
-                            questManager.QuestListShow(quests);
-                            /*questManager.PlayQuest("미니언", 10);
-                            questManager.PlayQuest("슬라임", 5);*/
+                            uiManager.QuestListShow(quests);
+                            questManager.PlayQuest("미니언", 10);
+                            questManager.PlayQuest("슬라임", 5);
                             isSelecting = false;
                         }
                         break;
                     case "2":
-                        questManager.QuestListShow(quests);
+                        uiManager.QuestListShow(quests);
                         isSelecting = false;
                         break;
                     default:
@@ -69,7 +74,7 @@ namespace TerimalQuest.Scenes
             {
                 if(isRewarding)
                 {
-                    questManager.QuestListShow(quests);
+                    uiManager.QuestListShow(quests);
                     isRewarding = false;
                 }
                 else
@@ -78,9 +83,11 @@ namespace TerimalQuest.Scenes
                     {
                         if (num <= quests.Count && num > 0)
                         {
-                            QuestManager.Instance.SelectQuest(quests[num - 1]);
+                            uiManager.SelectQuest(quests[num - 1]);
                             isSelecting = true;
                         }
+                        else if (num == 0)
+                            OnSceneChangeRequested?.Invoke(new StartScene());
                         else
                             Console.WriteLine("잘못된 입력입니다.");
                     }

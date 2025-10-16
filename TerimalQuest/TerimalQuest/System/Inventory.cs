@@ -26,7 +26,7 @@ namespace TerimalQuest.System
         private int maxItemCount;    // 최대 아이템 개수
 
         // 아이템 리스트
-        private List<Item> items;
+        public List<Item> items;
 
         // 생성자
         public Inventory(int maxItemCount)
@@ -126,6 +126,7 @@ namespace TerimalQuest.System
             else
             {
                 item.Equip(true);
+                QuestManager.Instance.PlayQuest("장착");
             }
         }
 

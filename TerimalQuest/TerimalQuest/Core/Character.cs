@@ -52,17 +52,18 @@ namespace TerimalQuest.Core
             this.atk = atk;
         }
 
-        public int GetFinalDamage(out bool isCritical)
+        public int GetFinalDamage(out bool isCritical, int targetDef)
         {
             Random random = new Random();
             isCritical = random.NextDouble() < this.critRate;
             float deviation = (float)Math.Ceiling(atk * 0.1);
             int minDamage = (int)Math.Ceiling(atk - deviation);
             int maxDamage = (int)Math.Ceiling(atk + deviation);
-            int finalDamage = random.Next(minDamage, maxDamage + 1);
+            int finalDamage = random.Next(minDamage, maxDamage + 1) - targetDef;
+            if(finalDamage <= 0) finalDamage = 1;
             if (isCritical)
             {
-                finalDamage = (int)(finalDamage * 1.6f);
+                finalDamage = (int)(finalDamage * 1.6);
             }
             return  finalDamage;
         }

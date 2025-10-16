@@ -36,7 +36,7 @@ namespace TerimalQuest.Manager
 
         public void ShowStartSceneScripts()
         {
-            Console.Write("스파르타 던전에 오신 여러분 환영합니다. \n이제 전투를 시작할 수 있습니다. \n\n1.상태 보기 \n2.인벤토리\n3.전투 시작\n4.퀘스트\n5.상점\n0.게임 종료 \n\n원하시는 행동을 입력해주세요.\n>>");
+            Console.Write($"스파르타 던전에 오신 여러분 환영합니다. \n이제 전투를 시작할 수 있습니다. \n\n1.상태 보기 \n2.인벤토리\n3.전투 시작(현재 진행 : {GameManager.Instance.player.curStage}층)\n4.퀘스트\n5.상점\n0.게임 종료 \n\n원하시는 행동을 입력해주세요.\n>>");
         }
 
         public void ShowStatusSceneScripts()
@@ -294,7 +294,7 @@ namespace TerimalQuest.Manager
                 return;
             }
 
-            int finalDamage = attacker.GetFinalDamage(out bool isCritical);
+            int finalDamage = attacker.GetFinalDamage(out bool isCritical, (int)target.def);
             string attackStr = $"{target.name} 을(를) 맞췄습니다. [데미지 : {finalDamage}]";
 
             if (isCritical) attackStr += " - 치명타 공격!!";
@@ -305,6 +305,27 @@ namespace TerimalQuest.Manager
             string deadResult = target is Player ? "0" : "Dead";
             string attackResult =
                 $"HP {target.hp} -> {(target.hp - finalDamage > 0 ? target.hp - finalDamage : deadResult)}";
+
+            Console.WriteLine(attackResult);
+        }
+
+        public void AttackTargetWithSkill(Character attacker, Character target, Skill skill)
+        {
+            Console.Clear();
+            Console.WriteLine("Battle!\n");
+            Console.WriteLine($"{target.name}에게 {attacker.name}의 {skill.name} 공격!");
+            string deadResult = target is Player ? "0" : "Dead";
+            string attackResult = "";
+            if (skill.damageType == SkillDamageType.FixedDamage)
+            {
+                attackResult =
+                    $"Lv.{target.level} {target.name} HP {target.hp} -> {(target.hp - skill.damage > 0 ? target.hp - skill.damage : deadResult)} [데미지 : {skill.damage}]";
+            }
+            else
+            {
+                attackResult =
+                    $"Lv.{target.level} {target.name} HP {target.hp} -> {(target.hp - skill.damage * attacker.atk > 0 ? target.hp - skill.damage * attacker.atk : deadResult)} [데미지 : {skill.damage * attacker.atk}]";
+            }
 
             Console.WriteLine(attackResult);
         }
@@ -327,11 +348,15 @@ namespace TerimalQuest.Manager
             Console.WriteLine("[내정보]");
             Console.WriteLine($"Lv.{player.level} {player.name} ({player.jobName})");
             Console.WriteLine($"HP {player.hp}/{player.maxHp}");
+            Console.WriteLine($"MP {player.mp}/{player.maxMp}");
         }
 
         public void SelectTarget()
         {
+            Console.WriteLine();
+            Console.WriteLine("0. 뒤로가기");
             Console.WriteLine("대상을 선택해주세요.\n>>");
+
         }
 
         public void SelectWrongSelection()
@@ -371,7 +396,165 @@ namespace TerimalQuest.Manager
             {
                 foreach (var itemPair in totalReward.totalRewardItems)
                 {
-                    Console.WriteLine($"{itemPair.Key} - {itemPair.Value}");
+                    Console.WriteLine($"{itemPair.Value} - {itemPair.Key}");
+                }
+            }
+        }
+
+        public void DisplayBattleChoice()
+        {
+            Console.WriteLine("1. 공격");
+            Console.WriteLine("2. 스킬");
+            Console.WriteLine("0. 후퇴");
+        }
+
+        public void DisplaySelectingSkill(List<Skill> skillList)
+        {
+            Console.WriteLine();
+            for (int i = 0; i < skillList.Count; i++)
+            {
+                Skill skill = skillList[i];
+                Console.WriteLine($"{i + 1}. {skill.name} - MP {skill.cost}");
+                Console.WriteLine($"{skill.description}");
+            }
+            Console.WriteLine("0. 취소");
+        }
+
+        public void DisplayNotEnoughMagicCost()
+        {
+            Console.WriteLine("MP가 부족합니다.");
+        }
+
+        public void DisplayUseSupportSkill(Player player ,Skill skill)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"{skill.name} 사용!");
+            Console.WriteLine($"{player.name}의 체력이 회복되었다.");
+            Console.WriteLine($"{player.hp} -> {(player.hp + skill.damage)}");
+        }
+
+        public void DisplayFullRangeAttackSkillResult(List<Monster> monsterList, Skill skill, float finalSkillDamage)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"모든 적에게 {skill.name} 시전! {finalSkillDamage}의 데미지!");
+            for (int i = 0; i < monsterList.Count; i++)
+            {
+                Monster monster = monsterList[i];
+                if (monster.hp < 0) continue;
+                Console.WriteLine($"{monster.name} - HP {monster.hp} -> {(monster.hp - finalSkillDamage >= 0 ? monster.hp -finalSkillDamage : "Dead")}");
+            }
+        }
+
+        #endregion
+
+
+        #region QuestUI
+        /// <summary>
+        /// 퀘스트 리스트업 함수
+        /// </summary>
+        /// <param name="quests"></param>
+        public void QuestListShow(List<Quest> quests)
+        {
+            Player player = GameManager.Instance.player;
+            Console.Clear();
+            Console.WriteLine("퀘스트 목록\n");
+            QuestManager.Instance.curQuest = null;
+            for (int i = 0; i < quests.Count; i++)
+            {
+                string questRunning = "";
+                if (player.questList != null)
+                {
+                    questRunning = player.questList.ContainsKey(quests[i].questNum) ? "[진행중]" : "";
+                }
+                Console.WriteLine($"{i + 1}. {quests[i].name} {questRunning}");
+            }
+            Console.WriteLine("\n0. 돌아가기");
+            Console.Write("\n원하시는 퀘스트를 선택해주세요.\n>>");
+        }
+
+
+        /// <summary>
+        /// 퀘스트 정보 출력
+        /// </summary>
+        /// <param name="quest"></param>
+        public void SelectQuest(Quest quest)
+        {
+            Console.Clear();
+            QuestManager.Instance.curQuest = quest;
+            Console.WriteLine($"퀘스트 : {quest.name}\n");
+            Console.WriteLine($"{quest.description}\n");
+            QuestInfo(quest);
+            Console.WriteLine("\n- 보상 -\n");
+            if (quest.rewardItem != null && quest.rewardItem.Count != 0)
+            {
+                foreach (var dic in quest.rewardItem)
+                {
+                    Item item = ItemDatabase.GetItem(dic.Key);
+                    Console.WriteLine($"  {item.name} x {dic.Value}");
+                }
+            }
+            Console.WriteLine($"  {quest.rewardGold}G");
+            Console.WriteLine($"  경험치 {quest.rewardExp}");
+
+            SelectChoice();
+        }
+
+        public void QuestInfo(Quest quest)
+        {
+            switch (quest.questType)
+            {
+                case "사냥":
+                    foreach (var questDic in quest.successConditions)
+                    {
+                        int curNum = QuestManager.Instance.curQuest.currentCounts[questDic.Key];
+                        Console.WriteLine($"- {questDic.Key} {questDic.Value}마리 처치 ({curNum}/{questDic.Value})");
+                    }
+                    break;
+                case "장착":
+                    Console.WriteLine("장비를 장착해보세요");
+                    break;
+                case "레벨":
+                    Console.WriteLine($"레벨을 {quest.successConditions["레벨"]}올리세요");
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 퀘스트 수락, 보상 버튼 조건부 표출
+        /// </summary>
+        public void SelectChoice()
+        {
+            Player player = GameManager.Instance.player;
+            if (player.questList.ContainsKey(QuestManager.Instance.curQuest.questNum))
+            {
+                Console.WriteLine("\n1. 보상 받기");
+                Console.WriteLine("2. 돌아가기");
+            }
+            else
+            {
+                Console.WriteLine("\n1. 수락");
+                Console.WriteLine("2. 거절");
+            }
+            Console.Write("\n원하시는 행동을 입력해주세요.\n>>");
+        }
+
+        /// <summary>
+        /// 보상메시지
+        /// </summary>
+        public void RewardMessage()
+        {
+            Player player = GameManager.Instance.player;
+            Quest quest = QuestManager.Instance.curQuest;
+            Console.WriteLine("보상을 획득하였습니다!");
+            Console.WriteLine($"경험치 : {player.exp} -> {player.exp + quest.rewardExp}");
+            Console.WriteLine($"골드 : {player.gold}G -> {player.gold + quest.rewardGold}G");
+            if (quest.rewardItem != null && quest.rewardItem.Count > 0)
+            {
+                Console.WriteLine("획득 아이템");
+                foreach (var dic in quest.rewardItem)
+                {
+                    Item item = ItemDatabase.GetItem(dic.Key);
+                    Console.WriteLine($"{item.name} x {dic.Value}");
                 }
             }
         }

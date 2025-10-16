@@ -34,76 +34,11 @@ namespace TerimalQuest.Manager
         }
 
         /// <summary>
-        /// 퀘스트 리스트업 함수
-        /// </summary>
-        /// <param name="quests"></param>
-        public void QuestListShow(List<Quest> quests)
-        {
-            Console.Clear();
-            Console.WriteLine("퀘스트 목록\n");
-            curQuest = null;
-            for (int i = 0; i < quests.Count; i++)
-            {
-
-                string questRunning = player.questList.Contains(quests[i]) ? "[진행중]" : "";
-                Console.WriteLine($"{i+1}. {quests[i].name} {questRunning}");
-            }
-            Console.Write("\n원하시는 퀘스트를 선택해주세요.\n>>");
-        }
-
-
-        /// <summary>
-        /// 퀘스트 정보 출력
-        /// </summary>
-        /// <param name="quest"></param>
-        public void SelectQuest(Quest quest)
-        {
-            Console.Clear();
-            curQuest = quest;
-            Console.WriteLine($"퀘스트 : {quest.name}\n");
-            Console.WriteLine($"{quest.description}\n");
-            foreach(var questDic in quest.successConditions)
-            {
-                int curNum = curQuest.currentCounts[questDic.Key];
-                Console.WriteLine($"- {questDic.Key} {questDic.Value}마리 처치 ({curNum}/{questDic.Value})");
-            }
-            Console.WriteLine("\n- 보상 -\n");
-            if (quest.rewardItem?.Count != 0)
-            {
-                for (int i = 0; i < quest.rewardItem?.Count; i++)
-                {
-                    Item item = ItemDatabase.GetItem(quest.rewardItem[i]);
-                    Console.WriteLine($"  {item.name} x {item.count}");
-                }
-            }
-            Console.WriteLine($"  {quest.rewardGold}G");
-            Console.WriteLine($"  경험치 {quest.rewardExp}");
-
-            SelectChoice();
-        }
-        
-        public void SelectChoice()
-        {
-            if (player.questList.Contains(curQuest))
-            {
-                Console.WriteLine("\n1. 보상 받기");
-                Console.WriteLine("2. 돌아가기");
-            }
-            else
-            {
-                Console.WriteLine("\n1. 수락");
-                Console.WriteLine("2. 거절");
-            }
-            Console.Write("\n원하시는 행동을 입력해주세요.\n>>");
-        }
-
-
-        /// <summary>
         /// 퀘스트 수락
         /// </summary>
         public void AccepQuest()
         {
-            player.questList.Add(curQuest);
+            player.questList.Add(curQuest.questNum, curQuest);
         }
 
         /// <summary>
@@ -114,19 +49,19 @@ namespace TerimalQuest.Manager
         /// <returns></returns>
         public void PlayQuest(string name, int num = 1)
         {
-            List<Quest> playerQuests = GameManager.Instance.player.questList;
-            for (int i = 0; i < playerQuests?.Count; i++)
+            Dictionary<int, Quest> playerQuests = GameManager.Instance.player.questList;
+            foreach(var quest in playerQuests)
             {
-                Quest quest = playerQuests[i];
-                if (quest.currentCounts.ContainsKey(name))
+                Quest curQuest = quest.Value;
+                if (curQuest.currentCounts.ContainsKey(name))
                 {
-                    quest.currentCounts[name] += num;
-                    if (quest.currentCounts[name] >= quest.successConditions[name])
+                    curQuest.currentCounts[name] += num;
+                    if (curQuest.currentCounts[name] >= curQuest.successConditions[name])
                     {
-                        quest.currentCounts[name] = quest.successConditions[name];
+                        curQuest.currentCounts[name] = curQuest.successConditions[name];
                     }
                 }
-                quest.isClear = CheckQuest(quest);
+                curQuest.isClear = CheckQuest(curQuest);
             }
         }
 
