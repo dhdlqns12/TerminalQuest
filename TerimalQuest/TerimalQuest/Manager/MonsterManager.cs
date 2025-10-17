@@ -8,6 +8,7 @@ public class MonsterManager
     private List<Monster> totalMonsterList;
     private const int MaxMonsterCount = 3;
     private const int MinMonsterCount = 0;
+    private const int FinalMaxMonsterCount = 7;
     private Random random = new Random();
 
     public MonsterManager()
@@ -33,7 +34,7 @@ public class MonsterManager
             monsterList.Add(CreateBossMonster(true));
             return monsterList;
         }
-        int encounterCount = random.Next(MinMonsterCount + playerStage, MaxMonsterCount + 1 + playerStage);
+        int encounterCount = random.Next(MinMonsterCount + playerStage, MaxMonsterCount + 1 + playerStage > FinalMaxMonsterCount ? FinalMaxMonsterCount : MaxMonsterCount + 1 + playerStage);
         for (int i = 0; i < encounterCount; i++)
         {
             Monster monster = CreateRandomMonster(playerStage);
