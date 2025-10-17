@@ -898,7 +898,7 @@ namespace TerimalQuest.Manager
                     Console.WriteLine($"{itemPair.Value} - {itemPair.Key}");
                 }
             }
-        }    
+        }
 
         #endregion
 
@@ -912,7 +912,10 @@ namespace TerimalQuest.Manager
         {
             Player player = GameManager.Instance.player;
             Console.Clear();
-            Console.WriteLine("퀘스트 목록\n");
+            ColorText("---------------------------", ConsoleColor.DarkCyan);
+            Console.WriteLine("        퀘스트 목록");
+            ColorText("---------------------------", ConsoleColor.DarkCyan);
+            Console.WriteLine();
             QuestManager.Instance.curQuest = null;
             ShowMainQuest(player);
             Console.WriteLine();
@@ -924,29 +927,67 @@ namespace TerimalQuest.Manager
         public void ShowSubQuests(Player player)
         {
             List<Quest> subQuests = QuestManager.Instance.subQuests;
-            Console.WriteLine("서브 퀘스트\n");
+            ColorText("\n서브 퀘스트\n", ConsoleColor.DarkBlue);
             for (int i = 0; i < subQuests.Count; i++)
             {
                 string questRunning = "";
-                if (player.questList != null)
+                int num = subQuests[i].questNum;
+                ConsoleColor textColor = ConsoleColor.White;
+                if (player.questList != null && subQuests.Count > 0)
                 {
-                    questRunning = player.questList.ContainsKey(subQuests[i].questNum) ? "[진행중]" : "";
+                    questRunning = QuestStatusText(player.questList, num);
+                    textColor = QuestStatusColor(player.questList, num);
                 }
-                Console.WriteLine($"{i + 2}. {subQuests[i].name} {questRunning}");
+                string questName = ($"{i + 2}. {subQuests[i].name} {questRunning}");
+                ColorText(questName, textColor);
             }
         }
 
         public void ShowMainQuest(Player player)
         {
             List<Quest> mainQuests = QuestManager.Instance.mainQuests;
-            Console.WriteLine("메인 퀘스트\n");
+            ColorText("메인 퀘스트 (필수!!)\n", ConsoleColor.DarkRed);
             if (player.questList != null && mainQuests.Count > 0)
             {
-                string questRunning = player.questList.ContainsKey(mainQuests[0].questNum) ? "[진행중]" : "";
-                Console.WriteLine($"1. {mainQuests[0].name} {questRunning}");
+                int num = mainQuests[0].questNum;
+                string questRunning = QuestStatusText(player.questList, num);
+                ConsoleColor textColor = QuestStatusColor(player.questList, num);
+                string questName = ($"1. {mainQuests[0].name} {questRunning}");
+                ColorText(questName, textColor);
             }
         }
 
+        public string QuestStatusText(Dictionary<int, Quest> quests, int num)
+        {
+            if (quests.ContainsKey(num) && quests[num].isClear)
+            {
+                return "[완료]";
+            }
+            else if (quests.ContainsKey(num) && !quests[num].isClear)
+            {
+                return "[진행중]";
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        public ConsoleColor QuestStatusColor(Dictionary<int, Quest> quests, int num)
+        {
+            if (quests.ContainsKey(num) && quests[num].isClear)
+            {
+                return ConsoleColor.DarkGreen;
+            }
+            else if (quests.ContainsKey(num) && !quests[num].isClear)
+            {
+                return ConsoleColor.DarkYellow;
+            }
+            else
+            {
+                return ConsoleColor.White;
+            }
+        }
 
 
         /// <summary>
@@ -958,7 +999,10 @@ namespace TerimalQuest.Manager
             Console.Clear();
             Player player = GameManager.Instance.player;
             QuestManager.Instance.curQuest = quest;
-            Console.WriteLine($"퀘스트 : {quest.name}\n");
+            ColorText("---------------------------", ConsoleColor.DarkCyan);
+            Console.WriteLine($"퀘스트 : {quest.name}");
+            ColorText("---------------------------", ConsoleColor.DarkCyan);
+            Console.WriteLine();
             Console.WriteLine($"{quest.description}\n");
             if (player.questList.ContainsKey(quest.questNum))
                 QuestInfo(player.questList[quest.questNum]);
@@ -1038,6 +1082,13 @@ namespace TerimalQuest.Manager
                     Console.WriteLine($"{item.name} x {dic.Value}");
                 }
             }
+        }
+
+        public void ColorText(string text, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
+            Console.WriteLine(text);
+            Console.ResetColor();
         }
         #endregion
 
