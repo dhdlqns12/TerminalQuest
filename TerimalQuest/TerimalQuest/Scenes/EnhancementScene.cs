@@ -32,7 +32,7 @@ namespace TerimalQuest.Scenes
 
         public void Update()
         {
-            //Process();
+            
         }
 
         public void Exit()
@@ -47,6 +47,7 @@ namespace TerimalQuest.Scenes
 
             string choice = ConsoleHelper.GetUserChoice(["0", "1", "2"]);
 
+            // 무기나 방어구 선택 후 강화 페이지로 넘어가기
             switch (choice)
             {
                 case "1":
@@ -116,16 +117,6 @@ namespace TerimalQuest.Scenes
         {
             currentEnhancementView = view;
             currentEnhancementView?.Invoke();
-        }
-
-        public void DisplayOption(string[] options)
-        {
-            foreach (var option in options)
-            {
-                Console.WriteLine(option);
-            }
-            Console.WriteLine();
-            Console.WriteLine("원하시는 행동을 입력해주세요.");
         }
     }
 }

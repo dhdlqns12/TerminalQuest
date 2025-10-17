@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerimalQuest.Core;
 using TerimalQuest.Manager;
 
 namespace TerimalQuest.System
@@ -23,6 +24,9 @@ namespace TerimalQuest.System
          * 
          */
 
+        // 외부 참조 클래스
+        private UIManager uiManager;
+
         private int maxItemCount;    // 최대 아이템 개수
 
         // 아이템 리스트
@@ -33,11 +37,20 @@ namespace TerimalQuest.System
         {
             this.maxItemCount = maxItemCount;
             items = new List<Item>();
+
+            uiManager = UIManager.Instance;
         }
 
         // 아이템 추가 
         public void Add(Item item)
         {
+            // 최대 소지 개수를 넘어가면 취소
+            if (items.Count >= maxItemCount)
+            {
+                uiManager.MessageNotEnoughInventorySpace();
+                return;
+            }
+
             AddByItemType(item);
         }
 
@@ -133,7 +146,7 @@ namespace TerimalQuest.System
         // 인벤토리 보여주기
         public void DisplayInfo(bool isEquipMode, params ItemType[] filterTypes)
         {
-            UIManager.Instance.DisplayItemInfoHeader(isEquipMode);
+            uiManager.DisplayItemInfoHeader(isEquipMode);
 
             IEnumerable<Item> displayList;
 
@@ -154,7 +167,7 @@ namespace TerimalQuest.System
         // 인벤토리 보여주기 - 아이템 판매
         public void DisplayInfoWithGold()
         {
-            UIManager.Instance.DisplayItemProductHeader();
+            uiManager.DisplayItemProductHeader();
 
             for (int i = 0; i < items.Count; i++)
             {

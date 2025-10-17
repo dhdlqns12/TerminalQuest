@@ -28,6 +28,7 @@ namespace TerimalQuest.System
             GameManager.Instance.player.ToggleEquipItem(this);
         }
 
+        // 아이템 효과 가져오기
         public override string GetEffectText()
         {
             return $"방어력 +{def}";
@@ -52,6 +53,7 @@ namespace TerimalQuest.System
             UIManager.Instance.DisplayItemProduct(this);
         }
 
+        // 강화 레벨 가져오기
         public override int GetLevel() => enhancementLevel;
 
         // 아이템 복제
