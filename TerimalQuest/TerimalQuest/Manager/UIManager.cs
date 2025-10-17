@@ -17,7 +17,7 @@ namespace TerimalQuest.Manager
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("========================================");
-            Console.WriteLine($"           {text}");
+            Console.WriteLine($"   {text}");
             Console.WriteLine("========================================");
             Console.ResetColor();
         }
