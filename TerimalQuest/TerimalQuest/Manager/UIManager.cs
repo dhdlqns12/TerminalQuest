@@ -1023,8 +1023,10 @@ namespace TerimalQuest.Manager
                     Console.WriteLine($"  {item.name} x {dic.Value}");
                 }
             }
-            Console.WriteLine($"  {quest.rewardGold}G");
-            Console.WriteLine($"  경험치 {quest.rewardExp}");
+            if(quest.rewardGold > 0)
+                Console.WriteLine($"  {quest.rewardGold}G");
+            if(quest.rewardExp > 0)
+                Console.WriteLine($"  경험치 {quest.rewardExp}");
 
             SelectChoice();
         }
@@ -1042,7 +1044,14 @@ namespace TerimalQuest.Manager
                     }
                     break;
                 case "레벨":
-                    Console.WriteLine($"- 레벨을 {quest.successConditions["레벨"]}올리세요");
+                    int presentLevel = quest.currentCounts[quest.questType];
+                    int successLevel = quest.successConditions[quest.questType];
+                    Console.WriteLine($"- 레벨을 {quest.successConditions["레벨"]}올리세요 ({presentLevel}/{successLevel})");
+                    break;
+                case "강화":
+                    int presentEnhance = quest.currentCounts[quest.questType];
+                    int successEnhance = quest.successConditions[quest.questType];
+                    Console.WriteLine($"- 강화를 {successEnhance}회 성공하세요 ({presentEnhance}/{successEnhance})");
                     break;
                 default:
                     Console.WriteLine($"- {quest.successDes}");
