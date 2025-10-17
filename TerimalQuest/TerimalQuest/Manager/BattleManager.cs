@@ -183,6 +183,9 @@ namespace TerimalQuest.Manager
         private void ProcessTargetSelection(string input)
         {
             int choice;
+
+
+
             if (!CheckPlayerInputInvalidTargetSelection(input, out choice))
             {
                 uiManager.SelectWrongSelection();
@@ -200,7 +203,6 @@ namespace TerimalQuest.Manager
                     return;
                 }
                 Monster targetMonster = encounterMonsterList[choice - 1];
-
                 if (selectedSkill != null && currentState == BattleState.PlayerTargetSelectWithSkill)
                 {
                     AttackSkill(selectedSkill, targetMonster);
@@ -283,7 +285,7 @@ namespace TerimalQuest.Manager
             {
                 return false;
             }
-            return encounterMonsterList[choice - 1].hp >= 0;
+            return encounterMonsterList[choice - 1].hp > 0;
         }
 
         private bool CheckPlayerInputInvalidSkillSelection(string input, out int choice)

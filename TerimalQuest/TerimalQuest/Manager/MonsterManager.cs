@@ -1,3 +1,4 @@
+using System.Drawing;
 using TerimalQuest.Core;
 
 namespace TerimalQuest.Manager;
@@ -7,6 +8,7 @@ public class MonsterManager
     private List<Monster> totalMonsterList;
     private const int MaxMonsterCount = 3;
     private const int MinMonsterCount = 0;
+    private const int FinalMaxMonsterCount = 7;
     private Random random = new Random();
 
     public MonsterManager()
@@ -32,7 +34,10 @@ public class MonsterManager
             monsterList.Add(CreateBossMonster(true));
             return monsterList;
         }
-        int encounterCount = random.Next(MinMonsterCount + playerStage, MaxMonsterCount + 1 + playerStage);
+
+        int maxCount = Math.Min(MaxMonsterCount + playerStage, FinalMaxMonsterCount);
+        int encounterCount = random.Next(Math.Min(MinMonsterCount + playerStage, maxCount), maxCount + 1);
+
         for (int i = 0; i < encounterCount; i++)
         {
             Monster monster = CreateRandomMonster(playerStage);
@@ -65,12 +70,12 @@ public class MonsterManager
     /// </summary>
     public void CreateTotalMonsterList()
     {
-        Monster minion = new Monster("미니언", 1,10,0,10,1);
-        Monster voidInsect = new Monster("공허충", 1,10,0,15,2);
-        Monster cannonMinion = new Monster("대포미니언", 1,10,0,20,3);
-        totalMonsterList.Add(minion);
-        totalMonsterList.Add(voidInsect);
-        totalMonsterList.Add(cannonMinion);
+        Monster slime = new Monster("슬라임", 1,10,0,10,1);
+        Monster orc = new Monster("오크", 1,10,0,15,2);
+        Monster troll = new Monster("트롤", 1,10,0,20,3);
+        totalMonsterList.Add(slime);
+        totalMonsterList.Add(orc);
+        totalMonsterList.Add(troll);
     }
 
     public Monster CreateBossMonster(bool isLast)

@@ -38,7 +38,6 @@ namespace TerimalQuest.System
         // 아이템 복제
         public override Item Clone()
         {
-            this.Id += 1;   // 복제 시 Id 증가
             return new EnhancementStone(Id, name, desc, price, type);
         }
     }

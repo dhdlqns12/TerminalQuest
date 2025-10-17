@@ -26,6 +26,7 @@ namespace TerimalQuest.System
         public string desc { get; set; }    // 아이템 설명
         public int price { get; set; }      // 아이템 가격
         public int count { get; set; }      // 아이템 수량
+        public int lastId { get; set; }     // 마지막 아이템 Id
 
         public bool isEquipped { get; set; }    // 아이템 착용 여부
         public bool isPurchase { get; set; }    // 아이템 구매 여부
@@ -45,8 +46,9 @@ namespace TerimalQuest.System
             this.isEquipped = false;
             this.isPurchase = false;
 
-            // 생성자 내 개수 1개로 설정
+            // 생성 시 개수 1개로 설정
             this.count = 1;
+            this.lastId = lastId;
         }
 
         public virtual void Equip(bool isEquip)
@@ -67,6 +69,11 @@ namespace TerimalQuest.System
             return $"수량: x{count}";
         }
 
+        public virtual void Enhance(float enhanceValue)
+        {
+            // 아이템 강화
+        }
+
         public virtual void DisplayInfo()
         {
             // 아이템 정보 표시
@@ -76,6 +83,9 @@ namespace TerimalQuest.System
         {
             // 아이템 정보 표시 : 상점
         }
+
+        // 강화 레벨 가져오기
+        public virtual int GetLevel() => 0;
 
         // 아이템 복제
         public virtual Item Clone()

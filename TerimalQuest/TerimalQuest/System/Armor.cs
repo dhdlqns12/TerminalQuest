@@ -11,10 +11,12 @@ namespace TerimalQuest.System
     public class Armor : Item
     {
         public float def { get; set; }
+        public int enhancementLevel { get; set; }
 
         public Armor(int id, string name, string desc, int price, float def, ItemType type) : base(id, name, desc, price, type)
         {
             this.def = def;
+            this.enhancementLevel = 0;
         }
 
         public override void Equip(bool isEquip)
@@ -26,9 +28,18 @@ namespace TerimalQuest.System
             GameManager.Instance.player.ToggleEquipItem(this);
         }
 
+        // 아이템 효과 가져오기
         public override string GetEffectText()
         {
             return $"방어력 +{def}";
+        }
+
+        public override void Enhance(float enhanceValue)
+        {
+            // 강화 레벨 증가 후 방어력 증가
+            enhancementLevel++;
+            def += enhanceValue;
+            QuestManager.Instance.PlayQuest("강화");
         }
 
         public override void DisplayInfo()
@@ -43,11 +54,13 @@ namespace TerimalQuest.System
             UIManager.Instance.DisplayItemProduct(this);
         }
 
+        // 강화 레벨 가져오기
+        public override int GetLevel() => enhancementLevel;
+
         // 아이템 복제
         public override Item Clone()
         {
-            this.Id += 1;   // 복제 시 Id 증가
-            return new Armor(Id, name, desc, price, def, type);
+            return new Armor(ItemDatabase.GetLastId(Id), name, desc, price, def, type);
         }
     }
 }

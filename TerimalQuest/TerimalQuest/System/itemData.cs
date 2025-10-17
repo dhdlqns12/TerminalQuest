@@ -17,6 +17,7 @@ namespace TerimalQuest.System
         public float def { get; set; }
         public float healAmount { get; set; }
         public string potionType { get; set; }
+        public int lastId { get; set; }
     }
 
     public class ItemDataList

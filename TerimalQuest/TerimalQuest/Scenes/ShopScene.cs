@@ -15,13 +15,15 @@ namespace TerimalQuest.Scenes
 
         private Shop shop;
         private Player player;
+        private UIManager uiManager;
 
         public void Enter()
         {
             shop = GameManager.Instance.shop;
             player = GameManager.Instance.player;
+            uiManager = UIManager.Instance;
 
-            UIManager.Instance.ShopScripts(player, shop);
+            uiManager.ShopScripts(player, shop);
         }
 
         public void Update()

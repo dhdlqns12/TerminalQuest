@@ -1,4 +1,5 @@
-﻿using TerimalQuest.Manager;
+﻿using TerimalQuest.Core;
+using TerimalQuest.Manager;
 using TerimalQuest.Scenes;
 
 namespace TerimalQuest.Scenes
@@ -8,6 +9,9 @@ namespace TerimalQuest.Scenes
         public event Action<IScene> OnSceneChangeRequested;
         public void Enter()
         {
+            Player player = GameManager.Instance.player;
+            player.RefreshStat();
+
             UIManager.Instance.ShowSection("상태창");
             UIManager.Instance.ShowStatusSceneScripts();
         }

@@ -12,6 +12,7 @@ namespace TerimalQuest.Scenes
         public event Action<IScene> OnSceneChangeRequested;
         public void Enter()
         {
+            UIManager.Instance.TerminalQuestScripts();
             Console.Write("데이터를 저장하시겠습니까? \n\ny/n \n>>");
             bool answer = UIManager.Instance.YesOrNo();
             if (!answer)
@@ -55,14 +56,12 @@ namespace TerimalQuest.Scenes
                         break;
                     default:
                         Console.WriteLine("데이터가 존재하지 않습니다.");
-                        Console.ReadKey();
                         break;
                 }
             }
             else
             {
                 Console.WriteLine("잘못된 입력입니다.");
-                Console.ReadKey();
             }
         }
 
@@ -101,14 +100,12 @@ namespace TerimalQuest.Scenes
                             break;
                         default:
                             Console.WriteLine("잘못된 입력입니다.");
-                            Console.ReadKey();
                             continue;
                     }
                 }
                 else
                 {
                     Console.WriteLine("잘못된 입력입니다.");
-                    Console.ReadKey();
                     continue;
                 }
                 break;

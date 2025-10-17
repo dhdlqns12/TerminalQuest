@@ -15,13 +15,14 @@ namespace TerimalQuest.Scenes
 
         private Shop shop;
         private Player player;
-
+        private UIManager uiManager;
         public void Enter()
         {
             shop = GameManager.Instance.shop;
             player = GameManager.Instance.player;
 
-            UIManager.Instance.ShopPurchaseScripts(player, shop);
+            uiManager = UIManager.Instance;
+            uiManager.ShopPurchaseScripts(player, shop);
         }
 
         public void Update()
@@ -39,7 +40,7 @@ namespace TerimalQuest.Scenes
             // 상품 인덱스 정보 가져오기
             int vaildCount = shop.ProductList.Count;
             string[] vaildItemOption = Enumerable.Range(0, vaildCount + 1).Select(i => i.ToString()).ToArray();   // LINQ 문법
-            var choice = GetUserChoice(vaildItemOption);
+            var choice = ConsoleHelper.GetUserChoice(vaildItemOption);
 
             // 아이템 구매
             while (true)
@@ -49,28 +50,12 @@ namespace TerimalQuest.Scenes
                 // 구매 가능한 아이템이면 구매 
                 if (shop.TryPurchaseItem(int.Parse(choice) - 1) == true) break;
 
-                choice = GetUserChoice(vaildItemOption);
+                choice = ConsoleHelper.GetUserChoice(vaildItemOption);
             }
 
             // 구매가 완료 되었으면 1초 후 갱신
             Thread.Sleep(1000);
             OnSceneChangeRequested?.Invoke(new ShopPurchaseScene());
-        }
-
-        // 사용자 입력 체크
-        protected string GetUserChoice(string[] vaildOptions)
-        {
-            string choice;
-            while (true)
-            {
-                Console.Write(">> ");
-                choice = Console.ReadLine();
-                Console.WriteLine();
-
-                foreach (var option in vaildOptions) if (choice == option) return choice;
-
-                UIManager.Instance.SelectWrongSelection();
-            }
         }
     }
 }

@@ -1,18 +1,24 @@
-﻿using TerimalQuest.Manager;
+﻿using TerimalQuest.Core;
+using TerimalQuest.Manager;
 using TerimalQuest.Scenes;
 
 public class StartScene : IScene
 {
     public event Action<IScene> OnSceneChangeRequested;
-
+    Player player;
+    QuestManager questManager;
+    UIManager uiManager;
     public void Enter()
     {
+        player = GameManager.Instance.player;
+        questManager = QuestManager.Instance;
+        uiManager = UIManager.Instance;
     }
 
     public void Update()
     {
         Console.Clear();
-        UIManager.Instance.ShowStartSceneScripts();
+        uiManager.ShowStartSceneScripts();
         if (int.TryParse(Console.ReadLine(), out int answer))
         {
             switch (answer)
@@ -24,7 +30,15 @@ public class StartScene : IScene
                     OnSceneChangeRequested?.Invoke(new InventoryScene());
                     break;
                 case 3:
-                    OnSceneChangeRequested?.Invoke(new BattleScene());
+                    if((player.curStage == 5 || player.curStage == 10) && !player.questList.ContainsKey(questManager.mainQuests[0].questNum))
+                    {
+                        uiManager.ColorText("메인 퀘스트를 수락 후 입장 가능합니다!!", ConsoleColor.DarkRed);
+                        Console.ReadKey();
+                    }
+                    else
+                    {
+                        OnSceneChangeRequested?.Invoke(new BattleScene());
+                    }
                     break;
                 case 4:
                     OnSceneChangeRequested?.Invoke(new QuestScene());
@@ -35,18 +49,21 @@ public class StartScene : IScene
                 case 6:
                     OnSceneChangeRequested?.Invoke(new TownActivityScene());
                     break;
+                case 7:
+                    OnSceneChangeRequested?.Invoke(new EnhancementScene());
+                    break;
                 case 0:
                     OnSceneChangeRequested?.Invoke(new DataSaveScene());
                     break;
                 default:
-                    Console.WriteLine("잘못된 입력입니다.");
+                    uiManager.ShowInvalidInput();
                     Console.ReadKey();
                     break;
             }
         }
         else
         {
-            Console.WriteLine("잘못된 입력입니다.");
+            uiManager.ShowInvalidInput();
             Console.ReadKey();
         }
     }

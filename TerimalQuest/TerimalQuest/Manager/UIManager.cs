@@ -17,7 +17,7 @@ namespace TerimalQuest.Manager
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("========================================");
-            Console.WriteLine($"           {text}");
+            Console.WriteLine($"   {text}");
             Console.WriteLine("========================================");
             Console.ResetColor();
         }
@@ -36,8 +36,74 @@ namespace TerimalQuest.Manager
 
         public void ShowStartSceneScripts()
         {
-            Console.Write($"스파르타 던전에 오신 여러분 환영합니다. \n이제 전투를 시작할 수 있습니다. \n\n1.상태 보기 \n2.인벤토리\n3.전투 시작(현재 진행 : {GameManager.Instance.player.curStage}층)\n4.퀘스트\n5.상점\n6.마을활동\n0.게임 종료 \n\n원하시는 행동을 입력해주세요.\n>>");
+            Player p = GameManager.Instance.player;
+            Console.Clear();
+
+            // 헤더 꾸미기
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("╔══════════════════════════════════════════════════════════╗");
+            Console.WriteLine("║          ⚔ 터미널 퀘스트에 오신 걸 환영합니다 ⚔          ║");
+            Console.WriteLine("╚══════════════════════════════════════════════════════════╝");
+            Console.ResetColor();
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("─────────────────────────────────────────");
+            Console.WriteLine($"  이름: {p.name}   HP: {p.hp}/{p.maxHp}   GOLD: {p.gold}");
+            Console.WriteLine("─────────────────────────────────────────");
+            Console.ResetColor();
+
+            Console.WriteLine();
+            TypeWrite("이제 전투를 시작할 수 있습니다.\n", 30);
+
+            // 메뉴 항목
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("┌────────── [메뉴 선택] ──────────┐");
+            Console.ResetColor();
+
+            PrintMenuOption(1, "상태 보기");
+            PrintMenuOption(2, "인벤토리");
+            PrintMenuOption(3, $"전투 시작 (현재 진행: {GameManager.Instance.player.curStage}층)");
+            PrintMenuOption(4, "퀘스트");
+            PrintMenuOption(5, "상점");
+            PrintMenuOption(6, "마을 활동");
+            PrintMenuOption(7, "장비 강화");
+            PrintMenuOption(0, "게임 종료");
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("└─────────────────────────────────┘");
+            Console.ResetColor();
+
+            Console.WriteLine();
+            Console.Write("원하시는 행동을 입력해주세요 \n>> ");
         }
+
+        private void PrintMenuOption(int number, string text)
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write($"│ ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($"{number,2}. ");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine(ConsoleHelper.PadRightForConsole(text, 28) + "│");
+        }
+
+        void TypeWrite(string text, int delay = 20)
+        {
+            foreach (char c in text)
+            {
+                Console.Write(c);
+                Thread.Sleep(delay);
+            }
+        }
+
+        public void ShowInvalidInput()
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            TypeWrite("\n잘못된 입력입니다! 다시 선택해주세요.\n", 25);
+            Console.ResetColor();
+            Thread.Sleep(1000);
+        }
+
 
         public void ShowStatusSceneScripts()
         {
@@ -45,7 +111,7 @@ namespace TerimalQuest.Manager
             Console.Write($"상태 보기\r\n캐릭터의 정보가 표시됩니다.\r\n\r\nLv. {p.level}      \r\n{p.name} ( {p.jobName} )\r\n공격력 : {p.atk}\r\n방어력 : {p.def}\r\n체 력 : {p.hp}\r\nGold : {p.gold} G\r\n\r\n0. 나가기\r\n\r\n원하시는 행동을 입력해주세요.\r\n>> ");
         }
 
-        public void SetNameScripts()
+        public void TerminalQuestScripts()
         {
             Console.OutputEncoding = global::System.Text.Encoding.UTF8;
             Console.Clear();
@@ -78,7 +144,7 @@ namespace TerimalQuest.Manager
                         string displayText = terminal[i].Substring(startPos, lineLength);
 
                         Console.ForegroundColor = ConsoleColor.Magenta;
-                        Console.SetCursorPosition(startPos, i );
+                        Console.SetCursorPosition(startPos, i);
                         Console.Write(displayText);
                     }
                 }
@@ -113,6 +179,10 @@ namespace TerimalQuest.Manager
             Console.ResetColor();
             Console.CursorVisible = true;
             Console.SetCursorPosition(0, 7);
+        }
+
+        public void SetNameScripts()
+        {
             Console.Write("원하시는 이름을 설정해주세요. \n>>");
         }
 
@@ -192,11 +262,11 @@ namespace TerimalQuest.Manager
         }
 
         // 문자 사이 정렬 offset 값
-        private int offsetName = 15;
-        private int offsetEffect = 15;
+        private int offsetName = 20;
+        private int offsetEffect = 13;
         private int offsetDesc = 50;
         private int offsetCount = 10;
-        private int offsetPurchase = 10;
+        private int offsetPurchase = 5;
 
         // 아이템 정보 표시 헤더
         public void DisplayItemInfoHeader(bool isEquipMode = false)
@@ -216,10 +286,15 @@ namespace TerimalQuest.Manager
         // 인벤토리 아이템 정보 표시
         public void DisplayItemInfo(Item item, bool isEquipMode = false)
         {
-            string equipTxt = (item.isEquipped && (item.type == ItemType.Armor || item.type == ItemType.Weapon)) ? "[E]" : "";
-            string itemName = $"{equipTxt}{item.name}";
+            string itemName = item.name;
 
-            string equipMode = (isEquipMode) ? ConsoleHelper.PadRightForConsole(" ", 6) : $"  ";
+            if (item is Weapon || item is Armor)
+            {
+                itemName = GetEquipItemName(item);
+            }
+
+            // 번호 모드
+            string numberMode = (isEquipMode) ? ConsoleHelper.PadRightForConsole(" ", 6) : $"  ";
 
             Console.WriteLine(string.Format("{0} | {1} | {2} | {3}",
                 ConsoleHelper.PadRightForConsole(itemName, offsetName),
@@ -238,10 +313,10 @@ namespace TerimalQuest.Manager
             Console.WriteLine(
                 string.Format("{0}{1} | {2} | {3} | {4} | {5}",
                 purchase,
-                ConsoleHelper.PadRightForConsole("[아이템 이름]", 15),
-                ConsoleHelper.PadRightForConsole("[아이템 효과]", 15),
-                ConsoleHelper.PadRightForConsole("[아이템 설명]", 50),
-                ConsoleHelper.PadRightForConsole("[수량]", 10),
+                ConsoleHelper.PadRightForConsole("[아이템 이름]", offsetName),
+                ConsoleHelper.PadRightForConsole("[아이템 효과]", offsetEffect),
+                ConsoleHelper.PadRightForConsole("[아이템 설명]", offsetDesc),
+                ConsoleHelper.PadRightForConsole("[수량]", offsetCount),
                 "[아이템 가격]\n"));
         }
 
@@ -260,6 +335,17 @@ namespace TerimalQuest.Manager
                 isGoldIcon));
         }
 
+        private string GetEquipItemName(Item item)
+        {
+            // 강화 레벨
+            string enhanceLevelTxt = $"(+{item.GetLevel()}강)";
+
+            // 착용 여부
+            string equipTxt = (item.isEquipped) ? "[E]" : "";
+
+            return $"{equipTxt}{enhanceLevelTxt}{item.name}";
+        }
+
         #region InventoryUI
 
         // 플레이어 인벤토리 창 : 플레이어의 인벤토리를 볼 수 있는 창. 아이템을 확인 할 수 있다.
@@ -271,7 +357,7 @@ namespace TerimalQuest.Manager
             Console.WriteLine();
             inventory.DisplayInfo(false);
             Console.WriteLine();
-            DisplayOption(["1. 장착 관리", "2. 아이템 정렬", "0. 나가기"]);
+            DisplayOption(["1. 장착 관리", "2. 아이템 사용", "3. 아이템 정렬", "0. 나가기"]);
         }
 
         // 플레이어 인벤토리 장착 관리 창 : 플레이어의 아이템을 장착/해제 할 수 있다.
@@ -281,9 +367,21 @@ namespace TerimalQuest.Manager
             Console.WriteLine("인벤토리 - 장착 관리");
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
             Console.WriteLine();
-            inventory.DisplayInfo(true);
+            inventory.DisplayInfo(true, ItemType.Weapon, ItemType.Armor);
             Console.WriteLine();
             DisplayOption(["(번호). 해당 장비 장착", "0. 나가기"]);
+        }
+
+        // 플레이어 인벤토리 사용 창 : 포션 등 아이템을 사용할 수 있다.
+        public void InventoryUseScripts(Inventory inventory)
+        {
+            Console.Clear();
+            Console.WriteLine("인벤토리 - 아이템 사용");
+            Console.WriteLine("보유 중인 아이템을 사용 할 수 있습니다.");
+            Console.WriteLine();
+            inventory.DisplayInfo(true, ItemType.Potion);
+            Console.WriteLine();
+            DisplayOption(["(번호). 해당 아이템 사용", "0. 나가기"]);
         }
 
         // 플레이어 인벤토리 정렬 창 : 인벤토리의 아이템들을 옵션에 따라 정렬할 수 있다.
@@ -297,6 +395,9 @@ namespace TerimalQuest.Manager
             Console.WriteLine();
             DisplayOption(["1. 이름", "2. 장착순", "3. 공격력", "4. 방어력", "0. 나가기"]);
         }
+
+        // 메세지 : 인벤토리 공간 부족
+        public void MessageNotEnoughInventorySpace() { Console.WriteLine("소지 할 수 있는 인벤토리 공간이 없습니다!"); }
 
         #endregion
 
@@ -347,90 +448,437 @@ namespace TerimalQuest.Manager
             DisplayOption(["(번호). 해당 아이템 판매", "0. 나가기"]);
         }
 
+        // 메세지 : 상품 품절
+        public void MessageSoldOut() { Console.WriteLine("이미 품절된 아이템입니다."); }
+
+        // 메세지 : 돈 부족
+        public void MessageNotEnoughGold() { Console.WriteLine("골드가 충분하지 않습니다."); }
+
+        // 메세지 : 아이템 구매
+        public void MessagePurchaseItem(Item item) { Console.WriteLine($"{item.name} 아이템을 구매했습니다."); }
+
+        // 메세지 : 아이템 판매
+        public void MessageSaleItem(Item item) { Console.WriteLine($"{item.name} 아이템을 판매했습니다."); }
+
+        #endregion
+
+        #region EnhancementUI
+
+        public void DisplayEnhancementStartScripts(Inventory inventory, EnhancementManager enhancementManager)
+        {
+            Console.Clear();
+            Console.WriteLine("장비 강화");
+            Console.WriteLine("보유 중인 장비를 강화할 수 있습니다.");
+            Console.WriteLine();
+            Console.WriteLine("[보유 강화석]");
+            Console.WriteLine($"강화석: {enhancementManager.GetPlayerEnhancementStoneCount()}개");
+            Console.WriteLine();
+            inventory.DisplayInfo(true, ItemType.Weapon, ItemType.Armor);
+            Console.WriteLine();
+            DisplayOption(["1. 무기 강화", "2. 방어구 강화", "0. 나가기"]);
+        }
+
+        public void DisplayEnhancementScripts(EnhancementManager enhancementManager, ItemType type)
+        {
+            string typeTxt = (type == ItemType.Weapon) ? "무기" : "방어구";
+
+            Console.Clear();
+            Console.WriteLine($"장비 강화 - {typeTxt}");
+            Console.WriteLine("보유 중인 장비를 강화할 수 있습니다.");
+            Console.WriteLine();
+            Console.WriteLine("[보유 강화석]");
+            Console.WriteLine($"강화석: {enhancementManager.GetPlayerEnhancementStoneCount()}개");
+            Console.WriteLine();
+            enhancementManager.DisplayEnhancealbeItemList();
+            Console.WriteLine();
+            DisplayOption(["(번호). 해당 장비 강화", "0. 나가기"]);
+        }
+
+        public void DisplayEnhancementResultScripts(bool success, int prevLevel, Item item)
+        {
+            Console.Clear();
+            Console.WriteLine("강화 결과");
+            Console.WriteLine();
+            if (success)
+            {
+                // 강화 성공 텍스트 출력
+                Console.WriteLine("강화에 성공했습니다!");
+                Console.WriteLine($"[{prevLevel}강] -> [{item.GetLevel()}강]");
+            }
+            else
+            {
+                // 강화 실패 텍스트 출력
+                Console.WriteLine("강화에 실패하였습니다..");
+            }
+            Console.WriteLine();
+            DisplayOption(["0. 나가기"]);
+        }
+
+        // 메세지 : 최대 강화 레벨일 시 출력
+        public void MessageNoMoreEnhancement() { Console.WriteLine("더이상 강화를 진행할 수 있습니다."); }
+
+        // 메세지 : 강화석 부족
+        public void MessageNotEnoughEnhancementStone() { Console.WriteLine("강화석 재료가 부족합니다."); }
+
+
         #endregion
 
         #region BattleUI
 
+        // 전투 화면 진입 - 몬스터 애니메이션 포함
+        public void BattleEntrance(List<Monster> monsters, Player player)
+        {
+            Console.Clear();
+            Console.SetCursorPosition(0, 0);
+
+            int screenWidth = Console.WindowWidth;
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(new string('═', screenWidth));
+
+            string battleText = "  B A T T L E  ";
+            int padding = (screenWidth - battleText.Length) / 2;
+            string centeredBattle = new string(' ', padding) + battleText;
+            Console.WriteLine(centeredBattle);
+
+            Console.WriteLine(new string('═', screenWidth));
+            Console.ResetColor();
+
+            Console.WriteLine();
+
+            BattleDisplay.DisplayMonsters(monsters, AnimationType.Idle);
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("────────────────── [내 정보] ──────────────────");
+            Console.ResetColor();
+            Console.WriteLine($"Lv.{player.level} {player.name} ({player.jobName})");
+            Console.Write("HP [");
+            PlayerHpBar(player);
+            Console.WriteLine($"] {player.hp:F0}/{player.maxHp:F0}");
+            Console.Write("MP [");
+            PlayerMpBar(player);
+            Console.WriteLine($"] {player.mp:F0}/{player.maxMp:F0}");
+            Console.WriteLine($"공격력: {player.atk:F0}  방어력: {player.def:F0}");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("───────────────────────────────────────────────");
+            Console.ResetColor();
+        }
+
+        private void PlayerHpBar(Player player)
+        {
+            int barLength = 20;
+            float hpPercent = player.hp / player.maxHp;
+            int filled = (int)(barLength * hpPercent);
+
+            if (filled < 0) filled = 0;
+
+            if (hpPercent > 0.5f)
+                Console.ForegroundColor = ConsoleColor.Green;
+            else if (hpPercent > 0.2f)
+                Console.ForegroundColor = ConsoleColor.Yellow;
+            else
+                Console.ForegroundColor = ConsoleColor.Red;
+
+            Console.Write(new string('█', filled));
+            Console.ResetColor();
+            Console.Write(new string('▒', barLength - filled));
+        }
+
+        private void PlayerMpBar(Player player)
+        {
+            int barLength = 20;
+            float mpPercent = player.mp / player.maxMp;
+            int filled = (int)(barLength * mpPercent);
+
+            if (filled < 0) filled = 0;
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write(new string('█', filled));
+            Console.ResetColor();
+            Console.Write(new string('▒', barLength - filled));
+        }
+
         public void AttackTarget(Character attacker, Character target, bool isEvade)
         {
             Console.Clear();
-            Console.WriteLine("Battle!");
-            Console.WriteLine($"Lv.{attacker.level} {attacker.name} 의 공격!");
+
+            if (attacker is Player)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("\n 플레이어의 공격! \n");
+                Console.ResetColor();
+                Thread.Sleep(500);
+
+                if (target is Monster monster)
+                {
+                    BattleDisplay.PlayMonsterAnimation(monster,
+                        isEvade ? AnimationType.Idle : AnimationType.Hit,
+                        200);
+                }
+            }
+            else if (attacker is Monster attackMonster)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"\n {attacker.name}의 공격! \n");
+                Console.ResetColor();
+                Thread.Sleep(500);
+
+                BattleDisplay.PlayMonsterAnimation(attackMonster, AnimationType.Attack, 200);
+            }
 
             if (isEvade)
             {
-                Console.WriteLine($"Lv.{target.level} {target.name} 을(를) 공격했지만 아무일도 일어나지 않았습니다.");
-                return;
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine($"\n {target.name}이(가) 회피했습니다! ");
+                Console.ResetColor();
+            }
+            else
+            {
+                int finalDamage = attacker.GetFinalDamage(out bool isCritical, (int)target.def);
+
+                if (isCritical)
+                {
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.WriteLine("\n 크리티컬 히트! ");
+                    Console.ResetColor();
+                }
+
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"\n 명중! [{finalDamage} 데미지]");
+                Console.ResetColor();
+
+                string deadResult = target is Player ? "0" : "Dead";
+                float newHp = target.hp - finalDamage;
+                Console.WriteLine($"Lv.{target.level} {target.name}");
+                Console.WriteLine($"HP {target.hp:F0} → {(newHp > 0 ? newHp.ToString("F0") : deadResult)}");
+
+                if (newHp <= 0 && target is Monster deadMonster)
+                {
+                    Thread.Sleep(800);
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"\n {deadMonster.name}을(를) 처치했습니다! ");
+                    Console.ResetColor();
+                    BattleDisplay.PlayMonsterAnimation(deadMonster, AnimationType.Death, 300);
+                }
             }
 
-            int finalDamage = attacker.GetFinalDamage(out bool isCritical, (int)target.def);
-            string attackStr = $"{target.name} 을(를) 맞췄습니다. [데미지 : {finalDamage}]";
-
-            if (isCritical) attackStr += " - 치명타 공격!!";
-
-            Console.WriteLine(attackStr);
-            Console.WriteLine($"Lv. {target.level} {target.name}");
-
-            string deadResult = target is Player ? "0" : "Dead";
-            string attackResult =
-                $"HP {target.hp} -> {(target.hp - finalDamage > 0 ? target.hp - finalDamage : deadResult)}";
-
-            Console.WriteLine(attackResult);
+            Thread.Sleep(1000);
         }
 
         public void AttackTargetWithSkill(Character attacker, Character target, Skill skill)
         {
             Console.Clear();
-            Console.WriteLine("Battle!\n");
-            Console.WriteLine($"{target.name}에게 {attacker.name}의 {skill.name} 공격!");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine($"\n {attacker.name}이(가) [{skill.name}]을(를) 사용했습니다! \n");
+            Console.ResetColor();
+            Console.WriteLine($"  ※ {skill.description}");
+            Thread.Sleep(800);
+
+            if (target is Monster monster)
+            {
+                BattleDisplay.PlayMonsterAnimation(monster, AnimationType.Hit, 200);
+            }
+
             string deadResult = target is Player ? "0" : "Dead";
-            string attackResult = "";
+            float damage = 0;
+
             if (skill.damageType == SkillDamageType.FixedDamage)
             {
-                attackResult =
-                    $"Lv.{target.level} {target.name} HP {target.hp} -> {(target.hp - skill.damage > 0 ? target.hp - skill.damage : deadResult)} [데미지 : {skill.damage}]";
+                damage = skill.damage;
             }
-            else
+            else if (skill.damageType == SkillDamageType.BaseAttack)
             {
-                attackResult =
-                    $"Lv.{target.level} {target.name} HP {target.hp} -> {(target.hp - skill.damage * attacker.atk > 0 ? target.hp - skill.damage * attacker.atk : deadResult)} [데미지 : {skill.damage * attacker.atk}]";
+                damage = skill.damage * attacker.atk;
             }
 
-            Console.WriteLine(attackResult);
+            float newHp = target.hp - damage;
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"\n {target.name}에게 {damage:F0} 데미지!");
+            Console.ResetColor();
+            Console.WriteLine($"Lv.{target.level} {target.name}");
+            Console.WriteLine($"HP {target.hp:F0} → {(newHp > 0 ? newHp.ToString("F0") : deadResult)}");
+
+            if (newHp <= 0 && target is Monster deadMonster)
+            {
+                Thread.Sleep(800);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"\n {deadMonster.name}을(를) 처치했습니다! ");
+                Console.ResetColor();
+                BattleDisplay.PlayMonsterAnimation(deadMonster, AnimationType.Death, 300);
+            }
+
+            Thread.Sleep(1000);
         }
 
-        public void BattleEntrance(List<Monster> monsters, Player player)
+        public void DisplayFullRangeAttackSkillResult(List<Monster> monsterList, Skill skill, float finalSkillDamage)
         {
             Console.Clear();
-            Console.WriteLine("Battle!!\n");
-            for (int i = 0; i < monsters.Count; i++)
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine($"\n {skill.name}! \n");
+            Console.ResetColor();
+            Console.WriteLine($"  ▶ {skill.description}");
+            Thread.Sleep(800);
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"\n 모든 적에게 {finalSkillDamage:F0} 데미지! \n");
+            Console.ResetColor();
+
+            List<Monster> aliveMonsters = monsterList.Where(m => m.hp > 0).ToList();
+            if (aliveMonsters.Count > 0)
             {
-                if(monsters[i].hp > 0)
-                {
-                    Console.Write($"{i + 1}. ");
-                }
-                Console.Write($"Lv.{monsters[i].level} {monsters[i].name}  HP {(monsters[i].hp > 0 ? monsters[i].hp : "Dead")}\n");
+                BattleDisplay.DisplayMonsters(aliveMonsters, AnimationType.Hit);
             }
 
-            Console.WriteLine();
+            Thread.Sleep(500);
 
-            Console.WriteLine("[내정보]");
-            Console.WriteLine($"Lv.{player.level} {player.name} ({player.jobName})");
-            Console.WriteLine($"HP {player.hp}/{player.maxHp}");
-            Console.WriteLine($"MP {player.mp}/{player.maxMp}");
+            foreach (var monster in monsterList)
+            {
+                if (monster.hp <= 0) continue;
+
+                float newHp = monster.hp - finalSkillDamage;
+                Console.WriteLine($"{monster.name} - HP {monster.hp:F0} → {(newHp >= 0 ? newHp.ToString("F0") : "Dead")}");
+
+                if (newHp <= 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"   {monster.name} 처치!");
+                    Console.ResetColor();
+                }
+            }
+
+            Thread.Sleep(1000);
+        }
+
+        public void DisplayUseSupportSkill(Player player, Skill skill)
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\n {player.name}이(가) [{skill.name}]을(를) 사용했습니다! ");
+            Console.ResetColor();
+            Console.WriteLine($"\n   {skill.description}");
+            Console.WriteLine($"\n HP가 {skill.damage:F0}만큼 회복되었습니다!");
+            Console.WriteLine($"HP {player.hp:F0} → {player.hp + skill.damage:F0}");
+            Thread.Sleep(1500);
         }
 
         public void SelectTarget()
         {
-            Console.WriteLine();
-            Console.WriteLine("0. 뒤로가기");
-            Console.WriteLine("대상을 선택해주세요.\n>>");
+            Console.WriteLine("\n");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("─────── [타겟 선택] ───────");
+            Console.ResetColor();
+            Console.WriteLine("공격할 대상의 번호를 입력하세요.");
+            Console.WriteLine("0. 돌아가기");
+            Console.Write(">> ");
+        }
 
+        public void DisplayBattleChoice()
+        {
+            Console.WriteLine("\n");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("─────── [행동 선택] ───────");
+            Console.ResetColor();
+            Console.WriteLine("1. 공격");
+            Console.WriteLine("2. 스킬");
+            Console.WriteLine("0. 도망");
+            Console.Write(">> ");
+        }
+
+        public void DisplaySelectingSkill(List<Skill> skillList)
+        {
+            Console.WriteLine("\n");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("─────── [스킬 선택] ───────");
+            Console.ResetColor();
+
+            for (int i = 0; i < skillList.Count; i++)
+            {
+                Skill skill = skillList[i];
+                Console.Write($"{i + 1}. {skill.name}");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine($" (MP: {skill.cost})");
+                Console.ResetColor();
+                Console.WriteLine($"   ▶ {skill.description}");
+            }
+
+            Console.WriteLine("0. 취소");
+            Console.Write(">> ");
         }
 
         public void SelectWrongSelection()
         {
-            Console.WriteLine("잘못된 입력입니다.");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\n 잘못된 입력입니다!");
+            Console.ResetColor();
+        }
+
+        public void DisplayNotEnoughMagicCost()
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\n MP가 부족합니다!");
+            Console.ResetColor();
+        }
+
+        public void DisplayNotEnoughHp()
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\n HP가 부족해서 전투가 불가능합니다!");
+            Console.ResetColor();
+        }
+
+        public void DisplayPressAnyKeyToNext()
+        {
+            Console.WriteLine("\n계속하려면 아무 키나 누르세요...");
+            Console.ReadKey(true);
+        }
+
+
+        public void DisplayStageClearStatus(int lastClearStage) //스테이지 선택?
+        {
+             int totalStage = 10;
+
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("\n══════════════════════════════════════════");
+            Console.WriteLine("           스테이지 현황");
+            Console.WriteLine("══════════════════════════════════════════");
+            Console.ResetColor();
+
+            for (int i = 0; i < totalStage; i++)
+            {
+                int currentStage = i + 1;
+                string statusText;
+                ConsoleColor statusColor;
+
+                if (currentStage <= lastClearStage - 1)
+                {
+                    statusText = " Clear!";
+                    statusColor = ConsoleColor.Green;
+                }
+                else if (currentStage == lastClearStage)
+                {
+                    statusText = " Now";
+                    statusColor = ConsoleColor.Yellow;
+                }
+                else
+                {
+                    statusText = " Locked";
+                    statusColor = ConsoleColor.DarkGray;
+                }
+
+                Console.Write($"Stage {currentStage,-2} ");
+                Console.ForegroundColor = statusColor;
+                Console.Write($"{statusText,-10}\n");
+                Console.ResetColor();
+            }
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("══════════════════════════════════════════\n");
+            Console.ResetColor();
+            Console.WriteLine("적들이 나타났습니다!\n");
+            Thread.Sleep(1500);
         }
 
         public void WaitNextChoice()
@@ -470,106 +918,6 @@ namespace TerimalQuest.Manager
             }
         }
 
-        public void DisplayBattleChoice()
-        {
-            Console.WriteLine("1. 공격");
-            Console.WriteLine("2. 스킬");
-            Console.WriteLine("0. 후퇴");
-        }
-
-        public void DisplaySelectingSkill(List<Skill> skillList)
-        {
-            Console.WriteLine();
-            for (int i = 0; i < skillList.Count; i++)
-            {
-                Skill skill = skillList[i];
-                Console.WriteLine($"{i + 1}. {skill.name} - MP {skill.cost}");
-                Console.WriteLine($"{skill.description}");
-            }
-            Console.WriteLine("0. 취소");
-        }
-
-        public void DisplayNotEnoughMagicCost()
-        {
-            Console.WriteLine("MP가 부족합니다.");
-        }
-
-        public void DisplayNotEnoughHp()
-        {
-            Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("HP가 부족해서 전투가 불가능합니다.");
-            Console.ResetColor();
-        }
-
-        public void DisplayUseSupportSkill(Player player ,Skill skill)
-        {
-            Console.WriteLine();
-            Console.WriteLine($"{skill.name} 사용!");
-            Console.WriteLine($"{player.name}의 체력이 회복되었다.");
-            Console.WriteLine($"{player.hp} -> {(player.hp + skill.damage)}");
-        }
-
-        public void DisplayFullRangeAttackSkillResult(List<Monster> monsterList, Skill skill, float finalSkillDamage)
-        {
-            Console.WriteLine();
-            Console.WriteLine($"모든 적에게 {skill.name} 시전! {finalSkillDamage}의 데미지!");
-            for (int i = 0; i < monsterList.Count; i++)
-            {
-                Monster monster = monsterList[i];
-                if (monster.hp < 0) continue;
-                Console.WriteLine($"{monster.name} - HP {monster.hp} -> {(monster.hp - finalSkillDamage >= 0 ? monster.hp -finalSkillDamage : "Dead")}");
-            }
-        }
-
-        public void DisplayStageClearStatus(int lastClearStage)
-        {
-            const int TOTAL_STAGES = 10;
-
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("\n=============== 스테이지 현황 ===============");
-            Console.ResetColor();
-
-            for (int i = 0; i < TOTAL_STAGES; i++)
-            {
-                int currentStage = i + 1;
-                string statusText;
-                ConsoleColor statusColor;
-
-                if (currentStage <= lastClearStage-1)
-                {
-                    statusText = "Clear!";
-                    statusColor = ConsoleColor.Green;
-                }
-                else if (currentStage == lastClearStage)
-                {
-                    statusText = "(Now)";
-                    statusColor = ConsoleColor.Yellow;
-                }
-                else
-                {
-                    statusText = "(Locked)";
-                    statusColor = ConsoleColor.DarkGray;
-                }
-
-                Console.Write($"Stage{currentStage, -2} ");
-                Console.ForegroundColor = statusColor;
-                Console.Write($"{statusText,-8}\n");
-                Console.ResetColor();
-            }
-
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("\n===========================================");
-            Console.ResetColor();
-            Console.ReadKey(true);
-        }
-
-        public void DisplayPressAnyKeyToNext()
-        {
-            Console.WriteLine("진행하려면 아무키나 입력해주세요.");
-            Console.ReadKey(true);
-        }
-
         #endregion
 
 
@@ -582,7 +930,10 @@ namespace TerimalQuest.Manager
         {
             Player player = GameManager.Instance.player;
             Console.Clear();
-            Console.WriteLine("퀘스트 목록\n");
+            ColorText("---------------------------", ConsoleColor.DarkCyan);
+            Console.WriteLine("        퀘스트 목록");
+            ColorText("---------------------------", ConsoleColor.DarkCyan);
+            Console.WriteLine();
             QuestManager.Instance.curQuest = null;
             ShowMainQuest(player);
             Console.WriteLine();
@@ -594,29 +945,67 @@ namespace TerimalQuest.Manager
         public void ShowSubQuests(Player player)
         {
             List<Quest> subQuests = QuestManager.Instance.subQuests;
-            Console.WriteLine("서브 퀘스트\n");
+            ColorText("\n서브 퀘스트\n", ConsoleColor.DarkBlue);
             for (int i = 0; i < subQuests.Count; i++)
             {
                 string questRunning = "";
-                if (player.questList != null)
+                int num = subQuests[i].questNum;
+                ConsoleColor textColor = ConsoleColor.White;
+                if (player.questList != null && subQuests.Count > 0)
                 {
-                    questRunning = player.questList.ContainsKey(subQuests[i].questNum) ? "[진행중]" : "";
+                    questRunning = QuestStatusText(player.questList, num);
+                    textColor = QuestStatusColor(player.questList, num);
                 }
-                Console.WriteLine($"{i + 2}. {subQuests[i].name} {questRunning}");
+                string questName = ($"{i + 2}. {subQuests[i].name} {questRunning}");
+                ColorText(questName, textColor);
             }
         }
 
         public void ShowMainQuest(Player player)
         {
             List<Quest> mainQuests = QuestManager.Instance.mainQuests;
-            Console.WriteLine("메인 퀘스트\n");
+            ColorText("메인 퀘스트 (필수!!)\n", ConsoleColor.DarkRed);
             if (player.questList != null && mainQuests.Count > 0)
             {
-                string questRunning = player.questList.ContainsKey(mainQuests[0].questNum) ? "[진행중]" : "";
-                Console.WriteLine($"1. {mainQuests[0].name} {questRunning}");
+                int num = mainQuests[0].questNum;
+                string questRunning = QuestStatusText(player.questList, num);
+                ConsoleColor textColor = QuestStatusColor(player.questList, num);
+                string questName = ($"1. {mainQuests[0].name} {questRunning}");
+                ColorText(questName, textColor);
             }
         }
 
+        public string QuestStatusText(Dictionary<int, Quest> quests, int num)
+        {
+            if (quests.ContainsKey(num) && quests[num].isClear)
+            {
+                return "[완료]";
+            }
+            else if (quests.ContainsKey(num) && !quests[num].isClear)
+            {
+                return "[진행중]";
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        public ConsoleColor QuestStatusColor(Dictionary<int, Quest> quests, int num)
+        {
+            if (quests.ContainsKey(num) && quests[num].isClear)
+            {
+                return ConsoleColor.DarkGreen;
+            }
+            else if (quests.ContainsKey(num) && !quests[num].isClear)
+            {
+                return ConsoleColor.DarkYellow;
+            }
+            else
+            {
+                return ConsoleColor.White;
+            }
+        }
 
 
         /// <summary>
@@ -628,7 +1017,10 @@ namespace TerimalQuest.Manager
             Console.Clear();
             Player player = GameManager.Instance.player;
             QuestManager.Instance.curQuest = quest;
-            Console.WriteLine($"퀘스트 : {quest.name}\n");
+            ColorText("---------------------------------------------", ConsoleColor.DarkCyan);
+            Console.WriteLine($"퀘스트 : {quest.name}");
+            ColorText("---------------------------------------------", ConsoleColor.DarkCyan);
+            Console.WriteLine();
             Console.WriteLine($"{quest.description}\n");
             if (player.questList.ContainsKey(quest.questNum))
                 QuestInfo(player.questList[quest.questNum]);
@@ -643,8 +1035,10 @@ namespace TerimalQuest.Manager
                     Console.WriteLine($"  {item.name} x {dic.Value}");
                 }
             }
-            Console.WriteLine($"  {quest.rewardGold}G");
-            Console.WriteLine($"  경험치 {quest.rewardExp}");
+            if(quest.rewardGold > 0)
+                Console.WriteLine($"  {quest.rewardGold}G");
+            if(quest.rewardExp > 0)
+                Console.WriteLine($"  경험치 {quest.rewardExp}");
 
             SelectChoice();
         }
@@ -662,7 +1056,14 @@ namespace TerimalQuest.Manager
                     }
                     break;
                 case "레벨":
-                    Console.WriteLine($"- 레벨을 {quest.successConditions["레벨"]}올리세요");
+                    int presentLevel = quest.currentCounts[quest.questType];
+                    int successLevel = quest.successConditions[quest.questType];
+                    Console.WriteLine($"- 레벨을 {quest.successConditions["레벨"]}올리세요 ({presentLevel}/{successLevel})");
+                    break;
+                case "강화":
+                    int presentEnhance = quest.currentCounts[quest.questType];
+                    int successEnhance = quest.successConditions[quest.questType];
+                    Console.WriteLine($"- 강화를 {successEnhance}회 성공하세요 ({presentEnhance}/{successEnhance})");
                     break;
                 default:
                     Console.WriteLine($"- {quest.successDes}");
@@ -708,6 +1109,13 @@ namespace TerimalQuest.Manager
                     Console.WriteLine($"{item.name} x {dic.Value}");
                 }
             }
+        }
+
+        public void ColorText(string text, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
+            Console.WriteLine(text);
+            Console.ResetColor();
         }
         #endregion
 

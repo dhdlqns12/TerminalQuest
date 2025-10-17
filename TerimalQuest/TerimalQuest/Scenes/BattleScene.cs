@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using TerimalQuest.Core;
 using TerimalQuest.Manager;
 using TerimalQuest.System;
 
@@ -13,10 +15,13 @@ namespace TerimalQuest.Scenes
         public event Action<IScene> OnSceneChangeRequested;
         private BattleManager battleManager;
         private BattleResultManager resultManager;
+        Player player = GameManager.Instance.player;
+
         public void Enter()
         {
             battleManager = new BattleManager();
             resultManager = new BattleResultManager();
+            player.RefreshStat();
             battleManager.StartBattle();
         }
 

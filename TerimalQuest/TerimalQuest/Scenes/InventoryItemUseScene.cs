@@ -8,19 +8,22 @@ using TerimalQuest.System;
 
 namespace TerimalQuest.Scenes
 {
-    public class InventorySortingScene : IScene
+    public class InventoryItemUseScene : IScene
     {
         public event Action<IScene> OnSceneChangeRequested;
 
-        private Inventory inventory;
+        Inventory inventory;
         private UIManager uiManager;
+
+        private int equipIdx;
 
         public void Enter()
         {
+            equipIdx = 0;
             inventory = GameManager.Instance.player.inventory;
 
             uiManager = UIManager.Instance;
-            uiManager.InventorySortingScripts(inventory);
+            uiManager.InventoryUseScripts(inventory);
         }
 
         public void Update()
@@ -34,17 +37,21 @@ namespace TerimalQuest.Scenes
         }
 
         private void Process()
-        { 
-            var choice = ConsoleHelper.GetUserChoice(["0", "1", "2", "3", "4"]);
+        {
+            // 선택 가능한 포션 배열 만들기
+            int vaildCount = inventory.displayItems.Count;
+            string[] vaildItemOption = Enumerable.Range(0, vaildCount + 1).Select(i => i.ToString()).ToArray();   // LINQ 문법
+            var choice = ConsoleHelper.GetUserChoice(vaildItemOption);
 
             // 나가기 설정
             if (choice == "0") { OnSceneChangeRequested?.Invoke(new InventoryScene()); return; }
 
-            // 옵션에 따라 아이템 정렬
-            inventory.SortItemByOption(int.Parse(choice.ToString()));
+            // 인벤토리에서 idx로 검색하여 해당 아이템 사용
+            equipIdx = int.Parse(choice.ToString());
+            inventory.UseItemByIdx(equipIdx - 1);
 
             // 업데이트 하여 갱신
-            OnSceneChangeRequested?.Invoke(new InventorySortingScene());
+            OnSceneChangeRequested?.Invoke(new InventoryItemUseScene());
         }
     }
 }

@@ -22,16 +22,10 @@ namespace TerimalQuest.System
 
         public Potion() { }
 
-        public Potion(int id, string name, string desc, int price, float healAmount, ItemType type, PotionType _potionType) : base(id, name, desc, price, type)
+        public Potion(int id, string name, string desc, int price, float healAmount, ItemType type, PotionType potionType) : base(id, name, desc, price, type)
         {
             this.healAmount = healAmount;
-            this.potionType = _potionType;
-        }
-
-        public void AddPotion()
-        {
-            // 같은 종류의 포션 들어오면 겹치기
-            count++;
+            this.potionType = potionType;
         }
 
         public override void Equip(bool isEquip)
@@ -77,7 +71,6 @@ namespace TerimalQuest.System
         // 아이템 복제
         public override Potion Clone()
         {
-            this.Id += 1;   // 복제 시 Id 증가
             return new Potion(Id, name, desc, price, healAmount, type, potionType);
         }
     }
