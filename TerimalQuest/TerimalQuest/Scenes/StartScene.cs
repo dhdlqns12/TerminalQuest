@@ -42,14 +42,14 @@ public class StartScene : IScene
                     OnSceneChangeRequested?.Invoke(new DataSaveScene());
                     break;
                 default:
-                    Console.WriteLine("잘못된 입력입니다.");
+                    UIManager.Instance.ShowInvalidInput();
                     Console.ReadKey();
                     break;
             }
         }
         else
         {
-            Console.WriteLine("잘못된 입력입니다.");
+            UIManager.Instance.ShowInvalidInput();
             Console.ReadKey();
         }
     }
