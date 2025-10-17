@@ -31,7 +31,7 @@ public class StartScene : IScene
                     break;
                 case 3:
                     int mainQuestNum = questManager.mainQuests[0].questNum;
-                    if ((player.curStage == 5 || player.curStage == 10) && !player.questList.ContainsKey(mainQuestNum) && player.questList[mainQuestNum].isClear)
+                    if ((player.curStage == 5 || player.curStage == 10) && !player.questList.ContainsKey(mainQuestNum))
                     {
                         uiManager.ColorText("메인 퀘스트를 수락 후 입장 가능합니다!!", ConsoleColor.DarkRed);
                         Console.ReadKey();
