@@ -26,10 +26,10 @@ namespace TerimalQuest.Manager
         public List<Item> enhanceableItems { get; set; }
 
         // 강화는 10강까지 있으며 강화에 따라 소진 강화석 개수와 확률이 달라짐
-        private int maxEnhancementLevel;
-        private int[] stoneRequiredPerLevel = { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5 }; // 0강~10강 필요 강화석
-        private float[] successRatePerLevel = { 1f, 0.95f, 0.9f, 0.85f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f, 0.2f }; // 0~10강 확률
-        private float[] enhancementRatePerLevel = { 1f, 1f, 2f, 2f, 3f, 3f, 4f, 4f, 5f, 7f }; // 0~10강 증가량
+        private int maxEnhancementLevel = 10;
+        private int[] stoneRequiredPerLevel = { 0, 1, 1, 2, 2, 3, 4, 5, 6, 8, 12 };
+        private float[] successRatePerLevel = { 1f, 1f, 0.95f, 0.9f, 0.85f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f };
+        private float[] enhancementRatePerLevel = { 0, 3, 3, 5, 5, 7, 9, 11, 14, 18, 23 };
 
         // 강화 시 사용하는 변수
         private Random random;                  // 강화 확률에 사용할 랜덤 객체
@@ -78,7 +78,7 @@ namespace TerimalQuest.Manager
             {
                 string idxTxt = $"{enhanceableItems.IndexOf(item) + 1} : ";
                 Console.Write($"- {idxTxt}");
-                item.DisplayInfo();
+                item.DisplayInfo(idxTxt);
             }
         }
 

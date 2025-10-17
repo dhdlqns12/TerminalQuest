@@ -56,16 +56,16 @@ namespace TerimalQuest.System
             return $"{potionTypeTxt} + {healAmount}"; ;
         }
 
-        public override void DisplayInfo()
+        public override void DisplayInfo(string idxTxt)
         {
             // 아이템 정보 표시
-            UIManager.Instance.DisplayItemInfo(this);
+            UIManager.Instance.DisplayItemInfo(this, idxTxt);
         }
 
-        public override void DisplayInfoProduct()
+        public override void DisplayInfoProduct(string idxTxt)
         {
             // 상품 목록에서 보여줄 아이템 정보 표시
-            UIManager.Instance.DisplayItemProduct(this);
+            UIManager.Instance.DisplayItemProduct(this, idxTxt);
         }
 
         // 아이템 복제

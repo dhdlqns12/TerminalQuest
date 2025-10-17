@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using TerimalQuest.Core;
 using TerimalQuest.System;
 
@@ -284,7 +285,7 @@ namespace TerimalQuest.Manager
         }
 
         // 인벤토리 아이템 정보 표시
-        public void DisplayItemInfo(Item item, bool isEquipMode = false)
+        public void DisplayItemInfo(Item item, string idxTxt, bool isEquipMode = false)
         {
             string itemName = item.name;
 
@@ -293,15 +294,32 @@ namespace TerimalQuest.Manager
                 itemName = GetEquipItemName(item);
             }
 
+            string effect = ConsoleHelper.PadRightForConsole(item.GetEffectText(), offsetEffect);
+            string desc = ConsoleHelper.PadRightForConsole(item.desc, offsetDesc);
+            string count = ConsoleHelper.PadRightForConsole(item.GetCountText(), offsetCount);
+
             // 번호 모드
             string numberMode = (isEquipMode) ? ConsoleHelper.PadRightForConsole(" ", 6) : $"  ";
 
-            Console.WriteLine(string.Format("{0} | {1} | {2} | {3}",
-                ConsoleHelper.PadRightForConsole(itemName, offsetName),
-                ConsoleHelper.PadRightForConsole(item.GetEffectText(), offsetEffect),
-                ConsoleHelper.PadRightForConsole(item.desc, offsetDesc),
-                item.GetCountText()
-            ));
+            string line = $"{idxTxt}{itemName} | {effect} | {desc} | {count}";
+            int totalWidth = ConsoleHelper.GetDisplayWidth(line) + 4;
+
+            // 테두리 색상
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("╔" + new string('═', totalWidth - 2) + "╗");
+            Console.ResetColor();
+
+            // 내용 출력
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write("║ ");
+            Console.Write(line);
+            Console.ResetColor();
+            Console.WriteLine(" ║");
+
+            // 하단 테두리
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("╚" + new string('═', totalWidth - 2) + "╝");
+            Console.ResetColor();
         }
 
         // 상점 아이템 정보 표시 헤더
@@ -321,18 +339,35 @@ namespace TerimalQuest.Manager
         }
 
         // 상점 아이템 정보 표시
-        public void DisplayItemProduct(Item item)
+        public void DisplayItemProduct(Item item, string idxTxt)
         {
             string itemPurchase = (item.isPurchase) ? "구매완료" : $"{item.price}";
             string isGoldIcon = (item.isPurchase) ? "" : "G";
 
-            Console.WriteLine(string.Format("{0} | {1} | {2} | {3} | {4} {5}",
-                ConsoleHelper.PadRightForConsole(item.name, offsetName),
-                ConsoleHelper.PadRightForConsole(item.GetEffectText(), offsetEffect),
-                ConsoleHelper.PadRightForConsole(item.desc, offsetDesc),
-                ConsoleHelper.PadRightForConsole(item.GetCountText(), offsetCount),
-                ConsoleHelper.PadRightForConsole(itemPurchase, offsetPurchase),
-                isGoldIcon));
+            string name = ConsoleHelper.PadRightForConsole(item.name, offsetName);
+            string effect = ConsoleHelper.PadRightForConsole(item.GetEffectText(), offsetEffect);
+            string desc = ConsoleHelper.PadRightForConsole(item.desc, offsetDesc);
+            string count = ConsoleHelper.PadRightForConsole(item.GetCountText(), offsetCount);
+
+            string line = $"{idxTxt}{name} | {effect} | {desc} | {count} | {itemPurchase} {isGoldIcon}";
+            int totalWidth = ConsoleHelper.GetDisplayWidth(line) + 4;
+
+            // 테두리 색상
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("╔" + new string('═', totalWidth - 2) + "╗");
+            Console.ResetColor();
+
+            // 내용 출력
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write("║ ");
+            Console.Write(line);
+            Console.ResetColor();
+            Console.WriteLine(" ║");
+
+            // 하단 테두리
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("╚" + new string('═', totalWidth - 2) + "╝");
+            Console.ResetColor();
         }
 
         private string GetEquipItemName(Item item)
@@ -407,11 +442,15 @@ namespace TerimalQuest.Manager
         public void ShopScripts(Player player, Shop shop)
         {
             Console.Clear();
-            Console.WriteLine("상점");
-            Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+            ConsoleHelper.PrintColored("╔══════════════════════════════════════════════════════════╗", ConsoleColor.DarkCyan);
+            ConsoleHelper.PrintColoredWithBackground("║                     상   점                             ║", ConsoleColor.Yellow, ConsoleColor.DarkBlue);
+            ConsoleHelper.PrintColored("╚══════════════════════════════════════════════════════════╝", ConsoleColor.DarkCyan);
             Console.WriteLine();
-            Console.WriteLine("[보유 골드]");
-            Console.WriteLine($"{player.gold} G");
+            ConsoleHelper.PrintColored("필요한 아이템을 얻을 수 있는 상점입니다.", ConsoleColor.DarkCyan);
+            ConsoleHelper.PrintDivider(55, '─', ConsoleColor.DarkCyan);
+            Console.WriteLine();
+            ConsoleHelper.PrintColored("[보유 골드]", ConsoleColor.Yellow);
+            ConsoleHelper.PrintColored($"{player.gold} G", ConsoleColor.Green);
             Console.WriteLine();
             shop.DisplayInfo(false);
             Console.WriteLine();
@@ -422,11 +461,15 @@ namespace TerimalQuest.Manager
         public void ShopPurchaseScripts(Player player, Shop shop)
         {
             Console.Clear();
-            Console.WriteLine("상점 - 아이템 구매");
-            Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+            ConsoleHelper.PrintColored("╔══════════════════════════════════════════════════════════╗", ConsoleColor.DarkCyan);
+            ConsoleHelper.PrintColoredWithBackground("║                     상   점                             ║", ConsoleColor.Yellow, ConsoleColor.DarkBlue);
+            ConsoleHelper.PrintColored("╚══════════════════════════════════════════════════════════╝", ConsoleColor.DarkCyan);
             Console.WriteLine();
-            Console.WriteLine("[보유 골드]");
-            Console.WriteLine($"{player.gold} G");
+            ConsoleHelper.PrintColored("구매 페이지", ConsoleColor.DarkCyan);
+            ConsoleHelper.PrintDivider(55, '─', ConsoleColor.DarkCyan);
+            Console.WriteLine();
+            ConsoleHelper.PrintColored("[보유 골드]", ConsoleColor.Yellow);
+            ConsoleHelper.PrintColored($"{player.gold} G", ConsoleColor.Green);
             Console.WriteLine();
             shop.DisplayInfo(true);
             Console.WriteLine();
@@ -437,11 +480,15 @@ namespace TerimalQuest.Manager
         public void ShopSaleScripts(Player player)
         {
             Console.Clear();
-            Console.WriteLine("상점 - 아이템 판매");
-            Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+            ConsoleHelper.PrintColored("╔══════════════════════════════════════════════════════════╗", ConsoleColor.DarkCyan);
+            ConsoleHelper.PrintColoredWithBackground("║                     상   점                             ║", ConsoleColor.Yellow, ConsoleColor.DarkBlue);
+            ConsoleHelper.PrintColored("╚══════════════════════════════════════════════════════════╝", ConsoleColor.DarkCyan);
             Console.WriteLine();
-            Console.WriteLine("[보유 골드]");
-            Console.WriteLine($"{player.gold} G");
+            ConsoleHelper.PrintColored("필요한 아이템을 얻을 수 있는 상점입니다.", ConsoleColor.DarkCyan);
+            ConsoleHelper.PrintDivider(55, '─', ConsoleColor.DarkCyan);
+            Console.WriteLine();
+            ConsoleHelper.PrintColored("[보유 골드]", ConsoleColor.Yellow);
+            ConsoleHelper.PrintColored($"{player.gold} G", ConsoleColor.Green);
             Console.WriteLine();
             player.inventory.DisplayInfoWithGold();
             Console.WriteLine();

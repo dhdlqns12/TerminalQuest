@@ -148,8 +148,7 @@ namespace TerimalQuest.System
             for (int i = 0; i < productList.Count; i++)
             {
                 string idxTxt = (isPurchase) ? $"{i + 1} : " : "";
-                Console.Write($"- {idxTxt}");
-                productList[i].DisplayInfoProduct();
+                productList[i].DisplayInfoProduct(idxTxt);
             }
         }
 
