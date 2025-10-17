@@ -162,18 +162,19 @@
     "rewardItem": {
       "청동 도끼": 1,
       "무쇠갑옷": 1
-    },
-    {
-      "questNum": 12,
-      "questType": "마을 순찰",
-      "name": "가는 행동이 고와야 오는 행동도 곱다",
-      "description": "자네가 이 마을을 요즘 잘 도와준다고?\n내 익히 소문을 들었네 이 시대에 보기 드문 청년이야\n언젠가 나한테 오면 선물을 주지!",
-      "successDes": "마을 순찰을 통해 마을 주민에게 선물을 받아보세요,
-      "successConditions": {
-        "선물": 1
-      },
-      "rewardGold": 750,
-      "rewardExp": 20,
-      "rewardItem": null
     }
+  },
+  {
+    "questNum": 12,
+    "questType": "마을 순찰",
+    "name": "가는 행동이 고와야 오는 행동도 곱다",
+    "description": "자네가 이 마을을 요즘 잘 도와준다고?\n내 익히 소문을 들었네 이 시대에 보기 드문 청년이야\n언젠가 나한테 오면 선물을 주지!",
+    "successDes": "마을 순찰을 통해 마을 주민에게 선물을 받아보세요",
+    "successConditions": {
+      "선물": 1
+    },
+    "rewardGold": 750,
+    "rewardExp": 20,
+    "rewardItem": null
+  }
 ]
