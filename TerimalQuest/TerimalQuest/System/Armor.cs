@@ -39,6 +39,7 @@ namespace TerimalQuest.System
             // 강화 레벨 증가 후 방어력 증가
             enhancementLevel++;
             def += enhanceValue;
+            QuestManager.Instance.PlayQuest("강화");
         }
 
         public override void DisplayInfo()
