@@ -12,6 +12,7 @@ namespace TerimalQuest.Scenes
         public event Action<IScene> OnSceneChangeRequested;
         public void Enter()
         {
+            UIManager.Instance.TerminalQuestScripts();
             Console.Write("데이터를 저장하시겠습니까? \n\ny/n \n>>");
             bool answer = UIManager.Instance.YesOrNo();
             if (!answer)

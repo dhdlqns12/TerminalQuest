@@ -8,10 +8,11 @@ namespace TerimalQuest.Core
         static void Main(string[] args)
         {
             SafeResize(200, 50);
-
-            UIManager.Instance.ShowTitle("스파르타 마을에 오신것을 환영합니다!");
             Console.OutputEncoding = global::System.Text.Encoding.UTF8;
             Console.CursorVisible = false;
+
+
+            UIManager.Instance.TerminalQuestScripts();
 
             int saveDataCount = 0;
             for(int i =1; i<=3;i++)
