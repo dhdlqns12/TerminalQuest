@@ -68,6 +68,7 @@ namespace TerimalQuest.Manager
             PrintMenuOption(5, "상점");
             PrintMenuOption(6, "마을 활동");
             PrintMenuOption(7, "장비 강화");
+            PrintMenuOption(8, "게임 저장");
             PrintMenuOption(0, "게임 종료");
 
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -586,9 +587,24 @@ namespace TerimalQuest.Manager
 
         #region BattleUI
 
+        private bool kefgaEntranceShown = false;
         // 전투 화면 진입 - 몬스터 애니메이션 포함
         public void BattleEntrance(List<Monster> monsters, Player player)
         {
+            Monster boss = monsters.FirstOrDefault(m => m.name == "케프가" || m.name == "라보스");
+            if (boss != null)
+            {
+                // 보스별 등장 연출
+                if (boss.name == "케프가"&& !kefgaEntranceShown)
+                {
+                    DisplayKefgaBossEntrance();
+                    kefgaEntranceShown = true;
+                }
+                else if (boss.name == "라보스")
+                {
+
+                }
+            }
             Console.Clear();
             Console.SetCursorPosition(0, 0);
 
@@ -919,7 +935,6 @@ namespace TerimalQuest.Manager
 
         #endregion
 
-
         #region QuestUI
         /// <summary>
         /// 퀘스트 리스트업 함수
@@ -1233,6 +1248,163 @@ namespace TerimalQuest.Manager
         public void TownActivityScripts()
         {
             Console.WriteLine("마을에서 수행 할 활동을 선택해 주세요.\n\n1.순찰\n2.훈련\n\n0.나가기\n");
+        }
+        #endregion
+
+        #region UIAnimation
+        private void TunnelAnimation()
+        {
+            int centerX = 40;
+            int centerY = 12;
+
+            for (int frame = 0; frame < 25; frame++)
+            {
+                Console.Clear();
+
+                for (int layer = 5; layer >= 0; layer--)
+                {
+                    int size = (layer * 8 + frame * 2) % 50;
+
+                    if (size < 2) continue;
+
+                    ConsoleColor color;
+                    if (layer == 0) color = ConsoleColor.DarkGray;
+                    else if (layer == 1) color = ConsoleColor.DarkGray;
+                    else if (layer == 2) color = ConsoleColor.DarkGray;
+                    else if (layer == 3) color = ConsoleColor.DarkBlue;
+                    else if (layer == 4) color = ConsoleColor.DarkBlue;
+                    else color = ConsoleColor.Black;
+
+                    Console.ForegroundColor = color;
+
+                    DrawRectangle(centerX - size / 2, centerY - size / 4, size, size / 2);
+                }
+
+                global::System.Threading.Thread.Sleep(150);
+            }
+            Console.Clear();
+        }
+
+        private void DrawRectangle(int x, int y, int width, int height)
+        {
+            if (width <= 0 || height <= 0) return;
+
+            if (y >= 0 && y < Console.WindowHeight)
+            {
+                Console.SetCursorPosition(Math.Max(0, x), y);
+                Console.Write(new string('█', Math.Min(width, Console.WindowWidth - Math.Max(0, x))));
+            }
+
+            if (y + height >= 0 && y + height < Console.WindowHeight)
+            {
+                Console.SetCursorPosition(Math.Max(0, x), y + height);
+                Console.Write(new string('█', Math.Min(width, Console.WindowWidth - Math.Max(0, x))));
+            }
+
+            for (int i = 1; i < height; i++)
+            {
+                if (y + i >= 0 && y + i < Console.WindowHeight)
+                {
+                    if (x >= 0 && x < Console.WindowWidth)
+                    {
+                        Console.SetCursorPosition(x, y + i);
+                        Console.Write('█');
+                    }
+                    if (x + width >= 0 && x + width < Console.WindowWidth)
+                    {
+                        Console.SetCursorPosition(x + width, y + i);
+                        Console.Write('█');
+                    }
+                }
+            }
+        }
+
+        public void DisplayKefgaBossEntrance()
+        {
+            Console.Clear();
+            Console.CursorVisible = false;
+
+            string[] kefgaArt = new string[]
+            {
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠲⣶⠤⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠓⣄⠉⠙⠛⠽⣶⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣖⠦⣄⡀⠈⠙⠻⢽⣲⢤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢦⠀⠈⠓⠢⣄⡀⠀⠙⠺⣗⡢⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢳⡒⠤⢤⣀⣈⠓⠦⣄⠀⠉⠲⣝⠢⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢣⡀⠀⠀⠈⠉⠓⠦⣝⡢⣄⠀⠙⠮⡑⢦⣀⣀⡐⢻⠢⣌⡷⡄⠀⢿⢷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢧⠤⣄⡀⠀⠀⠀⠀⠉⠙⠿⣦⡀⠈⠣⡍⠿⣭⡙⢷⠸⠃⡇⠀⠈⣇⠙⢿⣤⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⡆⠀⠉⠙⠲⠤⣄⡀⠀⠀⠈⠙⠂⠀⠈⠣⡌⠻⣆⠀⢰⠃⠀⠀⢹⠳⣀⠙⢿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡏⠉⠉⠑⠒⠒⠤⣍⣓⠦⣀⠀⠀⠀⠀⠀⠈⢦⠈⠀⢸⠀⠀⠀⠘⡆⠘⢦⡀⠙⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢷⠀⠀⠀⠀⠀⠀⠀⠀⠉⠒⠻⣦⣄⠀⠀⠀⠀⢳⡀⠘⡆⠀⠀⠀⡗⠢⣀⠙⣄⠈⢫⣦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠲⠤⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠈⠓⠀⠀⠀⠀⢣⠀⡇⠀⠀⠀⡇⠀⠈⠳⡌⢦⡀⠱⡷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⣀⣀⣈⡙⠒⠢⠤⣀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⢳⠀⠀⢰⠛⢤⠀⠀⠈⠣⡳⡀⠸⡽⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⠀⠈⠉⠉⠑⠲⠭⢷⣤⣄⠀⠀⠀⠀⢨⠃⠸⡄⠀⡼⠤⡀⠙⢄⠀⠀⠙⢿⡄⠸⡜⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡼⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠙⠂⠀⠀⣇⠀⠀⡇⢠⠃⠀⠈⠱⢄⡳⡄⠀⠈⢻⡀⠸⡜⣶⣄⢲⣄⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⠧⠤⠤⠤⢀⣀⣀⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⢀⡔⠁⣠⠊⢀⠗⢄⡀⠀⠀⠀⠑⢎⣦⠀⠀⠁⠀⢳⠹⣎⢿⢸⢞⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣇⣀⡠⠤⠄⠒⠒⠒⠒⠒⠒⠚⠛⠒⠒⠄⠀⣠⠊⢀⡔⠁⢀⡟⠦⣀⠙⢢⡀⠀⠀⠀⠑⣷⡀⠀⠀⠈⡇⢻⠀⢀⠞⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡞⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡞⠁⣰⠊⠀⣠⠞⠀⠀⠀⠙⠢⣜⢦⡀⠀⠀⠈⢳⡀⠀⠀⢳⠀⢠⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡰⠃⢀⠞⠁⢠⠜⠥⣄⠀⠀⠀⠀⠀⠈⠑⢽⣦⡀⠀⠀⠁⠀⠀⣸⠀⡎⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡯⠤⠤⠒⠒⠒⣈⡩⠭⠭⠭⠭⠒⠒⢠⠞⠀⡴⠃⢠⠜⠓⠒⠤⠤⣍⡓⢤⡀⠀⠀⠀⠀⠙⢷⡄⠀⠀⠀⠀⡇⣰⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣠⠤⠖⠊⠉⠁⠀⠀⠀⠀⠀⠀⢀⠼⠁⢠⠞⢀⡔⠁⠀⠀⠀⠀⠀⠀⠉⠙⠺⢵⣦⡀⠀⠀⠀⠙⠆⠀⣠⠜⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡏⠀⠀⣹⣴⣋⣉⣉⡒⠦⢄⣀⠀⠀⠀⠀⠀⠀⠈⠙⠦⠀⠀⢀⣀⠴⠃⢀⡠⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣳⠀⠀⡏⠀⠀⠀⠀⠈⠉⠑⠒⠻⢖⣤⣀⠀⠀⠀⢀⣀⠴⠒⢉⣠⠔⠚⣉⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡞⠒⠊⢉⣩⠤⠔⠒⠒⠊⠉⠉⠀⠀⠈⢇⠀⠸⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢉⣣⠴⠒⢉⡠⠔⠚⠁⠀⠀⢰⠃⢀⣈⣙⣒⠢⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⠤⠒⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣸⠀⠀⠙⠮⡭⣗⣦⢤⡀⠀⠀⡴⠋⠁⡤⠔⠊⠁⠀⠀⠀⠀⠀⠀⡼⠊⠁⡴⣴⡾⣿⣌⠳⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡜⢁⡤⠔⢒⣒⡒⠒⠒⠒⠢⠔⠚⠉⠉⠁⠀⡎⠀⠀⠀⠀⠈⠏⠒⠭⣙⠓⠤⡇⠀⡴⠃⠀⠀⠀⠀⠀⠀⠀⣠⠜⠁⠀⠀⠓⠻⠷⠿⠟⠣⣌⠉⣲⡤⢄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣎⣴⡯⠊⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠈⠑⠴⠧⢤⣇⣀⣀⣀⣀⡤⠤⢖⡉⠀⠀⠀⠀⠀⠀⠀⠀⢠⢀⠤⠬⣍⣛⣧⣄⠈⠉⠒⠦⢤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⣀⠀⠀⠀⠀⠀⢀⡤⠖⠉⠉⠉⠉⠉⠉⠩⠭⠵⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⠴⠊⠁⣠⣶⣤⣀⡀⠀⠀⣱⣄⠘⠸⢄⡐⠲⠶⣤⣌⣀⣀⠀⠀⠀⠀⠙⠛⢶⣤⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⡰⣾⡻⣅⡀⣀⡴⠚⠁⢀⡠⠖⠒⠒⠒⢶⠤⠤⠤⠤⠤⠤⢴⡶⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⣉⣁⡤⠴⠒⠊⠁⠀⠀⠉⠉⠉⠉⠁⠀⠉⠒⠒⠚⠷⠦⣄⣉⠒⠪⢍⣑⠒⠒⠤⢄⣀⣈⠓⣄⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠰⣟⠒⠁⠀⠉⠁⣠⠴⠚⠁⠀⠀⠀⢴⣞⣁⣀⣀⡤⠴⠒⠊⠁⠀⠀⠀⠀⠀⣀⣠⣄⣀⣠⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠴⠚⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠒⠦⣤⣉⣓⠲⠤⣄⡀⠉⠙⠁⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠉⠙⠛⠛⠉⠀⠀⠀⠀⠀⠀⣠⠔⠚⠉⠉⠀⠀⠀⠀⢀⣀⣠⠤⠤⠒⠋⠁⠀⠀⠀⠀⠀⠉⠙⠲⠤⣄⣀⠀⠀⠀⠀⠀⢀⣠⠤⠚⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠛⠓⠛⠛⠛⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠞⠁⢀⠤⠤⠴⠒⠚⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤⣶⠀⠀⣠⠞⠁⣠⠞⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⣏⣳⠈⠉⠚⠁⣠⠞⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠳⠤⠤⠤⠖⠚⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+            };
+
+            int screenWidth = Console.WindowWidth/2;
+            int artHeight = kefgaArt.Length;
+            int artWidth = 150; 
+
+            for (int x = -artWidth; x < screenWidth; x += 5)  
+            {
+                Console.Clear();
+
+                Console.SetCursorPosition(screenWidth, 5);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(" WARNING ");
+                Console.ResetColor();
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+                int startY = 10; 
+
+                for (int i = 0; i < artHeight; i++)
+                {
+                    if (x >= 0 && x < screenWidth && startY + i < Console.WindowHeight)
+                    {
+                        Console.SetCursorPosition(x, startY + i);
+                        Console.Write(kefgaArt[i]);
+                    }
+                    else if (x < 0)  
+                    {
+                        int visibleStart = Math.Abs(x);
+                        if (visibleStart < kefgaArt[i].Length)
+                        {
+                            string visiblePart = kefgaArt[i].Substring(visibleStart);
+                            Console.SetCursorPosition(0, startY + i);
+                            Console.Write(visiblePart);
+                        }
+                    }
+                }
+                Console.ResetColor();
+
+                Thread.Sleep(150);
+            }
+
+            Console.Clear();
+            Console.SetCursorPosition(screenWidth, Console.WindowHeight / 2);
+            ConsoleHelper.PrintColored("『 케프가 』", ConsoleColor.White);
+            Thread.Sleep(1000);
         }
         #endregion
     }
