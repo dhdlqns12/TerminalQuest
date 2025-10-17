@@ -178,8 +178,7 @@ namespace TerimalQuest.System
             foreach (var item in displayItems)
             {
                 string idxTxt = (isEquipMode) ? $"{displayItems.IndexOf(item) + 1} : " : "";
-                Console.Write($"- {idxTxt}");
-                item.DisplayInfo();
+                item.DisplayInfo(idxTxt);
             }
         }
 
@@ -199,8 +198,7 @@ namespace TerimalQuest.System
             for (int i = 0; i < displayItems.Count; i++)
             {
                 string idxTxt = $"{i + 1} : ";
-                Console.Write($"- {idxTxt}");
-                displayItems[i].DisplayInfoProduct();
+                displayItems[i].DisplayInfoProduct(idxTxt);
             }
         }
 

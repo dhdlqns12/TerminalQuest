@@ -74,12 +74,12 @@ namespace TerimalQuest.System
             // 아이템 강화
         }
 
-        public virtual void DisplayInfo()
+        public virtual void DisplayInfo(string idxTxt)
         {
             // 아이템 정보 표시
         }
 
-        public virtual void DisplayInfoProduct()
+        public virtual void DisplayInfoProduct(string idxTxt)
         {
             // 아이템 정보 표시 : 상점
         }
