@@ -17,7 +17,7 @@ namespace TerimalQuest.Manager
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("========================================");
-            Console.WriteLine($"           {text}");
+            Console.WriteLine($"   {text}");
             Console.WriteLine("========================================");
             Console.ResetColor();
         }
@@ -36,8 +36,80 @@ namespace TerimalQuest.Manager
 
         public void ShowStartSceneScripts()
         {
-            Console.Write($"스파르타 던전에 오신 여러분 환영합니다. \n이제 전투를 시작할 수 있습니다. \n\n1.상태 보기 \n2.인벤토리\n3.전투 시작(현재 진행 : {GameManager.Instance.player.curStage}층)\n4.퀘스트\n5.상점\n6.마을활동\n7. 장비 강화\n0.게임 종료 \n\n원하시는 행동을 입력해주세요.\n>>");
+            Console.Clear();
+
+            // 헤더 꾸미기
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("╔══════════════════════════════════════════════════════════╗");
+            Console.WriteLine("║         ⚔ 스파르타 던전에 오신 걸 환영합니다 ⚔         ║");
+            Console.WriteLine("╚══════════════════════════════════════════════════════════╝");
+            Console.ResetColor();
+
+            Console.WriteLine();
+            TypeWrite("이제 전투를 시작할 수 있습니다.\n", 30);
+
+            // 메뉴 항목
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("┌────────── [메뉴 선택] ──────────┐");
+            Console.ResetColor();
+
+            PrintMenuOption(1, "상태 보기");
+            PrintMenuOption(2, "인벤토리");
+            PrintMenuOption(3, "전투 시작 (현재 진행: 1층)");
+            PrintMenuOption(4, "퀘스트");
+            PrintMenuOption(5, "상점");
+            PrintMenuOption(6, "마을 활동");
+            PrintMenuOption(7, "장비 강화");
+            PrintMenuOption(0, "게임 종료");
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("└─────────────────────────────────┘");
+            Console.ResetColor();
+
+            Console.WriteLine();
+            Console.Write("원하시는 행동을 입력해주세요 \n>> ");
         }
+
+        private void PrintMenuOption(int number, string text)
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write($"│ ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($"{number,2}. ");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine(PadDisplay(text, 28) + "│");
+        }
+
+        static int GetDisplayWidth(string text)
+        {
+            int width = 0;
+            foreach (char c in text)
+            {
+                // 한글, 한자, 일부 특수문자 등은 2칸
+                if (c >= 0xAC00 && c <= 0xD7A3) width += 2;
+                else if (c >= 0x1100 && c <= 0x11FF) width += 2;
+                else if (c >= 0x3130 && c <= 0x318F) width += 2;
+                else width += 1;
+            }
+            return width;
+        }
+
+        static string PadDisplay(string text, int totalWidth)
+        {
+            int width = GetDisplayWidth(text);
+            int padding = Math.Max(0, totalWidth - width);
+            return text + new string(' ', padding);
+        }
+
+        void TypeWrite(string text, int delay = 20)
+        {
+            foreach (char c in text)
+            {
+                Console.Write(c);
+                Thread.Sleep(delay);
+            }
+        }
+
 
         public void ShowStatusSceneScripts()
         {
