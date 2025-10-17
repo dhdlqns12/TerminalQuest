@@ -2,7 +2,14 @@ using TerimalQuest.Core;
 using TerimalQuest.System;
 
 namespace TerimalQuest.Manager;
-
+public class GameRecordData
+{
+    public int TotalDamage { get; set; }
+    public int TotalDamageTaken { get; set; }
+    public List<RecodeManager.UsedSkillRecord> UsedSkillRecords { get; set; }
+    public Dictionary<string, int> DefeatedMonsterList { get; set; }
+    public Player ClearPlayer { get; set; }
+}
 public class RecodeManager
 {
     private static RecodeManager instance;
@@ -11,10 +18,14 @@ public class RecodeManager
     public int totalDamage { get; set; }
     public int totalDamageTaken { get; set; }
 
+    // public static GameRecordData gameRecordData { get; set; }
+
     public List<UsedSkillRecord> usedSkillRecords { get; set; }
 
     public Dictionary<string ,int> defeatedMonsterList  { get; set; }
     public Player clearPlayer  { get; set; }
+
+
 
     public RecodeManager()
     {
@@ -22,8 +33,30 @@ public class RecodeManager
         uiManager = UIManager.Instance;
         defeatedMonsterList = new Dictionary<string ,int>();
         usedSkillRecords = new List<UsedSkillRecord>();
+
+    }
+    public GameRecordData CreateRecordData()
+    {
+        GameRecordData data = new GameRecordData
+        {
+            TotalDamage = this.totalDamage,
+            TotalDamageTaken = this.totalDamageTaken,
+            UsedSkillRecords = this.usedSkillRecords,
+            DefeatedMonsterList = this.defeatedMonsterList,
+            ClearPlayer = this.clearPlayer
+        };
+        return data;
     }
 
+    public void LoadFromRecordData(GameRecordData data)
+    {
+        if (data == null) return;
+        this.totalDamage = data.TotalDamage;
+        this.totalDamageTaken = data.TotalDamageTaken;
+        this.usedSkillRecords = data.UsedSkillRecords;
+        this.defeatedMonsterList = data.DefeatedMonsterList;
+        this.clearPlayer = data.ClearPlayer;
+    }
     public void RecordTotalDamage(int atkDamage)
     {
         this.totalDamage += atkDamage;
