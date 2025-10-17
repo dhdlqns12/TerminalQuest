@@ -43,6 +43,11 @@ namespace TerimalQuest.System
             uiManager = UIManager.Instance;
         }
 
+        public Inventory()
+        {
+
+        }
+
         // 아이템 추가 
         public void Add(Item item)
         {

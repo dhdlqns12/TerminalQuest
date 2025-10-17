@@ -40,11 +40,9 @@ namespace TerimalQuest.Manager
                 BattleQuestResult(result.defeatedMonsters);
                 uiManager.DisplayBattleRewardResult(totalReward);
                 player.curStage++;
+                player.mp += 10;
             }
             uiManager.WaitNextChoice();
-
-            player.mp += 10;
-
         }
 
         public void ProcessEnding()
@@ -116,7 +114,7 @@ namespace TerimalQuest.Manager
                 for (int i = 0; i < itemCount; i++)
                 {
                     Item itemToAdd = ItemDatabase.GetItem(itemName);
-                    player.inventory.Add(itemToAdd);
+                    if (itemToAdd != null) player.inventory.Add(itemToAdd);
                 }
             }
         }
@@ -136,20 +134,29 @@ namespace TerimalQuest.Manager
         {
             dropTable = new Dictionary<string, List<DropItem>>();
 
-            dropTable.Add("미니언", new List<DropItem>
+            dropTable.Add("슬라임", new List<DropItem>
             {
-                new DropItem { itemName = "낡은 검", minDropCount = 1, maxDropCount = 1, dropRate = 0.5f},
+
+                new DropItem { itemName = "강화석", minDropCount = 1, maxDropCount = 1, dropRate = 0.2f},
+                new DropItem { itemName = "빨간포션", minDropCount = 1, maxDropCount = 2, dropRate = 0.2f},
+                new DropItem { itemName = "파랑포션", minDropCount = 1, maxDropCount = 2, dropRate = 0.2f},
+                new DropItem { itemName = "노랑포션", minDropCount = 1, maxDropCount = 2, dropRate = 0.2f},
 
             });
 
-            dropTable.Add("대포미니언", new List<DropItem>
+            dropTable.Add("오크", new List<DropItem>
             {
-                new DropItem { itemName = "연습용 창", minDropCount = 0, maxDropCount = 1, dropRate = 0.1f }
+                new DropItem { itemName = "수련자 갑옷", minDropCount = 0, maxDropCount = 1, dropRate = 0.2f},
+                new DropItem { itemName = "무쇠갑옷", minDropCount = 0, maxDropCount = 1, dropRate = 0.1f},
+                new DropItem { itemName = "강화석", minDropCount = 1, maxDropCount = 1, dropRate = 0.2f}
             });
 
-            dropTable.Add("공허충", new List<DropItem>
+            dropTable.Add("트롤", new List<DropItem>
             {
-                new DropItem { itemName = "스파르타의 창", minDropCount = 0, maxDropCount = 1, dropRate = 0.01f  }
+                new DropItem { itemName = "낡은 검", minDropCount = 1, maxDropCount = 1, dropRate = 0.3f},
+                new DropItem { itemName = "연습용 창", minDropCount = 0, maxDropCount = 1, dropRate = 0.2f},
+                new DropItem { itemName = "청동 도끼", minDropCount = 0, maxDropCount = 1, dropRate = 0.1f},
+                new DropItem { itemName = "강화석", minDropCount = 1, maxDropCount = 1, dropRate = 0.2f}
             });
         }
     }
