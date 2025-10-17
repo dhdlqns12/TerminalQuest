@@ -53,6 +53,9 @@ public class StartScene : IScene
                 case 7:
                     OnSceneChangeRequested?.Invoke(new EnhancementScene());
                     break;
+                case 8:
+                    OnSceneChangeRequested?.Invoke(new SaveScene());
+                    break;
                 case 0:
                     OnSceneChangeRequested?.Invoke(new DataSaveScene());
                     break;
