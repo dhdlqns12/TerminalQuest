@@ -31,7 +31,7 @@ namespace TerimalQuest.System
         public bool isEquipped { get; set; }    // 아이템 착용 여부
         public bool isPurchase { get; set; }    // 아이템 구매 여부
 
-        public ItemType type { get; private set; } // 아이템 타입
+        public ItemType type { get; set; } // 아이템 타입
 
         public Item() { }
 
