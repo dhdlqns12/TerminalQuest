@@ -21,10 +21,11 @@ namespace TerimalQuest.System
          * 
          */
 
-        private Player player;
+        //private Player player;
         private UIManager uiManager;
         private List<Item> productList = new List<Item>();
         private float saleRate = 0.85f;     // 판매 가격 환율
+        private Player player => GameManager.Instance.player;
 
         public Shop()
         {
@@ -34,7 +35,7 @@ namespace TerimalQuest.System
         private void Init()
         {
             // 외부 참조 클래스 초기화
-            player = GameManager.Instance.player;
+            //player = GameManager.Instance.player;
             uiManager = UIManager.Instance;
 
             // 상품 리스트 초기화
@@ -111,7 +112,7 @@ namespace TerimalQuest.System
             return true;
         }
 
-        // 상품 구매
+        // 상품 판매
         public void SailItem(int idx)
         {
             Inventory inventory = player.inventory;

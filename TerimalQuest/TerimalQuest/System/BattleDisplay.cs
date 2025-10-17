@@ -9,7 +9,7 @@ namespace TerimalQuest.System
 {
     public static class BattleDisplay
     {
-        private const int MonsterSpacing = 30;
+        private const int MonsterSpacing = 25;
 
         public static void DisplayMonsters(List<Monster> monsters, AnimationType animationType = AnimationType.Idle)
         {

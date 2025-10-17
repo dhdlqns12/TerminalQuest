@@ -33,6 +33,7 @@ namespace TerimalQuest.Manager
         public List<Weapon> weapons { get; set; }
         public List<Armor> armors { get; set; }
         public List<Potion> potions { get; set; }
+        public List<EnhancementStone> enhanceStone { get; set; }
 
         public string equippedWeapon { get; set; }
         public string equippedArmor { get; set; }
@@ -40,6 +41,12 @@ namespace TerimalQuest.Manager
         public Dictionary<int, Quest> questList { get; set; }
 
         public List<int> clearQuestNums { get; set; }
+
+        // 상점 아이템 목록
+        public List<Weapon> shopWeapons { get; set; }
+        public List<Armor> shopArmors { get; set; }
+        public List<Potion> shopPotions { get; set; }
+        public List<EnhancementStone> shopStones { get; set; }
 
         public SaveData() { }
 
@@ -65,12 +72,20 @@ namespace TerimalQuest.Manager
             weapons = player.inventory.Items.OfType<Weapon>().ToList();
             armors = player.inventory.Items.OfType<Armor>().ToList();
             potions = player.inventory.Items.OfType<Potion>().ToList();
+            enhanceStone = player.inventory.Items.OfType<EnhancementStone>().ToList();
 
             equippedWeapon = player.equippedWeapon?.name;
             equippedArmor = player.equippedArmor?.name;
 
             questList = player.questList;
             clearQuestNums = player.clearQuestNums;
+
+            // 상점 아이템 타입별 리스트 분리!
+            Shop shop = GameManager.Instance.shop;
+            shopWeapons = shop.ProductList.OfType<Weapon>().ToList();
+            shopArmors = shop.ProductList.OfType<Armor>().ToList();
+            shopPotions = shop.ProductList.OfType<Potion>().ToList();
+            shopStones = shop.ProductList.OfType<EnhancementStone>().ToList();
         }
     }
 
@@ -136,6 +151,11 @@ namespace TerimalQuest.Manager
             loadedPlayer.UpdateStats();
 
             GameManager.Instance.player = loadedPlayer;
+
+            GameManager.Instance.shop = new Shop();
+
+            LoadShopState(data);
+
             return data;
         }
 
@@ -164,6 +184,14 @@ namespace TerimalQuest.Manager
                 foreach (var potion in data.potions)
                 {
                     player.inventory.Items.Add(potion);
+                }
+            }
+
+            if(data.enhanceStone!=null)
+            {
+                foreach(var enhancementStone in data.enhanceStone)
+                {
+                    player.inventory.Items.Add(enhancementStone);
                 }
             }
         }
@@ -216,6 +244,45 @@ namespace TerimalQuest.Manager
 
             SaveData data = JsonSerializer.Deserialize<SaveData>(json_Deserialize, options);
             return data;
+        }
+
+        private static void LoadShopState(SaveData data)
+        {
+            Shop shop = GameManager.Instance.shop;
+
+            shop.ProductList.Clear();
+
+            if (data.shopWeapons != null)
+            {
+                foreach (var weapon in data.shopWeapons)
+                {
+                    shop.ProductList.Add(weapon);
+                }
+            }
+
+            if (data.shopArmors != null)
+            {
+                foreach (var armor in data.shopArmors)
+                {
+                    shop.ProductList.Add(armor);
+                }
+            }
+
+            if (data.shopPotions != null)
+            {
+                foreach (var potion in data.shopPotions)
+                {
+                    shop.ProductList.Add(potion);
+                }
+            }
+
+            if (data.shopStones != null)
+            {
+                foreach (var stone in data.shopStones)
+                {
+                    shop.ProductList.Add(stone);
+                }
+            }
         }
     }
 }
