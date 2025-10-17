@@ -96,6 +96,11 @@ namespace TerimalQuest.Manager
             return $"SaveGame{slot}.json";
         }
 
+        static string SaveRecordPath(int slot)
+        {
+            return $"SaveRecord{slot}.json";
+        }
+
         public static void GameSave(int _slot)
         {
             var options = new JsonSerializerOptions
@@ -107,10 +112,16 @@ namespace TerimalQuest.Manager
             SaveData data = new SaveData(player);
             string json_Serialize = JsonSerializer.Serialize(data, options);
             File.WriteAllText(SavePath(_slot), json_Serialize);
+            SaveRecord(_slot);
+
+
+
         }
 
         public static SaveData GameLoad(int _slot)
         {
+
+
             string path = SavePath(_slot);
             string json_Deserialize = File.ReadAllText(path);
 
@@ -155,8 +166,40 @@ namespace TerimalQuest.Manager
             GameManager.Instance.shop = new Shop();
 
             LoadShopState(data);
+            LoadRecord(_slot);
 
             return data;
+        }
+
+        static void SaveRecord(int _slot)
+        {
+             var options = new JsonSerializerOptions
+                        {
+                            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                            WriteIndented = true
+                        };
+            GameRecordData data_Record = RecodeManager.Instance.CreateRecordData();
+            if (data_Record != null)
+            {
+                string json_Serialize_Record = JsonSerializer.Serialize(data_Record, options);
+                File.WriteAllText(SaveRecordPath(_slot), json_Serialize_Record);
+            }
+        }
+        static void LoadRecord(int _slot)
+        {
+            string json_Deserialize_Record = File.ReadAllText(SaveRecordPath(_slot));
+            var options = new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                WriteIndented = true,
+                IncludeFields = true
+            };
+            GameRecordData data_Record = JsonSerializer.Deserialize<GameRecordData>(json_Deserialize_Record, options);
+            if (json_Deserialize_Record.Length > 0)
+            {
+                RecodeManager.Instance.LoadFromRecordData(data_Record);
+            }
+
         }
 
         private static void LoadInventory(Player player, SaveData data)

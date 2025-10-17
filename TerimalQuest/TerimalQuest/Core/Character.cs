@@ -26,7 +26,7 @@ namespace TerimalQuest.Core
         public float mp // 캐릭터 마나
         {
             get { return _mp; }
-            set { _mp = Math.Clamp(value,0,maxMp); }
+            set { _mp = Math.Clamp(value, 0, maxMp); }
         }
 
         public float atk { get; set; }          // 캐릭터 공격력
