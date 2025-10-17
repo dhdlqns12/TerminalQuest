@@ -59,7 +59,7 @@ namespace TerimalQuest.Core
 
         private bool isChangeStat = false;
 
-        public int[] requiredExp= { 10, 35, 65, 100 };
+        //public int[] requiredExp= { 10, 35, 65, 100 };
 
         private int _exp { get; set; }            // 플레이어 경험치
         public int exp
@@ -109,27 +109,23 @@ namespace TerimalQuest.Core
         }
 
         #region 레벨업
+        public int RequiredExp()
+        {
+            return level * 20;
+        }
+
         public void Check_LevelUp()
         {
-            if (level == 0 || job == null) //player초기화 안됬을때(로드에서 오류 생김)
-                return;
-
-            while (level < requiredExp.Length + 1 && exp >= requiredExp[level-1])
+            while (exp >= RequiredExp())
             {
-                _exp -= requiredExp[level - 1];
+                _exp -= RequiredExp();
 
                 LevelUp();
 
                 Console.WriteLine($"레벨업! Lv.{level}");
-
-                if(level>=requiredExp.Length+1)
-                {
-                    Console.WriteLine("최대 레벨");
-                    break;
-                }
+                Console.WriteLine($"다음 레벨까지: {RequiredExp()} EXP");
             }
-
-            UpdateStats();
+            RefreshStat();
         }
 
         private void LevelUp()
