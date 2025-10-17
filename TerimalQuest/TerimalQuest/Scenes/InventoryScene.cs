@@ -43,6 +43,9 @@ namespace TerimalQuest.Scenes
                     OnSceneChangeRequested?.Invoke(new InventoryEquipScene());
                     break;
                 case "2":
+                    OnSceneChangeRequested?.Invoke(new InventoryItemUseScene());
+                    break;
+                case "3":
                     OnSceneChangeRequested?.Invoke(new InventorySortingScene());
                     break;
                 case "0":

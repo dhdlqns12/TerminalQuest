@@ -31,12 +31,14 @@ namespace TerimalQuest.System
 
         // 아이템 리스트
         public List<Item> items;
+        public List<Item> displayItems { get; set; }
 
         // 생성자
         public Inventory(int maxItemCount)
         {
             this.maxItemCount = maxItemCount;
             items = new List<Item>();
+            displayItems = new List<Item>();
 
             uiManager = UIManager.Instance;
         }
@@ -122,12 +124,12 @@ namespace TerimalQuest.System
         // 장비 장착/해제 - 인덱스 검색
         public void EquipItemByIdx(int idx)
         {
-            if (items.Count <= 0 || idx > items.Count)
+            if (displayItems.Count <= 0 || idx > displayItems.Count)
             {
                 return;
             }
 
-            Item item = items[idx];
+            Item item = displayItems[idx];
 
             // 이미 장착되어 있다면 장착 해제
             if(item.isEquipped)
@@ -142,38 +144,63 @@ namespace TerimalQuest.System
                 QuestManager.Instance.PlayQuest("장착");
             }
         }
+
+        // 아이템 사용 - 포션
+        public void UseItemByIdx(int idx)
+        {
+            if (displayItems.Count <= 0 || idx > displayItems.Count)
+            {
+                return;
+            }
+
+            Item item = displayItems[idx];
+
+            // 포션 사용
+            if (item != null && item is Potion)
+            {
+                item.Equip(false);
+            }
+        }
         
         // 인벤토리 보여주기
         public void DisplayInfo(bool isEquipMode, params ItemType[] filterTypes)
         {
             uiManager.DisplayItemInfoHeader(isEquipMode);
 
-            IEnumerable<Item> displayList;
+            displayItems.Clear();
 
             // filterType에 따라 보여줄 ItemList 갱신
             if (filterTypes == null || filterTypes.Length == 0)
-                displayList = items;
+                displayItems.AddRange(items);
             else
-                displayList = items.Where(item => filterTypes.Contains(item.type));
+                displayItems.AddRange(items.Where(item => filterTypes.Contains(item.type)));
 
-            foreach (var item in displayList)
+            foreach (var item in displayItems)
             {
-                string idxTxt = (isEquipMode) ? $"{items.IndexOf(item) + 1} : " : "";
+                string idxTxt = (isEquipMode) ? $"{displayItems.IndexOf(item) + 1} : " : "";
                 Console.Write($"- {idxTxt}");
                 item.DisplayInfo();
             }
         }
 
         // 인벤토리 보여주기 - 아이템 판매
-        public void DisplayInfoWithGold()
+        public void DisplayInfoWithGold(params ItemType[] filterTypes)
         {
             uiManager.DisplayItemProductHeader();
 
-            for (int i = 0; i < items.Count; i++)
+            displayItems.Clear();
+
+            // filterType에 따라 보여줄 ItemList 갱신
+            if (filterTypes == null || filterTypes.Length == 0)
+                displayItems.AddRange(items);
+            else
+                displayItems.AddRange(items.Where(item => filterTypes.Contains(item.type)));
+
+            for (int i = 0; i < displayItems.Count; i++)
             {
                 string idxTxt = $"{i + 1} : ";
                 Console.Write($"- {idxTxt}");
-                items[i].DisplayInfoProduct();
+                displayItems[i].DisplayInfoProduct();
             }
         }
 
