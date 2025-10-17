@@ -13,7 +13,7 @@ namespace TerimalQuest.System
         public float def { get; set; }
         public int enhancementLevel { get; set; }
 
-        public Armor(int id, string name, string desc, int price, float def, ItemType type, int lastId) : base(id, name, desc, price, type, lastId)
+        public Armor(int id, string name, string desc, int price, float def, ItemType type) : base(id, name, desc, price, type)
         {
             this.def = def;
             this.enhancementLevel = 0;
@@ -39,6 +39,7 @@ namespace TerimalQuest.System
             // 강화 레벨 증가 후 방어력 증가
             enhancementLevel++;
             def += enhanceValue;
+            QuestManager.Instance.PlayQuest("강화");
         }
 
         public override void DisplayInfo()
@@ -59,7 +60,7 @@ namespace TerimalQuest.System
         // 아이템 복제
         public override Item Clone()
         {
-            return new Armor(Id, name, desc, price, def, type);
+            return new Armor(ItemDatabase.GetLastId(Id), name, desc, price, def, type);
         }
     }
 }
