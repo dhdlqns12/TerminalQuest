@@ -125,7 +125,7 @@ namespace TerimalQuest.System
 
             if (config == null)
             {
-                config = new ItemDatabaseAIConfig { id = baseItemId, lastId = 0 };
+                config = new ItemDatabaseAIConfig { id = baseItemId, lastId = baseItemId };
                 aiConfigs.Add(config);
             }
 
