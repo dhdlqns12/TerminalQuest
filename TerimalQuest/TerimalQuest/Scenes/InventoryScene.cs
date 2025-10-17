@@ -35,7 +35,7 @@ namespace TerimalQuest.Scenes
 
         private void Process()
         {
-            string choice =  ConsoleHelper.GetUserChoice(["0", "1", "2"]);
+            string choice =  ConsoleHelper.GetUserChoice(["0", "1", "2", "3"]);
 
             switch(choice)
             {

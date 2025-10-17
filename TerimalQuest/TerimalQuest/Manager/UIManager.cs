@@ -955,9 +955,9 @@ namespace TerimalQuest.Manager
             Console.Clear();
             Player player = GameManager.Instance.player;
             QuestManager.Instance.curQuest = quest;
-            ColorText("---------------------------", ConsoleColor.DarkCyan);
+            ColorText("---------------------------------------------", ConsoleColor.DarkCyan);
             Console.WriteLine($"퀘스트 : {quest.name}");
-            ColorText("---------------------------", ConsoleColor.DarkCyan);
+            ColorText("---------------------------------------------", ConsoleColor.DarkCyan);
             Console.WriteLine();
             Console.WriteLine($"{quest.description}\n");
             if (player.questList.ContainsKey(quest.questNum))
