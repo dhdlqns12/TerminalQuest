@@ -144,6 +144,7 @@ namespace TerimalQuest.Manager
             loadedPlayer.gold = data.gold;
             loadedPlayer.stamina = data.stamina;
             loadedPlayer.curStage = data.curStage;
+            loadedPlayer.exp = data.exp;
 
             loadedPlayer.baseAtk = data.baseAtk;
             loadedPlayer.baseDef = data.baseDef;
