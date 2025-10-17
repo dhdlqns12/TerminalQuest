@@ -12,7 +12,7 @@ namespace TerimalQuest.System
 {
     public class EnhancementStone : Item
     {
-        public EnhancementStone(int id, string name, string desc, int price, ItemType type) : base(id, name, desc, price, type)
+        public EnhancementStone(int id, string name, string desc, int price, ItemType type, int lastId) : base(id, name, desc, price, type, lastId)
         {
             
         }

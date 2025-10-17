@@ -12,7 +12,7 @@ namespace TerimalQuest.System
         public float atk { get; set; }
         public int enhancementLevel { get; set; }
 
-        public Weapon(int id, string name, string desc, int price, float atk, ItemType type) : base(id, name, desc, price, type)
+        public Weapon(int id, string name, string desc, int price, float atk, ItemType type, int lastId) : base(id, name, desc, price, type, lastId)
         {
             this.atk = atk;
             this.enhancementLevel = 0;

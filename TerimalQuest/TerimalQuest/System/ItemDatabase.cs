@@ -18,6 +18,7 @@ namespace TerimalQuest.System
          */
 
         private static Dictionary<string, Item> itemDatabase = new Dictionary<string, Item>();
+        private static int lastId;
 
         static ItemDatabase()
         {
