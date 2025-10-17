@@ -75,6 +75,7 @@ namespace TerimalQuest.Core
         public Player() : base()                //기본 생성자
         {
             questList = new Dictionary<int, Quest>();
+            clearQuestNums = new List<int>();
             skillList = new List<Skill>();
             inventory = new Inventory(50);
             level = 1;
