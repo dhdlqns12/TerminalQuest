@@ -77,7 +77,6 @@ namespace TerimalQuest.Manager
             foreach (var item in enhanceableItems)
             {
                 string idxTxt = $"{enhanceableItems.IndexOf(item) + 1} : ";
-                Console.Write($"- {idxTxt}");
                 item.DisplayInfo(idxTxt);
             }
         }
