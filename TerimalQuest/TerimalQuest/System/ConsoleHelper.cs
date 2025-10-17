@@ -53,7 +53,7 @@ namespace TerimalQuest.System
         }
 
         #region 문자열 색상 변경
-        public static void PrintColored(string message, ConsoleColor color, bool newLine = true) // 색상이 적용된 글자
+        public static void PrintColor(string message, ConsoleColor color, bool newLine = true) // 색상이 적용된 글자
         {
             Console.ForegroundColor = color;
             if (newLine)
@@ -63,7 +63,7 @@ namespace TerimalQuest.System
             Console.ResetColor();
         }
 
-        public static void PrintColoredWithBackground(string message, ConsoleColor foreColor, ConsoleColor backColor, bool newLine = true) // 전경색 배경색
+        public static void PrintColorBackGround(string message, ConsoleColor foreColor, ConsoleColor backColor, bool newLine = true) // 전경색 배경색
         {
             Console.ForegroundColor = foreColor;
             Console.BackgroundColor = backColor;
@@ -74,10 +74,10 @@ namespace TerimalQuest.System
             Console.ResetColor();
         }
 
-        public static void PrintDivider(int length = 0, char dividerChar = '─', ConsoleColor color = ConsoleColor.Cyan)  // 구분선
+        public static void PrintDivide(int length = 0, char divideChar = '─', ConsoleColor color = ConsoleColor.Cyan)  // 구분선
         {
             if (length == 0) length = Console.WindowWidth;
-            PrintColored(new string(dividerChar, length), color);
+            PrintColor(new string(divideChar, length), color);
         }
         #endregion
     }

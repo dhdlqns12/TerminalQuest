@@ -53,7 +53,7 @@ namespace TerimalQuest.Manager
                 return;
             }
 
-            uiManager.DisplayStageClearStatus(player.curStage);
+            uiManager.StageClearStatus(player.curStage);
             // player.mp = 9999;
             // player.atk = 9999;
             isPlayerTurn = true;
@@ -162,7 +162,7 @@ namespace TerimalQuest.Manager
                 case "2": // Skill
                     currentState = BattleState.PlayerSelectingSkill;
                     uiManager.BattleEntrance(encounterMonsterList, player);
-                    uiManager.DisplaySelectingSkill(player.skillList);
+                    uiManager.SelectingSkill(player.skillList);
                     break;
 
                 case "0": // Escape
@@ -246,7 +246,7 @@ namespace TerimalQuest.Manager
                 uiManager.SelectWrongSelection();
                 Thread.Sleep(1000);
                 uiManager.BattleEntrance(encounterMonsterList, player);
-                uiManager.DisplaySelectingSkill(player.skillList);
+                uiManager.SelectingSkill(player.skillList);
             }
         }
 
@@ -344,7 +344,7 @@ namespace TerimalQuest.Manager
                     finalSkillDamage = (skill.damage * player.atk);
                 }
 
-                uiManager.DisplayFullRangeAttackSkillResult(encounterMonsterList, skill, finalSkillDamage);
+                uiManager.FullRangeAttackSkill(encounterMonsterList, skill, finalSkillDamage);
                 uiManager.DisplayPressAnyKeyToNext();
                 for (int i = 0; i < encounterMonsterList.Count; i++)
                 {
@@ -398,13 +398,13 @@ namespace TerimalQuest.Manager
                 uiManager.DisplayNotEnoughMagicCost();
                 Thread.Sleep(1000);
                 uiManager.BattleEntrance(encounterMonsterList, player);
-                uiManager.DisplaySelectingSkill(player.skillList);
+                uiManager.SelectingSkill(player.skillList);
                 return;
             }
             player.mp -= selectedSkill.cost;
             if (selectedSkill.skillType == SkillType.Support)
             {
-                uiManager.DisplayUseSupportSkill(player, selectedSkill);
+                uiManager.UseSupportSkill(player, selectedSkill);
                 player.hp += selectedSkill.damage;
                 uiManager.DisplayPressAnyKeyToNext();
                 currentState = BattleState.MonsterTurn;

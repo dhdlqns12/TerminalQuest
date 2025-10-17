@@ -133,7 +133,7 @@ namespace TerimalQuest.System
             Console.Write("]");
         }
 
-        public static void PlayMonsterAnimation(Monster monster, AnimationType type, int delayMs = 300)
+        public static void PlayMonsterAnimation(Monster monster, AnimationType type, int delay = 300)
         {
             var animation = MonsterAnimation.GetAnimation(monster.name, type);
             int startLine = Console.CursorTop;
@@ -150,7 +150,7 @@ namespace TerimalQuest.System
                     Console.WriteLine(line);
                 }
 
-                Thread.Sleep(delayMs);
+                Thread.Sleep(delay);
             }
 
             Console.SetCursorPosition(0, startLine + 15);
