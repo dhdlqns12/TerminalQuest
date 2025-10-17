@@ -9,6 +9,11 @@ namespace TerimalQuest.System
 {
     public static class ItemDatabase
     {
+        class ItemDatabaseAIConfig
+        {
+            public int lastId { get; set; }
+            public int id  { get; set; }
+        }
         /*
          * ItemDatabase: 아이템 데이터베이스 클래스
          * 
@@ -18,13 +23,18 @@ namespace TerimalQuest.System
          */
 
         private static Dictionary<string, Item> itemDatabase = new Dictionary<string, Item>();
-        private static int lastId;
+        private static List<ItemDatabaseAIConfig> aiConfigs = new List<ItemDatabaseAIConfig>();
 
         static ItemDatabase()
         {
             LoadItems();
+            LoadAIConfigs();
+            AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
         }
-
+        private static void OnProcessExit(object sender, EventArgs e)
+        {
+            SaveAIConfigs();
+        }
         // Item JSON 파일 로드
         private static void LoadItems()
         {
@@ -75,6 +85,53 @@ namespace TerimalQuest.System
             }
         }
 
+        private static void LoadAIConfigs()
+        {
+            try
+            {
+                string projectRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\");
+                string path = Path.Combine(projectRoot, "Resources", "AutoIncrementConfig.json");
+
+                // JSON 파일 읽기
+                string json = File.ReadAllText(path);
+                aiConfigs = JsonSerializer.Deserialize<List<ItemDatabaseAIConfig>>(json);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+        }
+
+        private static void SaveAIConfigs()
+        {
+            try
+            {
+                string projectRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\");
+                string path = Path.Combine(projectRoot, "Resources", "AutoIncrementConfig.json");
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                string json = JsonSerializer.Serialize(aiConfigs, options);
+                File.WriteAllText(path, json);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        public static int GetLastId(int baseItemId)
+        {
+            var config = aiConfigs.FirstOrDefault(c => c.id == baseItemId);
+
+            if (config == null)
+            {
+                config = new ItemDatabaseAIConfig { id = baseItemId, lastId = 0 };
+                aiConfigs.Add(config);
+            }
+
+            config.lastId++;
+            return config.lastId;
+        }
         // 아이템 반환 : itemDatabase는 원본 데이털를 가지고 있으므로 복제본을 반환한다.
         public static Weapon GetWeapon(string name) { if (itemDatabase.TryGetValue(name, out var item) && item is Weapon weapon) return (Weapon)weapon.Clone(); else return null; }
         public static Armor GetArmor(string name) { if (itemDatabase.TryGetValue(name, out var item) && item is Armor armor) return (Armor)armor.Clone(); else return null; }

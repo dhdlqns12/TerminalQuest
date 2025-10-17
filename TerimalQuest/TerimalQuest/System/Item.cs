@@ -35,7 +35,7 @@ namespace TerimalQuest.System
 
         public Item() { }
 
-        public Item(int id, string name, string desc, int price, ItemType type, int lastId)
+        public Item(int id, string name, string desc, int price, ItemType type)
         {
             Id = id;
             this.name = name;
