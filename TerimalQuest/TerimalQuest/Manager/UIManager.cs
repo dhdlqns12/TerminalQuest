@@ -68,6 +68,7 @@ namespace TerimalQuest.Manager
             PrintMenuOption(5, "상점");
             PrintMenuOption(6, "마을 활동");
             PrintMenuOption(7, "장비 강화");
+            PrintMenuOption(8, "게임 저장");
             PrintMenuOption(0, "게임 종료");
 
             Console.ForegroundColor = ConsoleColor.Yellow;
