@@ -37,6 +37,10 @@ namespace TerimalQuest.Manager
             QuestClassify(questLists);
         }
 
+        /// <summary>
+        /// 플레이어가 클리어한 퀘스트 제외
+        /// </summary>
+        /// <param name="quests"></param>
         public void InitializeQuests(List<Quest> quests)
         {
             List<int> clearNums = player.clearQuestNums;
@@ -51,7 +55,10 @@ namespace TerimalQuest.Manager
         }
 
 
-
+        /// <summary>
+        /// 메인,서브 퀘스트 분할
+        /// </summary>
+        /// <param name="quests"></param>
         public void QuestClassify(List<Quest> quests)
         {
             for (int i = 0; i < quests.Count; i++)
