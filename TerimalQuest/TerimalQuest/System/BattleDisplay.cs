@@ -9,7 +9,7 @@ namespace TerimalQuest.System
 {
     public static class BattleDisplay
     {
-        private const int MonsterSpacing = 25;
+        private const int MonsterSpacing = 30;
 
         public static void DisplayMonsters(List<Monster> monsters, AnimationType animationType = AnimationType.Idle)
         {
@@ -29,7 +29,7 @@ namespace TerimalQuest.System
             for (int i = 0; i < aliveMonsters.Count; i++)
             {
                 int xPos = i * MonsterSpacing;
-                Console.SetCursorPosition(xPos, startTop);
+                Console.SetCursorPosition(xPos+5, startTop);
 
                 int originalIndex = monsters.IndexOf(aliveMonsters[i]);
                 string nameWithLv = $"[{originalIndex + 1}] {aliveMonsters[i].name} Lv.{aliveMonsters[i].level}";
@@ -113,10 +113,10 @@ namespace TerimalQuest.System
         {
             int barLength = 15;
             float hpPercent = monster.hp / monster.maxHp;
-            int filledLength = (int)(barLength * hpPercent);
+            int filled = (int)(barLength * hpPercent);
 
-            if (filledLength < 0) filledLength = 0;
-            if (filledLength > barLength) filledLength = barLength;
+            if (filled < 0) filled = 0;
+            if (filled > barLength) filled = barLength;
 
             Console.Write("HP [");
 
@@ -127,9 +127,9 @@ namespace TerimalQuest.System
             else
                 Console.ForegroundColor = ConsoleColor.Red;
 
-            Console.Write(new string('█', filledLength));
+            Console.Write(new string('█', filled));
             Console.ResetColor();
-            Console.Write(new string('□', barLength - filledLength));
+            Console.Write(new string('▒', barLength - filled));
             Console.Write("]");
         }
 

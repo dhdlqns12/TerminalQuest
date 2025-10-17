@@ -8,9 +8,6 @@ namespace TerimalQuest.Core
         static void Main(string[] args)
         {
             SafeResize(200, 50);
-            Console.WriteLine($"현재 창 크기 {Console.WindowWidth} x {Console.WindowHeight}");
-            Console.WriteLine($"현재 버퍼 크기 {Console.BufferWidth} x {Console.BufferHeight}");
-            Console.ReadLine();
 
             UIManager.Instance.ShowTitle("스파르타 마을에 오신것을 환영합니다!");
             Console.OutputEncoding = global::System.Text.Encoding.UTF8;

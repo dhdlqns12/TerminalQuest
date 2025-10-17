@@ -427,11 +427,19 @@ namespace TerimalQuest.Manager
             Console.Clear();
             Console.SetCursorPosition(0, 0);
 
+            int screenWidth = Console.WindowWidth;
+
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("════════════════════════════════════════════════");
-            Console.WriteLine("                 B A T T L E  ");
-            Console.WriteLine("════════════════════════════════════════════════");
+            Console.WriteLine(new string('═', screenWidth));
+
+            string battleText = "  B A T T L E  ";
+            int padding = (screenWidth - battleText.Length) / 2;
+            string centeredBattle = new string(' ', padding) + battleText;
+            Console.WriteLine(centeredBattle);
+
+            Console.WriteLine(new string('═', screenWidth));
             Console.ResetColor();
+
             Console.WriteLine();
 
             BattleDisplay.DisplayMonsters(monsters, AnimationType.Idle);
@@ -456,9 +464,9 @@ namespace TerimalQuest.Manager
         {
             int barLength = 20;
             float hpPercent = player.hp / player.maxHp;
-            int filledLength = (int)(barLength * hpPercent);
+            int filled = (int)(barLength * hpPercent);
 
-            if (filledLength < 0) filledLength = 0;
+            if (filled < 0) filled = 0;
 
             if (hpPercent > 0.5f)
                 Console.ForegroundColor = ConsoleColor.Green;
@@ -467,23 +475,23 @@ namespace TerimalQuest.Manager
             else
                 Console.ForegroundColor = ConsoleColor.Red;
 
-            Console.Write(new string('█', filledLength));
+            Console.Write(new string('█', filled));
             Console.ResetColor();
-            Console.Write(new string('□', barLength - filledLength));
+            Console.Write(new string('▒', barLength - filled));
         }
 
         private void PlayerMpBar(Player player)
         {
             int barLength = 20;
             float mpPercent = player.mp / player.maxMp;
-            int filledLength = (int)(barLength * mpPercent);
+            int filled = (int)(barLength * mpPercent);
 
-            if (filledLength < 0) filledLength = 0;
+            if (filled < 0) filled = 0;
 
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.Write(new string('█', filledLength));
+            Console.Write(new string('█', filled));
             Console.ResetColor();
-            Console.Write(new string('□', barLength - filledLength));
+            Console.Write(new string('▒', barLength - filled));
         }
 
         public void AttackTarget(Character attacker, Character target, bool isEvade)
