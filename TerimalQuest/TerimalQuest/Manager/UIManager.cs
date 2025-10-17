@@ -580,17 +580,17 @@ namespace TerimalQuest.Manager
 
             int screenWidth = Console.WindowWidth;
 
-            ConsoleHelper.PrintColor(new string('═', screenWidth), ConsoleColor.Yellow);
+            ConsoleHelper.PrintColored(new string('═', screenWidth), ConsoleColor.Yellow);
             string battleText = "  B A T T L E  ";
             int padding = (screenWidth - battleText.Length) / 2;
-            ConsoleHelper.PrintColor(new string(' ', padding) + battleText, ConsoleColor.Yellow);
-            ConsoleHelper.PrintColor(new string('═', screenWidth), ConsoleColor.Yellow);
+            ConsoleHelper.PrintColored(new string(' ', padding) + battleText, ConsoleColor.Yellow);
+            ConsoleHelper.PrintColored(new string('═', screenWidth), ConsoleColor.Yellow);
 
             Console.WriteLine();
 
             BattleDisplay.DisplayMonsters(monsters, AnimationType.Idle);
 
-            ConsoleHelper.PrintColor("────────────────── [내 정보] ──────────────────", ConsoleColor.Cyan);
+            ConsoleHelper.PrintColored("────────────────── [내 정보] ──────────────────", ConsoleColor.Cyan);
             Console.WriteLine($"Lv.{player.level} {player.name} ({player.jobName})");
             Console.Write("HP [");
             PlayerHpBar(player);
@@ -599,7 +599,7 @@ namespace TerimalQuest.Manager
             PlayerMpBar(player);
             Console.WriteLine($"] {player.mp:F0}/{player.maxMp:F0}");
             Console.WriteLine($"공격력: {player.atk:F0}  방어력: {player.def:F0}");
-            ConsoleHelper.PrintColor("───────────────────────────────────────────────", ConsoleColor.Cyan);
+            ConsoleHelper.PrintColored("───────────────────────────────────────────────", ConsoleColor.Cyan);
         }
 
         private void PlayerHpBar(Player player)
@@ -642,7 +642,7 @@ namespace TerimalQuest.Manager
 
             if (attacker is Player)
             {
-                ConsoleHelper.PrintColor("\n 플레이어의 공격! \n", ConsoleColor.Yellow);
+                ConsoleHelper.PrintColored("\n 플레이어의 공격! \n", ConsoleColor.Yellow);
                 Thread.Sleep(500);
 
                 if (target is Monster monster)
@@ -653,14 +653,14 @@ namespace TerimalQuest.Manager
             }
             else if (attacker is Monster attackMonster)
             {
-                ConsoleHelper.PrintColor($"\n {attacker.name}의 공격! \n", ConsoleColor.Red);
+                ConsoleHelper.PrintColored($"\n {attacker.name}의 공격! \n", ConsoleColor.Red);
                 Thread.Sleep(500);
                 BattleDisplay.PlayMonsterAnimation(attackMonster, AnimationType.Attack, 200);
             }
 
             if (isEvade)
             {
-                ConsoleHelper.PrintColor($"\n {target.name}이(가) 회피했습니다! ", ConsoleColor.Cyan);
+                ConsoleHelper.PrintColored($"\n {target.name}이(가) 회피했습니다! ", ConsoleColor.Cyan);
             }
             else
             {
@@ -668,10 +668,10 @@ namespace TerimalQuest.Manager
 
                 if (isCritical)
                 {
-                    ConsoleHelper.PrintColor("\n 크리티컬 히트! ", ConsoleColor.Magenta);
+                    ConsoleHelper.PrintColored("\n 크리티컬 히트! ", ConsoleColor.Magenta);
                 }
 
-                ConsoleHelper.PrintColor($"\n 명중! [{finalDamage} 데미지]", ConsoleColor.Yellow);
+                ConsoleHelper.PrintColored($"\n 명중! [{finalDamage} 데미지]", ConsoleColor.Yellow);
 
                 string deadResult = target is Player ? "0" : "Dead";
                 float newHp = target.hp - finalDamage;
@@ -681,7 +681,7 @@ namespace TerimalQuest.Manager
                 if (newHp <= 0 && target is Monster deadMonster)
                 {
                     Thread.Sleep(800);
-                    ConsoleHelper.PrintColor($"\n {deadMonster.name}을(를) 처치했습니다! ", ConsoleColor.Green);
+                    ConsoleHelper.PrintColored($"\n {deadMonster.name}을(를) 처치했습니다! ", ConsoleColor.Green);
                     BattleDisplay.PlayMonsterAnimation(deadMonster, AnimationType.Death, 300);
                 }
             }
@@ -692,7 +692,7 @@ namespace TerimalQuest.Manager
         public void AttackTargetWithSkill(Character attacker, Character target, Skill skill)
         {
             Console.Clear();
-            ConsoleHelper.PrintColor($"\n {attacker.name}이(가) [{skill.name}]을(를) 사용했습니다! \n", ConsoleColor.Magenta);
+            ConsoleHelper.PrintColored($"\n {attacker.name}이(가) [{skill.name}]을(를) 사용했습니다! \n", ConsoleColor.Magenta);
             Console.WriteLine($" ※{skill.description}");
             Thread.Sleep(800);
 
@@ -708,14 +708,14 @@ namespace TerimalQuest.Manager
 
             float newHp = target.hp - damage;
 
-            ConsoleHelper.PrintColor($"\n {target.name}에게 {damage:F0} 데미지!", ConsoleColor.Yellow);
+            ConsoleHelper.PrintColored($"\n {target.name}에게 {damage:F0} 데미지!", ConsoleColor.Yellow);
             Console.WriteLine($"Lv.{target.level} {target.name}");
             Console.WriteLine($"HP {target.hp:F0} → {(newHp > 0 ? newHp.ToString("F0") : deadResult)}");
 
             if (newHp <= 0 && target is Monster deadMonster)
             {
                 Thread.Sleep(800);
-                ConsoleHelper.PrintColor($"\n {deadMonster.name}을(를) 처치했습니다! ", ConsoleColor.Green);
+                ConsoleHelper.PrintColored($"\n {deadMonster.name}을(를) 처치했습니다! ", ConsoleColor.Green);
                 BattleDisplay.PlayMonsterAnimation(deadMonster, AnimationType.Death, 300);
             }
 
@@ -725,11 +725,11 @@ namespace TerimalQuest.Manager
         public void FullRangeAttackSkill(List<Monster> monsterList, Skill skill, float finalSkillDamage)
         {
             Console.Clear();
-            ConsoleHelper.PrintColor($"\n {skill.name}! \n", ConsoleColor.Magenta);
+            ConsoleHelper.PrintColored($"\n {skill.name}! \n", ConsoleColor.Magenta);
             Console.WriteLine($"  ▶ {skill.description}");
             Thread.Sleep(800);
 
-            ConsoleHelper.PrintColor($"\n 모든 적에게 {finalSkillDamage:F0} 데미지! \n", ConsoleColor.Yellow);
+            ConsoleHelper.PrintColored($"\n 모든 적에게 {finalSkillDamage:F0} 데미지! \n", ConsoleColor.Yellow);
 
             List<Monster> aliveMonsters = monsterList.Where(m => m.hp > 0).ToList();
             if (aliveMonsters.Count > 0)
@@ -748,7 +748,7 @@ namespace TerimalQuest.Manager
 
                 if (newHp <= 0)
                 {
-                    ConsoleHelper.PrintColor($"   {monster.name} 처치!", ConsoleColor.Green);
+                    ConsoleHelper.PrintColored($"   {monster.name} 처치!", ConsoleColor.Green);
                 }
             }
 
@@ -758,7 +758,7 @@ namespace TerimalQuest.Manager
         public void UseSupportSkill(Player player, Skill skill)
         {
             Console.Clear();
-            ConsoleHelper.PrintColor($"\n {player.name}이(가) [{skill.name}]을(를) 사용했습니다! ", ConsoleColor.Green);
+            ConsoleHelper.PrintColored($"\n {player.name}이(가) [{skill.name}]을(를) 사용했습니다! ", ConsoleColor.Green);
             Console.WriteLine($"\n   {skill.description}");
             Console.WriteLine($"\n HP가 {skill.damage:F0}만큼 회복되었습니다!");
             Console.WriteLine($"HP {player.hp:F0} → {player.hp + skill.damage:F0}");
@@ -768,7 +768,7 @@ namespace TerimalQuest.Manager
         public void SelectTarget()
         {
             Console.WriteLine("\n");
-            ConsoleHelper.PrintColor("─────── [타겟 선택] ───────", ConsoleColor.Cyan);
+            ConsoleHelper.PrintColored("─────── [타겟 선택] ───────", ConsoleColor.Cyan);
             Console.WriteLine("공격할 대상의 번호를 입력하세요.");
             Console.WriteLine("0. 돌아가기");
             Console.Write(">> ");
@@ -777,7 +777,7 @@ namespace TerimalQuest.Manager
         public void DisplayBattleChoice()
         {
             Console.WriteLine("\n");
-            ConsoleHelper.PrintColor("─────── [행동 선택] ───────", ConsoleColor.Cyan);
+            ConsoleHelper.PrintColored("─────── [행동 선택] ───────", ConsoleColor.Cyan);
             Console.WriteLine("1. 공격");
             Console.WriteLine("2. 스킬");
             Console.WriteLine("0. 도망");
@@ -787,13 +787,13 @@ namespace TerimalQuest.Manager
         public void SelectingSkill(List<Skill> skillList)
         {
             Console.WriteLine("\n");
-            ConsoleHelper.PrintColor("─────── [스킬 선택] ───────", ConsoleColor.Cyan);
+            ConsoleHelper.PrintColored("─────── [스킬 선택] ───────", ConsoleColor.Cyan);
 
             for (int i = 0; i < skillList.Count; i++)
             {
                 Skill skill = skillList[i];
                 Console.Write($"{i + 1}. {skill.name}");
-                ConsoleHelper.PrintColor($" (MP: {skill.cost})", ConsoleColor.Blue);
+                ConsoleHelper.PrintColored($" (MP: {skill.cost})", ConsoleColor.Blue);
                 Console.WriteLine($"   ▶ {skill.description}");
             }
 
@@ -803,19 +803,19 @@ namespace TerimalQuest.Manager
 
         public void SelectWrongSelection()
         {
-            ConsoleHelper.PrintColor("\n 잘못된 입력입니다!", ConsoleColor.Red);
+            ConsoleHelper.PrintColored("\n 잘못된 입력입니다!", ConsoleColor.Red);
         }
 
         public void DisplayNotEnoughMagicCost()
         {
-            ConsoleHelper.PrintColor("\n MP가 부족합니다!", ConsoleColor.Red);
+            ConsoleHelper.PrintColored("\n MP가 부족합니다!", ConsoleColor.Red);
         }
 
         public void DisplayNotEnoughHp()
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Red;
-            ConsoleHelper.PrintColor("\n HP가 부족해서 전투가 불가능합니다!", ConsoleColor.Red);
+            ConsoleHelper.PrintColored("\n HP가 부족해서 전투가 불가능합니다!", ConsoleColor.Red);
             Console.ResetColor();
         }
 
@@ -831,9 +831,9 @@ namespace TerimalQuest.Manager
             int totalStage = 10;
 
             Console.Clear();
-            ConsoleHelper.PrintColor("\n══════════════════════════════════════════", ConsoleColor.Yellow);
-            ConsoleHelper.PrintColor("           스테이지 현황", ConsoleColor.Yellow);
-            ConsoleHelper.PrintColor("══════════════════════════════════════════", ConsoleColor.Yellow);
+            ConsoleHelper.PrintColored("\n══════════════════════════════════════════", ConsoleColor.Yellow);
+            ConsoleHelper.PrintColored("           스테이지 현황", ConsoleColor.Yellow);
+            ConsoleHelper.PrintColored("══════════════════════════════════════════", ConsoleColor.Yellow);
 
             for (int i = 0; i < totalStage; i++)
             {
@@ -858,10 +858,10 @@ namespace TerimalQuest.Manager
                 }
 
                 Console.Write($"Stage {currentStage,-2} ");
-                ConsoleHelper.PrintColor($"{statusText,-10}", statusColor);
+                ConsoleHelper.PrintColored($"{statusText,-10}", statusColor);
             }
 
-            ConsoleHelper.PrintColor("══════════════════════════════════════════\n", ConsoleColor.Yellow);
+            ConsoleHelper.PrintColored("══════════════════════════════════════════\n", ConsoleColor.Yellow);
             Console.WriteLine("적들이 나타났습니다!\n");
             Thread.Sleep(1500);
         }
