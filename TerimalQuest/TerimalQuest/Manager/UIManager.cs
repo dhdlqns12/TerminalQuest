@@ -62,7 +62,7 @@ namespace TerimalQuest.Manager
 
             PrintMenuOption(1, "상태 보기");
             PrintMenuOption(2, "인벤토리");
-            PrintMenuOption(3, "전투 시작 (현재 진행: 1층)");
+            PrintMenuOption(3, $"전투 시작 (현재 진행: {GameManager.Instance.player.curStage}층)");
             PrintMenuOption(4, "퀘스트");
             PrintMenuOption(5, "상점");
             PrintMenuOption(6, "마을 활동");
