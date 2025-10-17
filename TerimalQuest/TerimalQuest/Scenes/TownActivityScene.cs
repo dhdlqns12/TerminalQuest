@@ -76,6 +76,8 @@ namespace TerimalQuest.Scenes
                     {
                         if (gold > 0)
                             questManager.PlayQuest("마을순찰");
+                        if (ranNum > 40 && ranNum <= 70)
+                            questManager.PlayQuest("선물");
                         Console.WriteLine($"{message} {gold}골드 흭득");
                         player.gold += gold;
                         break;
