@@ -84,28 +84,7 @@ namespace TerimalQuest.Manager
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write($"{number,2}. ");
             Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine(PadDisplay(text, 28) + "│");
-        }
-
-        static int GetDisplayWidth(string text)
-        {
-            int width = 0;
-            foreach (char c in text)
-            {
-                // 한글, 한자, 일부 특수문자 등은 2칸
-                if (c >= 0xAC00 && c <= 0xD7A3) width += 2;
-                else if (c >= 0x1100 && c <= 0x11FF) width += 2;
-                else if (c >= 0x3130 && c <= 0x318F) width += 2;
-                else width += 1;
-            }
-            return width;
-        }
-
-        static string PadDisplay(string text, int totalWidth)
-        {
-            int width = GetDisplayWidth(text);
-            int padding = Math.Max(0, totalWidth - width);
-            return text + new string(' ', padding);
+            Console.WriteLine(ConsoleHelper.PadRightForConsole(text, 28) + "│");
         }
 
         void TypeWrite(string text, int delay = 20)
