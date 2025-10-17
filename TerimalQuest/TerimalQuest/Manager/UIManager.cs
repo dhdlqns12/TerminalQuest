@@ -42,7 +42,7 @@ namespace TerimalQuest.Manager
             // 헤더 꾸미기
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("╔══════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║          ⚔ 스파르타 던전에 오신 걸 환영합니다 ⚔          ║");
+            Console.WriteLine("║          ⚔ 터미널 퀘스트에 오신 걸 환영합니다 ⚔          ║");
             Console.WriteLine("╚══════════════════════════════════════════════════════════╝");
             Console.ResetColor();
 
@@ -111,7 +111,7 @@ namespace TerimalQuest.Manager
             Console.Write($"상태 보기\r\n캐릭터의 정보가 표시됩니다.\r\n\r\nLv. {p.level}      \r\n{p.name} ( {p.jobName} )\r\n공격력 : {p.atk}\r\n방어력 : {p.def}\r\n체 력 : {p.hp}\r\nGold : {p.gold} G\r\n\r\n0. 나가기\r\n\r\n원하시는 행동을 입력해주세요.\r\n>> ");
         }
 
-        public void SetNameScripts()
+        public void TerminalQuestScripts()
         {
             Console.OutputEncoding = global::System.Text.Encoding.UTF8;
             Console.Clear();
@@ -144,7 +144,7 @@ namespace TerimalQuest.Manager
                         string displayText = terminal[i].Substring(startPos, lineLength);
 
                         Console.ForegroundColor = ConsoleColor.Magenta;
-                        Console.SetCursorPosition(startPos, i );
+                        Console.SetCursorPosition(startPos, i);
                         Console.Write(displayText);
                     }
                 }
@@ -179,6 +179,10 @@ namespace TerimalQuest.Manager
             Console.ResetColor();
             Console.CursorVisible = true;
             Console.SetCursorPosition(0, 7);
+        }
+
+        public void SetNameScripts()
+        {
             Console.Write("원하시는 이름을 설정해주세요. \n>>");
         }
 

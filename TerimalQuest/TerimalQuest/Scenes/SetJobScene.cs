@@ -15,7 +15,7 @@ namespace TerimalQuest.Scenes
         private JobType selectedJob;
         public void Enter()
         {
-            UIManager.Instance.ShowTitle("스파르타 마을에 오신 여러분들을 환영합니다.");
+            UIManager.Instance.TerminalQuestScripts();
         }
 
         public void Update()
