@@ -315,7 +315,7 @@ namespace TerimalQuest.Manager
         }
 
         // 메세지 : 인벤토리 공간 부족
-        public string MessageNotEnoughInventorySpace() => ("소지 할 수 있는 인벤토리 공간이 없습니다!");
+        public void MessageNotEnoughInventorySpace() { Console.WriteLine("소지 할 수 있는 인벤토리 공간이 없습니다!"); }
 
         #endregion
 
@@ -367,16 +367,16 @@ namespace TerimalQuest.Manager
         }
 
         // 메세지 : 상품 품절
-        public string MessageSoldOut() => "이미 품절된 아이템입니다.";
+        public void MessageSoldOut() { Console.WriteLine("이미 품절된 아이템입니다."); }
 
         // 메세지 : 돈 부족
-        public string MessageNotEnoughGold() => "골드가 충분하지 않습니다.";
+        public void MessageNotEnoughGold() { Console.WriteLine("골드가 충분하지 않습니다."); }
 
         // 메세지 : 아이템 구매
-        public string MessagePurchaseItem(Item item) =>$"{item.name} 아이템을 구매했습니다.";
+        public void MessagePurchaseItem(Item item) { Console.WriteLine($"{item.name} 아이템을 구매했습니다."); }
 
         // 메세지 : 아이템 판매
-        public string MessageSaleItem(Item item) => $"{item.name} 아이템을 판매했습니다.";
+        public void MessageSaleItem(Item item) { Console.WriteLine($"{item.name} 아이템을 판매했습니다."); }
 
         #endregion
 
@@ -433,10 +433,11 @@ namespace TerimalQuest.Manager
         }
 
         // 메세지 : 최대 강화 레벨일 시 출력
-        public string MessageNoMoreEnhancement() => ("더이상 강화를 진행할 수 있습니다.");
+        public void MessageNoMoreEnhancement() { Console.WriteLine("더이상 강화를 진행할 수 있습니다."); }
 
         // 메세지 : 강화석 부족
-        public string MessageNotEnoughEnhancementStone() => ("강화석 재료가 부족합니다.");
+        public void MessageNotEnoughEnhancementStone() { Console.WriteLine("강화석 재료가 부족합니다."); }
+
 
         #endregion
 
