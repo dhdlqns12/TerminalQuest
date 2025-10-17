@@ -357,7 +357,7 @@ namespace TerimalQuest.Manager
             Console.WriteLine();
             inventory.DisplayInfo(false);
             Console.WriteLine();
-            DisplayOption(["1. 장착 관리", "2. 아이템 정렬", "0. 나가기"]);
+            DisplayOption(["1. 장착 관리", "2. 아이템 사용", "3. 아이템 정렬", "0. 나가기"]);
         }
 
         // 플레이어 인벤토리 장착 관리 창 : 플레이어의 아이템을 장착/해제 할 수 있다.
@@ -367,9 +367,21 @@ namespace TerimalQuest.Manager
             Console.WriteLine("인벤토리 - 장착 관리");
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
             Console.WriteLine();
-            inventory.DisplayInfo(true);
+            inventory.DisplayInfo(true, ItemType.Weapon, ItemType.Armor);
             Console.WriteLine();
             DisplayOption(["(번호). 해당 장비 장착", "0. 나가기"]);
+        }
+
+        // 플레이어 인벤토리 사용 창 : 포션 등 아이템을 사용할 수 있다.
+        public void InventoryUseScripts(Inventory inventory)
+        {
+            Console.Clear();
+            Console.WriteLine("인벤토리 - 아이템 사용");
+            Console.WriteLine("보유 중인 아이템을 사용 할 수 있습니다.");
+            Console.WriteLine();
+            inventory.DisplayInfo(true, ItemType.Potion);
+            Console.WriteLine();
+            DisplayOption(["(번호). 해당 아이템 사용", "0. 나가기"]);
         }
 
         // 플레이어 인벤토리 정렬 창 : 인벤토리의 아이템들을 옵션에 따라 정렬할 수 있다.
