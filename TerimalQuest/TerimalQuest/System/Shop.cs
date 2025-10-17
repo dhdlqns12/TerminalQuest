@@ -134,7 +134,7 @@ namespace TerimalQuest.System
             item.count -= 1;
 
             // 수량이 0이면 플레이어 인벤토리에서 삭제
-            if(item.isPurchase == false)
+            if(item.count <= 0)
             {
                 inventory.Items.RemoveAt(idx);
             }

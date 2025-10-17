@@ -8,7 +8,7 @@ using TerimalQuest.System;
 
 namespace TerimalQuest.Scenes
 {
-    public class InventoryEquipScene : IScene
+    public class InventoryItemUseScene : IScene
     {
         public event Action<IScene> OnSceneChangeRequested;
 
@@ -23,7 +23,7 @@ namespace TerimalQuest.Scenes
             inventory = GameManager.Instance.player.inventory;
 
             uiManager = UIManager.Instance;
-            uiManager.InventoryEquipScripts(inventory);
+            uiManager.InventoryUseScripts(inventory);
         }
 
         public void Update()
@@ -37,8 +37,8 @@ namespace TerimalQuest.Scenes
         }
 
         private void Process()
-        { 
-            // 선택 가능한 장비 배열 만들기
+        {
+            // 선택 가능한 포션 배열 만들기
             int vaildCount = inventory.displayItems.Count;
             string[] vaildItemOption = Enumerable.Range(0, vaildCount + 1).Select(i => i.ToString()).ToArray();   // LINQ 문법
             var choice = ConsoleHelper.GetUserChoice(vaildItemOption);
@@ -46,12 +46,12 @@ namespace TerimalQuest.Scenes
             // 나가기 설정
             if (choice == "0") { OnSceneChangeRequested?.Invoke(new InventoryScene()); return; }
 
-            // 인벤토리에서 idx로 검색하여 해당 아이템 장착
+            // 인벤토리에서 idx로 검색하여 해당 아이템 사용
             equipIdx = int.Parse(choice.ToString());
-            inventory.EquipItemByIdx(equipIdx-1);
+            inventory.UseItemByIdx(equipIdx - 1);
 
             // 업데이트 하여 갱신
-            OnSceneChangeRequested?.Invoke(new InventoryEquipScene());
+            OnSceneChangeRequested?.Invoke(new InventoryItemUseScene());
         }
     }
 }

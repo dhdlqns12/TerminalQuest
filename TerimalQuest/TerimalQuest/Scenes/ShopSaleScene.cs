@@ -37,7 +37,7 @@ namespace TerimalQuest.Scenes
         private void Process()
         {
             // 인벤토리 인덱스 정보 가져오기
-            int vaildCount = player.inventory.Items.Count;
+            int vaildCount = player.inventory.displayItems.Count;
             string[] vaildItemOption = Enumerable.Range(0, vaildCount + 1).Select(i => i.ToString()).ToArray();   // LINQ 문법
             var choice = ConsoleHelper.GetUserChoice(vaildItemOption);
 
