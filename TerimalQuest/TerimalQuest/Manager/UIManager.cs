@@ -36,13 +36,20 @@ namespace TerimalQuest.Manager
 
         public void ShowStartSceneScripts()
         {
+            Player p = GameManager.Instance.player;
             Console.Clear();
 
             // 헤더 꾸미기
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("╔══════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║         ⚔ 스파르타 던전에 오신 걸 환영합니다 ⚔         ║");
+            Console.WriteLine("║          ⚔ 스파르타 던전에 오신 걸 환영합니다 ⚔          ║");
             Console.WriteLine("╚══════════════════════════════════════════════════════════╝");
+            Console.ResetColor();
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("─────────────────────────────────────────");
+            Console.WriteLine($"  이름: {p.name}   HP: {p.hp}/{p.maxHp}   GOLD: {p.gold}");
+            Console.WriteLine("─────────────────────────────────────────");
             Console.ResetColor();
 
             Console.WriteLine();
@@ -108,6 +115,14 @@ namespace TerimalQuest.Manager
                 Console.Write(c);
                 Thread.Sleep(delay);
             }
+        }
+
+        public void ShowInvalidInput()
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            TypeWrite("\n잘못된 입력입니다! 다시 선택해주세요.\n", 25);
+            Console.ResetColor();
+            Thread.Sleep(1000);
         }
 
 
