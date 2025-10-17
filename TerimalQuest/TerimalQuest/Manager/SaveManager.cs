@@ -16,6 +16,7 @@ namespace TerimalQuest.Manager
         public string name { get; set; }
         public int level { get; set; }
         public float hp { get; set; }
+        public float mp { get; set; }
         public float atk { get; set; }
         public float def { get; set; }
         public JobType jobType { get; set; }
@@ -55,6 +56,7 @@ namespace TerimalQuest.Manager
             name = player.name;
             level = player.level;
             hp = player.hp;
+            mp = player.mp;
             atk = player.atk;
             def = player.def;
             jobType = player.job.jobType;
@@ -141,6 +143,7 @@ namespace TerimalQuest.Manager
 
             loadedPlayer.level = data.level;
             loadedPlayer.hp = data.hp;
+            loadedPlayer.mp = data.mp;
             loadedPlayer.gold = data.gold;
             loadedPlayer.stamina = data.stamina;
             loadedPlayer.curStage = data.curStage;
