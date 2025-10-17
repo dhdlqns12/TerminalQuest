@@ -115,14 +115,14 @@ namespace TerimalQuest.Manager
             // 장비 레벨 체크
             if (enhancementLevel >= maxEnhancementLevel)
             {
-                Console.WriteLine("더이상 강화를 진행할 수 있습니다.");
+                uiManager.MessageNoMoreEnhancement();
                 return false;
             }
 
             // 강화석 재료 체크
             if (!HasEnoughEnhancementStones(enhancementLevel))
             {
-                Console.WriteLine("강화석 재료가 부족합니다.");
+                uiManager.MessageNotEnoughEnhancementStone();
                 return false;
             }
 

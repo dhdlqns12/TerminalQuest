@@ -13,12 +13,14 @@ namespace TerimalQuest.Scenes
         public event Action<IScene> OnSceneChangeRequested;
 
         private Inventory inventory;
+        private UIManager uiManager;
 
         public void Enter()
         {
             inventory = GameManager.Instance.player.inventory;
 
-            UIManager.Instance.InventorySortingScripts(inventory);
+            uiManager = UIManager.Instance;
+            uiManager.InventorySortingScripts(inventory);
         }
 
         public void Update()

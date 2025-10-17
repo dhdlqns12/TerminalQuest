@@ -13,6 +13,7 @@ namespace TerimalQuest.Scenes
         public event Action<IScene> OnSceneChangeRequested;
 
         Inventory inventory;
+        private UIManager uiManager;
 
         private int equipIdx;
 
@@ -21,7 +22,8 @@ namespace TerimalQuest.Scenes
             equipIdx = 0;
             inventory = GameManager.Instance.player.inventory;
 
-            UIManager.Instance.InventoryEquipScripts(inventory);
+            uiManager = UIManager.Instance;
+            uiManager.InventoryEquipScripts(inventory);
         }
 
         public void Update()

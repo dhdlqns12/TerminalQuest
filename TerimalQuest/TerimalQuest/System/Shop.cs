@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using TerimalQuest.Core;
@@ -20,6 +21,8 @@ namespace TerimalQuest.System
          * 
          */
 
+        private Player player;
+        private UIManager uiManager;
         private List<Item> productList = new List<Item>();
         private float saleRate = 0.85f;     // 판매 가격 환율
 
@@ -30,6 +33,10 @@ namespace TerimalQuest.System
 
         private void Init()
         {
+            // 외부 참조 클래스 초기화
+            player = GameManager.Instance.player;
+            uiManager = UIManager.Instance;
+
             // 상품 리스트 초기화
             productList.Clear();
 
@@ -62,15 +69,14 @@ namespace TerimalQuest.System
             // 이미 품절된 상품이라면 품절된 아이템입니다 출력
             if (product.isPurchase)
             {
-                Console.WriteLine("이미 품절된 아이템입니다.");
+                uiManager.MessageSoldOut();
                 return false;
             }
 
             // 플레이어의 골드가 충분한지 체크
-            Player player = GameManager.Instance.player;
             if (player.gold < product.price)
             {
-                Console.WriteLine("골드가 충분하지 않습니다.");
+                uiManager.MessageNotEnoughGold();
                 return false;
             }
 
@@ -87,20 +93,16 @@ namespace TerimalQuest.System
         // 상품 구매
         public void PurchaseItem(Item item)
         {
-            Player player = GameManager.Instance.player;
-
             // Player 골드 차감 및 인벤토리 추가
             player.gold -= item.price;
             player.inventory.Add(item);
 
-            Console.WriteLine($"{item.name} 아이템을 구매했습니다.");
+            uiManager.MessagePurchaseItem(item);
         }
 
         // 상품 판매 시도 - 인덱스 검색
         public bool TrySaleItem(int idx)
         {
-            Player player = GameManager.Instance.player;
-
             // 선택한 번호가 인벤토리 내 있는지 체크
             if (player.inventory.Items.Count <= 0 || idx >= player.inventory.Items.Count) return false;
 
@@ -112,7 +114,6 @@ namespace TerimalQuest.System
         // 상품 구매
         public void SailItem(int idx)
         {
-            Player player = GameManager.Instance.player;
             Inventory inventory = player.inventory;
             Item item = inventory.Items[idx];
 
@@ -126,7 +127,7 @@ namespace TerimalQuest.System
             player.gold += (int)(item.price * saleRate);
 
             // 판매 및 골드 흭득 메세지 출력
-            Console.WriteLine($"{item.name} 아이템을 판매하였습니다.");
+            uiManager.MessageSaleItem(item);
 
             // 수량 감소
             item.count -= 1;
@@ -141,7 +142,7 @@ namespace TerimalQuest.System
         // 상품 목록 보여주기
         public void DisplayInfo(bool isPurchase)
         {
-            UIManager.Instance.DisplayItemProductHeader(isPurchase);
+            uiManager.DisplayItemProductHeader(isPurchase);
 
             for (int i = 0; i < productList.Count; i++)
             {
