@@ -26,6 +26,7 @@ namespace TerimalQuest.System
         public string desc { get; set; }    // 아이템 설명
         public int price { get; set; }      // 아이템 가격
         public int count { get; set; }      // 아이템 수량
+        public int lastId { get; set; }     // 마지막 아이템 Id
 
         public bool isEquipped { get; set; }    // 아이템 착용 여부
         public bool isPurchase { get; set; }    // 아이템 구매 여부
@@ -34,7 +35,7 @@ namespace TerimalQuest.System
 
         public Item() { }
 
-        public Item(int id, string name, string desc, int price, ItemType type)
+        public Item(int id, string name, string desc, int price, ItemType type, int lastId)
         {
             Id = id;
             this.name = name;
@@ -47,6 +48,7 @@ namespace TerimalQuest.System
 
             // 생성 시 개수 1개로 설정
             this.count = 1;
+            this.lastId = lastId;
         }
 
         public virtual void Equip(bool isEquip)

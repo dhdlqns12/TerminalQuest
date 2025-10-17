@@ -55,14 +55,12 @@ namespace TerimalQuest.Scenes
                         break;
                     default:
                         Console.WriteLine("데이터가 존재하지 않습니다.");
-                        Console.ReadKey();
                         break;
                 }
             }
             else
             {
                 Console.WriteLine("잘못된 입력입니다.");
-                Console.ReadKey();
             }
         }
 
@@ -101,14 +99,12 @@ namespace TerimalQuest.Scenes
                             break;
                         default:
                             Console.WriteLine("잘못된 입력입니다.");
-                            Console.ReadKey();
                             continue;
                     }
                 }
                 else
                 {
                     Console.WriteLine("잘못된 입력입니다.");
-                    Console.ReadKey();
                     continue;
                 }
                 break;
