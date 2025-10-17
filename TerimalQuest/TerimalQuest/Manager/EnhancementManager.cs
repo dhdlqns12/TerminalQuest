@@ -10,13 +10,6 @@ using TerimalQuest.System;
 
 namespace TerimalQuest.Manager
 {
-    public enum EnhanceState
-    {
-        Before,         // 강화 전
-        InProgress,     // 강화 중
-        After           // 강화 후
-    }
-
     public class EnhancementManager
     {
         /*
@@ -28,12 +21,9 @@ namespace TerimalQuest.Manager
         */
         private Player player;
         private Inventory inventory;
-
         private UIManager uiManager;
 
         public List<Item> enhanceableItems { get; set; }
-
-        public EnhanceState currentState { get; private set; }
 
         // 강화는 10강까지 있으며 강화에 따라 소진 강화석 개수와 확률이 달라짐
         private int maxEnhancementLevel;
@@ -42,20 +32,18 @@ namespace TerimalQuest.Manager
         private float[] enhancementRatePerLevel = { 1f, 1f, 2f, 2f, 3f, 3f, 4f, 4f, 5f, 7f }; // 0~10강 증가량
 
         // 강화 시 사용하는 변수
-        private Random random;
-        private int enhancementLevel;
-        private EnhancementStone enhancementStone { get; set; }
-        private int enhancementStoneId;
-        private bool enhanceSuccess;
-        Item enhanceItem;
+        private Random random;                  // 강화 확률에 사용할 랜덤 객체
+        private Item enhanceItem;               // 강화 할 대상 아이템
+        private bool enhanceSuccess;            // 강화 성공 여부
+        private int enhancementLevel;           // 강화 레벨
+        private int enhancementStoneId;         // 강화석 Id
+        private EnhancementStone enhancementStone { get; set; } // 강화석
 
         public EnhancementManager() 
         {
             player = GameManager.Instance.player;
             inventory = player.inventory;
-
             uiManager = UIManager.Instance;
-
             enhanceableItems = new List<Item>();
 
             // 변수 초기화
@@ -81,7 +69,7 @@ namespace TerimalQuest.Manager
             enhanceableItems.AddRange(items.Where(item => filterTypes.Contains(item.type)));
         }
 
-        // 아이템 리스트 보여주기
+        // 강화 가능한 아이템 리스트 보여주기 : 장비 아이템
         public void DisplayEnhancealbeItemList()
         {
             uiManager.DisplayItemInfoHeader(true);

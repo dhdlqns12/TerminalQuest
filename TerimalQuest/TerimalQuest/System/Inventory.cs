@@ -38,6 +38,13 @@ namespace TerimalQuest.System
         // 아이템 추가 
         public void Add(Item item)
         {
+            // 최대 소지 개수를 넘어가면 취소
+            if (items.Count >= maxItemCount)
+            {
+                Console.WriteLine("소지 할 수 있는 인벤토리 공간이 없습니다!");
+                return;
+            }
+
             AddByItemType(item);
         }
 

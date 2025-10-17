@@ -28,12 +28,6 @@ namespace TerimalQuest.System
             this.potionType = potionType;
         }
 
-        public void AddPotion()
-        {
-            // 같은 종류의 포션 들어오면 겹치기
-            count++;
-        }
-
         public override void Equip(bool isEquip)
         {
             Player player = GameManager.Instance.player;

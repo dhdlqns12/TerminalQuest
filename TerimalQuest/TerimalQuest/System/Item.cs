@@ -45,7 +45,7 @@ namespace TerimalQuest.System
             this.isEquipped = false;
             this.isPurchase = false;
 
-            // 생성자 내 개수 1개로 설정
+            // 생성 시 개수 1개로 설정
             this.count = 1;
         }
 
@@ -82,6 +82,7 @@ namespace TerimalQuest.System
             // 아이템 정보 표시 : 상점
         }
 
+        // 강화 레벨 가져오기
         public virtual int GetLevel() => 0;
 
         // 아이템 복제
