@@ -39,5 +39,21 @@ namespace TerimalQuest.System
             return list.OrderByDescending(item => item is Armor)
                         .ThenByDescending(Item => (Item as Armor)?.def ?? 0).ToList();
         }
+
+        // 아이템 정렬 - 타입 별
+        public static List<Item> SortByItemType(List<Item> list)
+        {
+            Dictionary<ItemType, int> typeOrder = new Dictionary<ItemType, int>
+    {
+        { ItemType.Weapon, 0 },
+        { ItemType.Armor, 1 },
+        { ItemType.Potion, 2 },
+        { ItemType.EnhancementStone, 3 }
+    };
+
+            return list
+                .OrderBy(item => typeOrder.ContainsKey(item.type) ? typeOrder[item.type] : int.MaxValue)
+                .ToList();
+        }
     }
 }

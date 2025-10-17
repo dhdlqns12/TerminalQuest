@@ -224,6 +224,9 @@ namespace TerimalQuest.System
                 case 4:     // 방어력 정렬
                     items = ItemSorter.SortByDef(items);
                     break;
+                case 5:     // 타입 정렬
+                    items = ItemSorter.SortByItemType(items);
+                    break;
                 default:
                     break;
             }

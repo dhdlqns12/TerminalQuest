@@ -20,6 +20,9 @@ namespace TerimalQuest.Scenes
         {
             inventory = GameManager.Instance.player.inventory;
 
+            // 처음 인벤토리 들어오면 타입별 정렬 기본으로 한다.
+            inventory.SortItemByOption(5);
+
             UIManager.Instance.InventoryScripts(inventory);
         }
 

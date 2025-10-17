@@ -287,13 +287,14 @@ namespace TerimalQuest.Manager
         // 인벤토리 아이템 정보 표시
         public void DisplayItemInfo(Item item, string idxTxt, bool isEquipMode = false)
         {
-            string itemName = item.name;
+            string itemName = $"{idxTxt}{item.name}";
 
             if (item is Weapon || item is Armor)
             {
-                itemName = GetEquipItemName(item);
+                itemName = $"{idxTxt}{GetEquipItemName(item)}";
             }
 
+            string name = ConsoleHelper.PadRightForConsole(itemName, offsetName);
             string effect = ConsoleHelper.PadRightForConsole(item.GetEffectText(), offsetEffect);
             string desc = ConsoleHelper.PadRightForConsole(item.desc, offsetDesc);
             string count = ConsoleHelper.PadRightForConsole(item.GetCountText(), offsetCount);
@@ -301,11 +302,11 @@ namespace TerimalQuest.Manager
             // 번호 모드
             string numberMode = (isEquipMode) ? ConsoleHelper.PadRightForConsole(" ", 6) : $"  ";
 
-            string line = $"{idxTxt}{itemName} | {effect} | {desc} | {count}";
+            string line = $"{name} | {effect} | {desc} | {count}";
             int totalWidth = ConsoleHelper.GetDisplayWidth(line) + 4;
 
             // 테두리 색상
-            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.ForegroundColor = GetColorByItemType(item.type);
             Console.WriteLine("╔" + new string('═', totalWidth - 2) + "╗");
             Console.ResetColor();
 
@@ -317,7 +318,7 @@ namespace TerimalQuest.Manager
             Console.WriteLine(" ║");
 
             // 하단 테두리
-            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.ForegroundColor = GetColorByItemType(item.type);
             Console.WriteLine("╚" + new string('═', totalWidth - 2) + "╝");
             Console.ResetColor();
         }
@@ -344,16 +345,17 @@ namespace TerimalQuest.Manager
             string itemPurchase = (item.isPurchase) ? "구매완료" : $"{item.price}";
             string isGoldIcon = (item.isPurchase) ? "" : "G";
 
-            string name = ConsoleHelper.PadRightForConsole(item.name, offsetName);
+            string itemName = $"{idxTxt}{item.name}";
+            string name = ConsoleHelper.PadRightForConsole(itemName, offsetName);
             string effect = ConsoleHelper.PadRightForConsole(item.GetEffectText(), offsetEffect);
             string desc = ConsoleHelper.PadRightForConsole(item.desc, offsetDesc);
             string count = ConsoleHelper.PadRightForConsole(item.GetCountText(), offsetCount);
 
-            string line = $"{idxTxt}{name} | {effect} | {desc} | {count} | {itemPurchase} {isGoldIcon}";
+            string line = $"{name} | {effect} | {desc} | {count} | {itemPurchase} {isGoldIcon}";
             int totalWidth = ConsoleHelper.GetDisplayWidth(line) + 4;
 
             // 테두리 색상
-            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.ForegroundColor = GetColorByItemType(item.type);
             Console.WriteLine("╔" + new string('═', totalWidth - 2) + "╗");
             Console.ResetColor();
 
@@ -365,9 +367,21 @@ namespace TerimalQuest.Manager
             Console.WriteLine(" ║");
 
             // 하단 테두리
-            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.ForegroundColor = GetColorByItemType(item.type);
             Console.WriteLine("╚" + new string('═', totalWidth - 2) + "╝");
             Console.ResetColor();
+        }
+
+        private static ConsoleColor GetColorByItemType(ItemType type)
+        {
+            return type switch
+            {
+                ItemType.Weapon => ConsoleColor.Cyan,
+                ItemType.Armor => ConsoleColor.Green,
+                ItemType.Potion => ConsoleColor.Red,
+                ItemType.EnhancementStone => ConsoleColor.Yellow,
+                _ => ConsoleColor.Gray
+            };
         }
 
         private string GetEquipItemName(Item item)
