@@ -1141,68 +1141,106 @@ namespace TerimalQuest.Manager
         public void DisplayShowEnding()
         {
             RecodeManager recode = RecodeManager.Instance;
-
             Console.Clear();
+
+            int screenWidth = Console.WindowWidth;
+
+            Action<string> writeCentered = (text) =>
+            {
+                if (string.IsNullOrEmpty(text))
+                {
+                    Console.WriteLine();
+                    return;
+                }
+                int leftPadding = (screenWidth - text.Length) / 2;
+                Console.CursorLeft = Math.Max(0, leftPadding);
+                Console.WriteLine(text);
+            };
+
+            Action<string> writeSectionHeader = (text) =>
+            {
+                string headerText = $" {text} ";
+                int remainingWidth = screenWidth - headerText.Length;
+                int leftPadding = remainingWidth / 2;
+                int rightPadding = remainingWidth - leftPadding;
+                string header = new string('━', leftPadding) + headerText + new string('━', rightPadding);
+                Console.WriteLine(header);
+            };
+
+            string border = new string('*', screenWidth);
+            string title = "G A M E   C L E A R";
+            string emptyBorderLine = "*" + new string(' ', screenWidth - 2) + "*";
+            int titlePadding = (screenWidth - 2 - title.Length) / 2;
+            string titleLine = "*" + new string(' ', titlePadding) + title + new string(' ', screenWidth - 2 - title.Length - titlePadding) + "*";
+
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("**************************************************");
-            Console.WriteLine("*                                                *");
-            Console.WriteLine("*             G A M E   C L E A R                *");
-            Console.WriteLine("*                                                *");
-            Console.WriteLine("**************************************************");
+            Console.WriteLine(border);
+            Console.WriteLine(emptyBorderLine);
+            Console.WriteLine(titleLine);
+            Console.WriteLine(emptyBorderLine);
+            Console.WriteLine(border);
             Console.ResetColor();
             Console.WriteLine();
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($" >>Lv.{recode.clearPlayer.level} {recode.clearPlayer.name} ({recode.clearPlayer.jobName}) <<");
+            writeCentered($" >> Lv.{recode.clearPlayer.level} {recode.clearPlayer.name} ({recode.clearPlayer.jobName}) << ");
             Console.ResetColor();
             Console.WriteLine();
-
-            // 4. 종합 기록 출력
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("━━━━━━━━━━━━━━ 최종 기록 ━━━━━━━━━━━━━━");
-            Console.ResetColor();
-            Console.WriteLine($"  가한 총 데미지  : {recode.totalDamage:N0}");
-            Console.WriteLine($"  받은 총 데미지  : {recode.totalDamageTaken:N0}");
             Console.WriteLine();
 
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("━━━━━━━━━━━━ 처치한 몬스터 ━━━━━━━━━━━━");
+            writeSectionHeader("최종 기록");
             Console.ResetColor();
+            Console.WriteLine();
+            writeCentered($"가한 총 데미지  : {recode.totalDamage:N0}");
+            writeCentered($"받은 총 데미지  : {recode.totalDamageTaken:N0}");
+            Console.WriteLine();
+            Console.WriteLine();
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            writeSectionHeader("처치한 몬스터");
+            Console.ResetColor();
+            Console.WriteLine();
 
             if (recode.defeatedMonsterList.Count == 0)
             {
-                Console.WriteLine("  처치한 몬스터가 없습니다.");
+                writeCentered("처치한 몬스터가 없습니다.");
             }
             else
             {
                 foreach (var monster in recode.defeatedMonsterList)
                 {
-                    Console.WriteLine($"  - {monster.Key,-15} : {monster.Value,3}마리");
+                    writeCentered($"- {monster.Key,-20} : {monster.Value,3}마리");
                 }
             }
             Console.WriteLine();
+            Console.WriteLine();
 
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("━━━━━━━━━━ 사용한 스킬 및 데미지 ━━━━━━━━━━");
+            writeSectionHeader("사용한 스킬 및 데미지");
             Console.ResetColor();
+            Console.WriteLine();
 
             if (recode.usedSkillRecords.Count == 0)
             {
-                Console.WriteLine("  사용한 스킬이 없습니다.");
+                writeCentered("사용한 스킬이 없습니다.");
             }
             else
             {
                 foreach (var skill in recode.usedSkillRecords)
                 {
-                    Console.WriteLine($"  - {skill.skillName,-15} ({skill.skillUseCount,2}회) | 총 데미지: {skill.totalDamage:N0}");
+                    writeCentered($"- {skill.skillName,-20} ({skill.skillUseCount,2}회) | 총 데미지: {skill.totalDamage:N0}");
                 }
             }
             Console.WriteLine();
+            Console.WriteLine();
 
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("**************************************************");
-            Console.WriteLine("\n           Thank you for playing!\n");
-            Console.WriteLine("**************************************************");
+            Console.WriteLine(border);
+            Console.WriteLine();
+            writeCentered("Thank you for playing!");
+            Console.WriteLine();
+            Console.WriteLine(border);
             Console.ResetColor();
 
             Console.ReadKey(true);
