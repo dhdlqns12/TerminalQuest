@@ -47,9 +47,9 @@ namespace TerimalQuest.Manager
             Console.ResetColor();
 
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("─────────────────────────────────────────");
-            Console.WriteLine($"  이름: {p.name}   HP: {p.hp}/{p.maxHp}   GOLD: {p.gold}");
-            Console.WriteLine("─────────────────────────────────────────");
+            Console.WriteLine("────────────────────────────────────────────────────────────────────");
+            Console.WriteLine($"  이름: {p.name}   HP: {p.hp}/{p.maxHp}   MP: {p.mp}/{p.maxMp}    Stamina: {p.stamina}/{p.maxStamina}    GOLD: {p.gold}");
+            Console.WriteLine("────────────────────────────────────────────────────────────────────");
             Console.ResetColor();
 
             Console.WriteLine();
