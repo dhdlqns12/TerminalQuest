@@ -146,7 +146,9 @@ namespace TerimalQuest.Manager
             loadedPlayer.Init_Player_job(job);
 
             loadedPlayer.level = data.level;
+            loadedPlayer.maxHp = data.maxHp;
             loadedPlayer.hp = data.hp;
+            loadedPlayer.maxMp = data.maxMp;
             loadedPlayer.mp = data.mp;
             loadedPlayer.gold = data.gold;
             loadedPlayer.stamina = data.stamina;
