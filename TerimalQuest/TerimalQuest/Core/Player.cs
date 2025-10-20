@@ -299,6 +299,7 @@ namespace TerimalQuest.Core
             {
                 case PotionType.HP:
                     hp = Math.Min(hp + potion.healAmount, maxHp);
+                    QuestManager.Instance.PlayQuest(potion.name);
                     break;
 
                 case PotionType.MP:
