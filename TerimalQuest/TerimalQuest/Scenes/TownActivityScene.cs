@@ -122,7 +122,6 @@ namespace TerimalQuest.Scenes
             {
                 Console.WriteLine("스태미나 또는 골드가 부족합니다.");
             }
-                player.stamina -= 20;
         }
     }
 }

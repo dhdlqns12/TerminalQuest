@@ -28,8 +28,8 @@ namespace TerimalQuest.Manager
         // 강화는 10강까지 있으며 강화에 따라 소진 강화석 개수와 확률이 달라짐
         private int maxEnhancementLevel = 10;
         public int[] stoneRequiredPerLevel = { 0, 1, 1, 2, 2, 3, 4, 5, 6, 8, 12 };
-        public float[] successRatePerLevel = { 1f, 0.7f, 0.6f, 0.5f, 0.5f, 0.3f, 0.2f, 0.1f, 0.08f, 0.05f, 0.01f };
-        public float[] enhancementRatePerLevel = { 0, 3, 3, 5, 5, 7, 9, 11, 14, 18, 23 };
+        public float[] successRatePerLevel = { 1f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.3f, 0.2f, 0.1f, 0.05f, 0.03f };
+        public float[] enhancementRatePerLevel = { 0, 3, 3, 5, 5, 7, 9, 11, 18, 28, 40 };
 
         // 강화 시 사용하는 변수
         private Random random;                  // 강화 확률에 사용할 랜덤 객체
