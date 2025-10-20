@@ -60,7 +60,12 @@ namespace TerimalQuest.System
         // 아이템 복제
         public override Item Clone()
         {
-            return new Armor(ItemDatabase.GetLastId(Id), name, desc, price, def, type);
+            Armor armor = new Armor(ItemDatabase.GetLastId(Id), name, desc, price, def, type);
+
+            // 강화 레벨 포함
+            armor.enhancementLevel = enhancementLevel;
+
+            return armor;
         }
     }
 }

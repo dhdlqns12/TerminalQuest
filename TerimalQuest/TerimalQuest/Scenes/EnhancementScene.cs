@@ -53,12 +53,12 @@ namespace TerimalQuest.Scenes
                 case "1":
                     type = ItemType.Weapon;
                     enhancementManager.SetEnhancealbeItemList(type);
-                    ChangeView(EnhanceView);
+                    ChangeView(ChoseEnhancementView);
                     break;
                 case "2":
                     type = ItemType.Armor;
                     enhancementManager.SetEnhancealbeItemList(type);
-                    ChangeView(EnhanceView);
+                    ChangeView(ChoseEnhancementView);
                     break;
                 case "0":
                     OnSceneChangeRequested?.Invoke(new StartScene());
@@ -68,27 +68,47 @@ namespace TerimalQuest.Scenes
             }
         }
 
-        // 강화 화면: 무기 or 방어구
-        private void EnhanceView()
+        // 강화 선택 화면: 무기 or 방어구
+        private void ChoseEnhancementView()
         {
-            // 선택한 화면 보여주기
-            uiManager.DisplayEnhancementScripts(enhancementManager, type);
+            // 아이템 선택 화면 보여주기
+            uiManager.DisplayChoseEnhancementScripts(enhancementManager, type);
 
             // 강화 가능한 아이템 리스트 정보 가져오기
             int vaildCount = enhancementManager.enhanceableItems.Count;
             string[] vaildItemOption = Enumerable.Range(0, vaildCount + 1).Select(i => i.ToString()).ToArray();   // LINQ 문법
             var choice = ConsoleHelper.GetUserChoice(vaildItemOption);
 
-            // 아이템 강화
+            if (choice == "0")
+            {
+                ChangeView(EnhanceStartView);
+                return;
+            }
+
+            // 강화 장비 선택 후 강화 뷰로 이동
+            enhancementManager.ChoseEnhanceItem(int.Parse(choice) - 1);
+
+            ChangeView(EnhancementView);
+        }
+
+        // 강화 정보 화면 : 강화 확률과 소모되는 강화석 표시
+        private void EnhancementView()
+        {
+            // 강화 정보 보여주기
+            uiManager.DisplayEnhancementScripts(enhancementManager);
+
+            var choice = ConsoleHelper.GetUserChoice(["0", "1"]);
+
             while (true)
             {
-                if (choice == "0") {
-                    ChangeView(EnhanceStartView);
-                    return; 
+                if (choice == "0")
+                {
+                    ChangeView(ChoseEnhancementView);
+                    return;
                 }
 
                 // 아이템 강화가 가능한 지 체크
-                if (enhancementManager.TryEnhanceItem(int.Parse(choice) - 1) == true)
+                if (enhancementManager.TryEnhanceItem() == true)
                 {
                     // 아이템 강화
                     enhancementManager.EnhanceItem();
@@ -98,7 +118,7 @@ namespace TerimalQuest.Scenes
                     break;
                 }
 
-                choice = ConsoleHelper.GetUserChoice(vaildItemOption);
+                choice = ConsoleHelper.GetUserChoice(["0", "1"]);
             }
         }
 

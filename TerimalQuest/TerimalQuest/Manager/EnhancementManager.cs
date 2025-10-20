@@ -27,13 +27,14 @@ namespace TerimalQuest.Manager
 
         // 강화는 10강까지 있으며 강화에 따라 소진 강화석 개수와 확률이 달라짐
         private int maxEnhancementLevel = 10;
-        private int[] stoneRequiredPerLevel = { 0, 1, 1, 2, 2, 3, 4, 5, 6, 8, 12 };
-        private float[] successRatePerLevel = { 1f, 1f, 0.95f, 0.9f, 0.85f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f };
-        private float[] enhancementRatePerLevel = { 0, 3, 3, 5, 5, 7, 9, 11, 14, 18, 23 };
+        public int[] stoneRequiredPerLevel = { 0, 1, 1, 2, 2, 3, 4, 5, 6, 8, 12 };
+        public float[] successRatePerLevel = { 1f, 0.7f, 0.6f, 0.5f, 0.5f, 0.3f, 0.2f, 0.1f, 0.08f, 0.05f, 0.01f };
+        public float[] enhancementRatePerLevel = { 0, 3, 3, 5, 5, 7, 9, 11, 14, 18, 23 };
 
         // 강화 시 사용하는 변수
         private Random random;                  // 강화 확률에 사용할 랜덤 객체
-        private Item enhanceItem;               // 강화 할 대상 아이템
+        public Item prevItem { get; set; }      // 강화 이전 상태를 담은 아이템
+        public Item enhanceItem { get; set; }   // 강화 할 대상 아이템
         private bool enhanceSuccess;            // 강화 성공 여부
         private int enhancementLevel;           // 강화 레벨
         private int enhancementStoneId;         // 강화석 Id
@@ -100,12 +101,21 @@ namespace TerimalQuest.Manager
             return (enhancementStone == null) ? 0 : enhancementStone.count;
         }
 
-        // 강화 시도
-        public bool TryEnhanceItem(int idx)
+        // 강화할 장비 선택
+        public void ChoseEnhanceItem(int idx)
         {
             // 아이템 정보 가져오기
             enhanceItem = enhanceableItems[idx];
 
+            if (enhanceItem == null) return;
+
+            // 아이템 저장
+            prevItem = enhanceItem.Clone(); 
+        }
+
+        // 강화 시도
+        public bool TryEnhanceItem()
+        {
             if(enhanceItem == null) return false;
 
             // 아이템 강화 단계 가져오기
@@ -132,21 +142,27 @@ namespace TerimalQuest.Manager
         public void EnhanceItem()
         {
             // 강화석 소모
-            int requiredStoneCount = stoneRequiredPerLevel[enhancementLevel + 1]; // 다음 단계 필요 강화석
+            int requiredStoneCount = stoneRequiredPerLevel[enhancementLevel+1]; // 다음 단계 필요 강화석
             enhancementStone.count -= requiredStoneCount;
 
             // 강화 확률 계산
-            float successRate = successRatePerLevel[enhancementLevel + 1];
+            float successRate = successRatePerLevel[enhancementLevel+1];
             enhanceSuccess = random.NextDouble() < successRate;
 
             // 성공 시 강화 레벨 증가
-            enhanceItem.Enhance(enhancementRatePerLevel[enhancementLevel]);
+            if(enhanceSuccess)
+            {
+                enhanceItem.Enhance(enhancementRatePerLevel[enhancementLevel + 1]);
+            }
         }
 
         // 강화 결과
         public void EnhanceResult()
         {
-            uiManager.DisplayEnhancementResultScripts(enhanceSuccess, enhancementLevel, enhanceItem);
+            // 플레이어 스탯 업데이트
+            player.UpdateStats();
+
+            uiManager.DisplayEnhancementResultScripts(enhanceSuccess, prevItem, enhanceItem);
         }
     }
 }
