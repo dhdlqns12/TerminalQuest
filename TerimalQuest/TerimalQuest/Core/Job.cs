@@ -110,7 +110,7 @@ namespace TerimalQuest.Core
             evadeRate = 0.08f;
             //기본 스킬 추가
             Skill blizzard = new Skill("블리자드", "모든 적에게 냉기를 발산해 100의 고정데미지",  100, SkillType.Attack, SkillDamageType.FixedDamage, SkillRangeType.All, 40);
-            Skill meteor = new Skill("메테오", "모든 적에게 운석을 떨어뜨려 180의 고정데미지",  300, SkillType.Attack, SkillDamageType.FixedDamage, SkillRangeType.All, 200);
+            Skill meteor = new Skill("메테오", "모든 적에게 운석을 떨어뜨려 300의 고정데미지",  300, SkillType.Attack, SkillDamageType.FixedDamage, SkillRangeType.All, 200);
             Skill ragnarok = new Skill("라그나로크", "암흑 에너지를 발산시켜 적에게 공격력 *1.5의 데미지", 1.5f, SkillType.Attack, SkillDamageType.BaseAttack, SkillRangeType.One, 80);
             DefaultSkills.Add(blizzard);
             DefaultSkills.Add(meteor);
