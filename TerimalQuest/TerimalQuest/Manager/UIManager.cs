@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -273,11 +274,12 @@ namespace TerimalQuest.Manager
         public void DisplayItemInfoHeader(bool isEquipMode = false)
         {
             string equipMode = isEquipMode ? ConsoleHelper.PadRightForConsole(" ", 6) : "  ";
+            int offsetHeaderName = (isEquipMode) ? 16 : offsetName;
 
             Console.WriteLine(
                 string.Format("{0}{1} | {2} | {3} | {4}",
                 equipMode,
-                ConsoleHelper.PadRightForConsole("[아이템 이름]", offsetName),
+                ConsoleHelper.PadRightForConsole("[아이템 이름]", offsetHeaderName),
                 ConsoleHelper.PadRightForConsole("[아이템 효과]", offsetEffect),
                 ConsoleHelper.PadRightForConsole("[아이템 설명]", offsetDesc),
                 "[수량]\n")
@@ -324,10 +326,10 @@ namespace TerimalQuest.Manager
         }
 
         // 상점 아이템 정보 표시 헤더
-        public void DisplayItemProductHeader(bool isPurchase = true)
+        public void DisplayItemProductHeader(bool isPurchase = false)
         {
             Console.WriteLine("[아이템 목록]\n");
-            string purchase = (isPurchase) ? ConsoleHelper.PadRightForConsole(" ", 6) : $"  ";
+            string purchase =  $"  ";
 
             Console.WriteLine(
                 string.Format("{0}{1} | {2} | {3} | {4} | {5}",
@@ -401,8 +403,7 @@ namespace TerimalQuest.Manager
         public void InventoryScripts(Inventory inventory)
         {
             Console.Clear();
-            Console.WriteLine("인벤토리");
-            Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
+            InventoryHeader("보유 중인 아이템을 관리할 수 있습니다.");
             Console.WriteLine();
             inventory.DisplayInfo(false);
             Console.WriteLine();
@@ -413,8 +414,7 @@ namespace TerimalQuest.Manager
         public void InventoryEquipScripts(Inventory inventory)
         {
             Console.Clear();
-            Console.WriteLine("인벤토리 - 장착 관리");
-            Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
+            InventoryHeader("장착 관리 - 보유 중인 장비를 장착 할 수 있습니다.");
             Console.WriteLine();
             inventory.DisplayInfo(true, ItemType.Weapon, ItemType.Armor);
             Console.WriteLine();
@@ -425,8 +425,7 @@ namespace TerimalQuest.Manager
         public void InventoryUseScripts(Inventory inventory)
         {
             Console.Clear();
-            Console.WriteLine("인벤토리 - 아이템 사용");
-            Console.WriteLine("보유 중인 아이템을 사용 할 수 있습니다.");
+            InventoryHeader("아이템 사용 - 보유 중인 아이템을 사용 할 수 있습니다.");
             Console.WriteLine();
             inventory.DisplayInfo(true, ItemType.Potion);
             Console.WriteLine();
@@ -437,12 +436,21 @@ namespace TerimalQuest.Manager
         public void InventorySortingScripts(Inventory inventory)
         {
             Console.Clear();
-            Console.WriteLine("[인벤토리 - 아이템 정렬]");
-            Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
+            InventoryHeader("아이템 정렬 - 옵션 별로 아이템을 정렬 할 수 있습니다.");
             Console.WriteLine();
             inventory.DisplayInfo(false);
             Console.WriteLine();
             DisplayOption(["1. 이름", "2. 장착순", "3. 공격력", "4. 방어력", "0. 나가기"]);
+        }
+
+        private void InventoryHeader(string desc)
+        {
+            ConsoleHelper.PrintColored("╔══════════════════════════════════════════════════════════╗", ConsoleColor.Green);
+            ConsoleHelper.PrintColoredWithBackground("║                     인벤토리                             ║", ConsoleColor.Yellow, ConsoleColor.DarkGreen);
+            ConsoleHelper.PrintColored("╚══════════════════════════════════════════════════════════╝", ConsoleColor.Green);
+            Console.WriteLine();
+            ConsoleHelper.PrintColored(desc, ConsoleColor.DarkGreen);
+            ConsoleHelper.PrintDivider(55, '─', ConsoleColor.DarkGreen);
         }
 
         // 메세지 : 인벤토리 공간 부족
@@ -456,12 +464,7 @@ namespace TerimalQuest.Manager
         public void ShopScripts(Player player, Shop shop)
         {
             Console.Clear();
-            ConsoleHelper.PrintColored("╔══════════════════════════════════════════════════════════╗", ConsoleColor.DarkCyan);
-            ConsoleHelper.PrintColoredWithBackground("║                     상   점                             ║", ConsoleColor.Yellow, ConsoleColor.DarkBlue);
-            ConsoleHelper.PrintColored("╚══════════════════════════════════════════════════════════╝", ConsoleColor.DarkCyan);
-            Console.WriteLine();
-            ConsoleHelper.PrintColored("필요한 아이템을 얻을 수 있는 상점입니다.", ConsoleColor.DarkCyan);
-            ConsoleHelper.PrintDivider(55, '─', ConsoleColor.DarkCyan);
+            ShopHeader("필요한 아이템을 얻을 수 있는 상점입니다.");
             Console.WriteLine();
             ConsoleHelper.PrintColored("[보유 골드]", ConsoleColor.Yellow);
             ConsoleHelper.PrintColored($"{player.gold} G", ConsoleColor.Green);
@@ -475,9 +478,7 @@ namespace TerimalQuest.Manager
         public void ShopPurchaseScripts(Player player, Shop shop)
         {
             Console.Clear();
-            ConsoleHelper.PrintColored("╔══════════════════════════════════════════════════════════╗", ConsoleColor.DarkCyan);
-            ConsoleHelper.PrintColoredWithBackground("║                     상   점                             ║", ConsoleColor.Yellow, ConsoleColor.DarkBlue);
-            ConsoleHelper.PrintColored("╚══════════════════════════════════════════════════════════╝", ConsoleColor.DarkCyan);
+            ShopHeader("아이템 구매 - 상점에서 보유 중인 아이템을 구매할 수 있습니다.");
             Console.WriteLine();
             ConsoleHelper.PrintColored("구매 페이지", ConsoleColor.DarkCyan);
             ConsoleHelper.PrintDivider(55, '─', ConsoleColor.DarkCyan);
@@ -494,12 +495,7 @@ namespace TerimalQuest.Manager
         public void ShopSaleScripts(Player player)
         {
             Console.Clear();
-            ConsoleHelper.PrintColored("╔══════════════════════════════════════════════════════════╗", ConsoleColor.DarkCyan);
-            ConsoleHelper.PrintColoredWithBackground("║                     상   점                             ║", ConsoleColor.Yellow, ConsoleColor.DarkBlue);
-            ConsoleHelper.PrintColored("╚══════════════════════════════════════════════════════════╝", ConsoleColor.DarkCyan);
-            Console.WriteLine();
-            ConsoleHelper.PrintColored("필요한 아이템을 얻을 수 있는 상점입니다.", ConsoleColor.DarkCyan);
-            ConsoleHelper.PrintDivider(55, '─', ConsoleColor.DarkCyan);
+            ShopHeader("아이템 판매 - 인벤토리에서 보유 중인 아이템을 판매할 수 있습니다.");
             Console.WriteLine();
             ConsoleHelper.PrintColored("[보유 골드]", ConsoleColor.Yellow);
             ConsoleHelper.PrintColored($"{player.gold} G", ConsoleColor.Green);
@@ -507,6 +503,17 @@ namespace TerimalQuest.Manager
             player.inventory.DisplayInfoWithGold();
             Console.WriteLine();
             DisplayOption(["(번호). 해당 아이템 판매", "0. 나가기"]);
+        }
+
+        private void ShopHeader(string desc)
+        {
+            ConsoleHelper.PrintColored("╔══════════════════════════════════════════════════════════╗", ConsoleColor.DarkCyan);
+            ConsoleHelper.PrintColoredWithBackground("║                     상   점                             ║", ConsoleColor.Yellow, ConsoleColor.DarkBlue);
+            ConsoleHelper.PrintColored("╚══════════════════════════════════════════════════════════╝", ConsoleColor.DarkCyan);
+            Console.WriteLine();
+            ConsoleHelper.PrintColored(desc, ConsoleColor.DarkCyan);
+            ConsoleHelper.PrintDivider(55, '─', ConsoleColor.DarkCyan);
+            Console.WriteLine();
         }
 
         // 메세지 : 상품 품절
@@ -528,51 +535,224 @@ namespace TerimalQuest.Manager
         public void DisplayEnhancementStartScripts(Inventory inventory, EnhancementManager enhancementManager)
         {
             Console.Clear();
-            Console.WriteLine("장비 강화");
-            Console.WriteLine("보유 중인 장비를 강화할 수 있습니다.");
+            EnhancementHeader("보유 중인 장비를 강화할 수 있습니다.");
             Console.WriteLine();
-            Console.WriteLine("[보유 강화석]");
-            Console.WriteLine($"강화석: {enhancementManager.GetPlayerEnhancementStoneCount()}개");
+            ConsoleHelper.PrintColored("[보유 강화석]", ConsoleColor.Yellow);
+            ConsoleHelper.PrintColored($"강화석: {enhancementManager.GetPlayerEnhancementStoneCount()}개", ConsoleColor.Green);
             Console.WriteLine();
             inventory.DisplayInfo(true, ItemType.Weapon, ItemType.Armor);
             Console.WriteLine();
             DisplayOption(["1. 무기 강화", "2. 방어구 강화", "0. 나가기"]);
         }
 
-        public void DisplayEnhancementScripts(EnhancementManager enhancementManager, ItemType type)
+        public void DisplayChoseEnhancementScripts(EnhancementManager enhancementManager, ItemType type)
         {
             string typeTxt = (type == ItemType.Weapon) ? "무기" : "방어구";
 
             Console.Clear();
-            Console.WriteLine($"장비 강화 - {typeTxt}");
-            Console.WriteLine("보유 중인 장비를 강화할 수 있습니다.");
+            EnhancementHeader($"{typeTxt} 강화 - 강화 할 장비를 선택해주세요.");
             Console.WriteLine();
-            Console.WriteLine("[보유 강화석]");
-            Console.WriteLine($"강화석: {enhancementManager.GetPlayerEnhancementStoneCount()}개");
+            ConsoleHelper.PrintColored("[보유 강화석]", ConsoleColor.Yellow);
+            ConsoleHelper.PrintColored($"강화석: {enhancementManager.GetPlayerEnhancementStoneCount()}개", ConsoleColor.Green);
             Console.WriteLine();
             enhancementManager.DisplayEnhancealbeItemList();
             Console.WriteLine();
             DisplayOption(["(번호). 해당 장비 강화", "0. 나가기"]);
         }
 
-        public void DisplayEnhancementResultScripts(bool success, int prevLevel, Item item)
+        public void DisplayEnhancementScripts(EnhancementManager enhancementManager)
+        {
+            Item item = enhancementManager.prevItem;
+
+            Console.Clear();
+            EnhancementHeader("장비 강화 정보");
+            Console.WriteLine();
+            ConsoleHelper.PrintColored("[보유 강화석]", ConsoleColor.Yellow);
+            ConsoleHelper.PrintColored($"강화석: {enhancementManager.GetPlayerEnhancementStoneCount()}개", ConsoleColor.Green);
+            Console.WriteLine();
+
+            // 강화 현황 헤더
+            ConsoleHelper.PrintDivider(45, '─', ConsoleColor.DarkCyan);
+            ConsoleHelper.PrintColored($"[{item.name}]을 강화하시겠습니까?", ConsoleColor.Cyan);
+            ConsoleHelper.PrintDivider(45, '─', ConsoleColor.DarkCyan);
+
+            int currentLevel = item.GetLevel();
+            int nextLevel = currentLevel + 1;
+            float successRate = enhancementManager.successRatePerLevel[currentLevel+1];
+            int useEnhancementStone = enhancementManager.stoneRequiredPerLevel[currentLevel + 1];
+
+            item.DisplayInfo("");
+
+            // 현재/다음 레벨 및 공격력(또는 방어력) 표시
+            string type = (item is Weapon) ? "공격력" : "방어력";
+            float currentStat = (item is Weapon w) ? w.atk : (item is Armor a) ? a.def : 0;
+            float nextStat = currentStat + enhancementManager.enhancementRatePerLevel[item.GetLevel() + 1]; 
+
+            string currentText = ConsoleHelper.PadRightForConsole("[현재 레벨]", 12);
+            string nextText = ConsoleHelper.PadRightForConsole("[다음 레벨]", 12);
+            string arrow = "→";
+
+            Console.WriteLine();
+            ConsoleHelper.PrintColored($"{currentText}", ConsoleColor.Gray, false);
+            ConsoleHelper.PrintColored($"{item.GetLevel(),2}", ConsoleColor.Yellow, false);
+            ConsoleHelper.PrintColored($"   {arrow}   ", ConsoleColor.DarkGray, false);
+            ConsoleHelper.PrintColored($"{nextText}", ConsoleColor.Gray, false);
+            ConsoleHelper.PrintColored($"{item.GetLevel() + 1,2}", ConsoleColor.Green);
+            Console.WriteLine();
+
+            // 공격력(또는 방어력) 구간 출력
+            string atkText = ConsoleHelper.PadRightForConsole($"[현재 {type}]", 12);
+            string nextAtkText = ConsoleHelper.PadRightForConsole($"[다음 {type}]", 12);
+
+            ConsoleHelper.PrintColored($"{atkText}", ConsoleColor.Gray, false);
+            ConsoleHelper.PrintColored($" {currentStat}", ConsoleColor.Yellow, false);
+            ConsoleHelper.PrintColored($"   {arrow}   ", ConsoleColor.DarkGray, false);
+            ConsoleHelper.PrintColored($"{nextAtkText}", ConsoleColor.Gray, false);
+            ConsoleHelper.PrintColored($" {nextStat}", ConsoleColor.Green);
+            Console.WriteLine();
+
+            ConsoleHelper.PrintDivider(45, '─', ConsoleColor.DarkCyan);
+
+            // 강화 확률
+            ConsoleHelper.PrintColored("강화 성공 확률:", ConsoleColor.Cyan, false);
+            Console.Write(" ");
+            ConsoleHelper.PrintColored($"{successRate * 100:F1}%", ConsoleColor.Green);
+
+            // 강화석 소모 개수
+            ConsoleHelper.PrintColored("강화석 소모 개수:", ConsoleColor.Cyan, false);
+            Console.Write(" ");
+            ConsoleHelper.PrintColored($"{useEnhancementStone}개", ConsoleColor.Green);
+
+            Console.WriteLine();
+
+            Console.WriteLine();
+            DisplayOption(["1. 강화하기", "0. 나가기"]);
+        }
+
+        public void DisplayEnhancementResultScripts(bool success, Item prevItem, Item item)
         {
             Console.Clear();
-            Console.WriteLine("강화 결과");
+            EnhancementHeader("장비 강화");
             Console.WriteLine();
+
+            // 강화 진행 바 표시
+            ShowProgressBar("강화 중...", 30, 80);
+
+            Console.WriteLine("\n");
+            Thread.Sleep(500);
+
             if (success)
             {
                 // 강화 성공 텍스트 출력
-                Console.WriteLine("강화에 성공했습니다!");
-                Console.WriteLine($"[{prevLevel}강] -> [{item.GetLevel()}강]");
+                ConsoleHelper.PrintColored("강화에 성공했습니다!", ConsoleColor.Cyan);
             }
             else
             {
                 // 강화 실패 텍스트 출력
-                Console.WriteLine("강화에 실패하였습니다..");
+                ConsoleHelper.PrintColored("강화에 실패하였습니다..", ConsoleColor.Red);
             }
+
+            // 강화 전 -> 강화 후 장비 보여주기
+            string type = (item is Weapon) ? "공격력" : "방어력";
+            float preEffect = prevItem switch { Weapon w => w.atk, Armor a => a.def, _ => 0 };
+            float effect = item switch { Weapon w => w.atk, Armor a => a.def, _ => 0 };
+
+            int boxWidth = 22; // 한쪽 박스 폭
+            int boxHeight = 6; // 박스 내부 높이
+            int spaceBetween = 4; // 박스 간 간격
+
+            Thread.Sleep(600);
+
+            // 상단 제목
+            Console.WriteLine();
+            ConsoleHelper.PrintColored("장비 강화 결과", ConsoleColor.Cyan);
+            ConsoleHelper.PrintDivider(52, '═', ConsoleColor.DarkCyan);
+            Console.WriteLine();
+
+            item.DisplayInfo("");
+            Console.WriteLine();
+
+            // 상단 라인
+            string topLine = "╔" + new string('═', boxWidth - 2) + "╗";
+            string midSpace = new string(' ', spaceBetween);
+            string bottomLine = "╚" + new string('═', boxWidth - 2) + "╝";
+
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine($"{topLine}{midSpace}{topLine}");
+            Console.ResetColor();
+
+            // (강화 전 / 강화 후)
+            string[] leftContent =
+            {
+                CenterText("[강화 전]", boxWidth),
+                CenterText($"{prevItem.name}", boxWidth),
+                CenterText($"{prevItem.GetLevel()}강", boxWidth),
+                CenterText($"{type} + {preEffect}", boxWidth)
+            };
+
+            string[] rightContent =
+            {
+                CenterText("[강화 후]", boxWidth),
+                CenterText($"{item.name}", boxWidth),
+                CenterText($"{item.GetLevel()}강", boxWidth),
+                CenterText($"{type} + {effect}", boxWidth)
+            };
+
+            for (int i = 0; i < boxHeight - 2; i++)
+            {
+                string leftText = (i < leftContent.Length) ? leftContent[i] : new string(' ', boxWidth - 2);
+                string rightText = (i < rightContent.Length) ? rightContent[i] : new string(' ', boxWidth - 2);
+
+                Console.WriteLine($"║{leftText}║{midSpace}║{rightText}║");
+            }
+
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine($"{bottomLine}{midSpace}{bottomLine}");
+            Console.ResetColor();
+
+            Console.WriteLine();
+            ConsoleHelper.PrintDivider(52, '─', ConsoleColor.DarkGray);
+
+
             Console.WriteLine();
             DisplayOption(["0. 나가기"]);
+        }
+
+        // 진행바
+        public static void ShowProgressBar(string message, int barLength = 30, int delay = 80)
+        {
+            for (int progress = 0; progress <= barLength; progress++)
+            {
+                Console.CursorLeft = 0;
+
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                string bar = new string('=', progress) + new string(' ', barLength - progress);
+                int percent = (int)((progress / (float)barLength) * 100);
+                Console.Write($"[{bar}] {percent,3}%  {message}");
+                Console.ResetColor();
+
+                Thread.Sleep(delay);
+            }
+        }
+
+        // 문자열을 가운데 정렬해서 박스 안에 맞추기
+        private static string CenterText(string text, int totalWidth)
+        {
+            int innerWidth = totalWidth - 2;
+            int padding = innerWidth - ConsoleHelper.GetDisplayWidth(text);
+            int left = padding / 2;
+            int right = padding - left;
+            return new string(' ', left) + text + new string(' ', right);
+        }
+
+        private void EnhancementHeader(string desc)
+        {
+            ConsoleHelper.PrintColored("╔══════════════════════════════════════════════════════════╗", ConsoleColor.Magenta);
+            ConsoleHelper.PrintColoredWithBackground("║                     장비 강화                             ║", ConsoleColor.Yellow, ConsoleColor.DarkMagenta);
+            ConsoleHelper.PrintColored("╚══════════════════════════════════════════════════════════╝", ConsoleColor.Magenta);
+            Console.WriteLine();
+            ConsoleHelper.PrintColored(desc, ConsoleColor.DarkMagenta);
+            ConsoleHelper.PrintDivider(55, '─', ConsoleColor.DarkMagenta);
         }
 
         // 메세지 : 최대 강화 레벨일 시 출력

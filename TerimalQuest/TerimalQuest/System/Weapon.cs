@@ -59,7 +59,12 @@ namespace TerimalQuest.System
         // 아이템 복제
         public override Item Clone()
         {
-            return new Weapon(ItemDatabase.GetLastId(Id), name, desc, price, atk, type);
+            Weapon weapon = new Weapon(ItemDatabase.GetLastId(Id), name, desc, price, atk, type);
+
+            // 강화 레벨 포함
+            weapon.enhancementLevel = enhancementLevel;
+
+            return weapon;
         }
     }
 }
