@@ -49,14 +49,14 @@ namespace TerimalQuest.System
             productList.Add(ItemDatabase.GetWeapon("스파르타의 창"));
 
             productList.Add(ItemDatabase.GetPotion("빨간포션"));
-            productList[productList.Count - 1].count = 999; // 포션 99개 설정
+            productList[productList.Count - 1].count = 999; // 포션 999개 설정
             productList.Add(ItemDatabase.GetPotion("파랑포션"));
-            productList[productList.Count - 1].count = 999; // 포션 99개 설정
+            productList[productList.Count - 1].count = 999; // 포션 999개 설정
             productList.Add(ItemDatabase.GetPotion("노랑포션"));
-            productList[productList.Count - 1].count = 999; // 포션 99개 설정
+            productList[productList.Count - 1].count = 999; // 포션 999개 설정
 
             productList.Add(ItemDatabase.GetEnhancementStone("강화석"));
-            productList[productList.Count - 1].count = 999; // 강화석 99개 설정
+            productList[productList.Count - 1].count = 999; // 강화석 999개 설정
         }
 
         // 상품 구매 시도 - 인덱스 검색

@@ -167,7 +167,7 @@ namespace TerimalQuest.Manager
             {
                 // 하락 확률 계산
                 float degardRate = degradeRatePerLevel[enhancementLevel];
-                isDegrade = random.NextDouble() < successRate;
+                isDegrade = random.NextDouble() < degardRate;
 
                 if(isDegrade)
                 {
