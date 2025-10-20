@@ -25,17 +25,31 @@ namespace TerimalQuest.Manager
         public List<Quest> mainQuests = new List<Quest>();
         public List<Quest> subQuests = new List<Quest>();
         public QuestManager()
-        {           
-            string projectRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\");
-            string resourcePath = Path.Combine(projectRoot, "Resources", "QuestData.json");
-            string json = File.ReadAllText(resourcePath);
-
-            var data = JsonSerializer.Deserialize<List<Quest>>(json);
-            questLists = data;
+        {                   
+            LoadQuestData();
             player = GameManager.Instance.player;
             InitializeQuests(questLists);
             QuestClassify(questLists);
         }
+
+        public void LoadQuestData()
+        {
+            try
+            {
+                string projectRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\");
+                string resourcePath = Path.Combine(projectRoot, "Resources", "QuestData.json");
+                string json = File.ReadAllText(resourcePath);
+
+                var data = JsonSerializer.Deserialize<List<Quest>>(json);
+                questLists = data;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+        }
+
 
         /// <summary>
         /// 플레이어가 클리어한 퀘스트 제외
