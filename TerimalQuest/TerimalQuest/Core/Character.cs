@@ -70,6 +70,7 @@ namespace TerimalQuest.Core
             {
                 finalDamage = 1;
             }
+            if (this is Monster) finalDamage /= 2;
             return finalDamage;
         }
     }
