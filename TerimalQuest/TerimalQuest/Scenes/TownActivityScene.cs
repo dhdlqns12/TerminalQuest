@@ -117,12 +117,12 @@ namespace TerimalQuest.Scenes
                         break;
                     }
                 }
+                player.stamina -= 20;
             }
             else
             {
                 Console.WriteLine("스태미나 부족!");
             }
-                player.stamina -= 20;
         }
     }
 }
