@@ -72,8 +72,8 @@ namespace TerimalQuest.Core
             evadeRate = 0.08f;
             //기본 스킬 추가
             Skill eatRice = new Skill("밥먹기", "밥을 먹어 100의 체력을 회복",  100, SkillType.Support, SkillDamageType.FixedDamage, SkillRangeType.One, 10);
-            Skill bash = new Skill("배쉬", "힘을 세게주어 2배의 데미지",  1.5f, SkillType.Attack, SkillDamageType.BaseAttack, SkillRangeType.One, 10);
-            Skill powerBash = new Skill("파워배쉬", "온 힘을 다해 공격하여 모든 적에게 공격력 2.5배의 데미지",  2.5f, SkillType.Attack, SkillDamageType.BaseAttack, SkillRangeType.One,  30);
+            Skill bash = new Skill("배쉬", "힘을 세게주어 적에게 공격력 *1.5의 데미지",  1.5f, SkillType.Attack, SkillDamageType.BaseAttack, SkillRangeType.One, 10);
+            Skill powerBash = new Skill("파워배쉬", "온 힘을 다해 공격하여 적에게 공격력 *2.5의 데미지",  2.5f, SkillType.Attack, SkillDamageType.BaseAttack, SkillRangeType.One,  30);
             DefaultSkills.Add(eatRice);
             DefaultSkills.Add(bash);
             DefaultSkills.Add(powerBash);
@@ -91,8 +91,8 @@ namespace TerimalQuest.Core
             evadeRate = 0.2f;
             //기본 스킬 추가
             Skill rapidArrow = new Skill("빨리쏘기", "화살을 강하게 발사해 50의 고정데미지",  50, SkillType.Attack, SkillDamageType.FixedDamage, SkillRangeType.One,  10);
-            Skill arrowRain = new Skill("화살비", "모든 적에게 공격력 *0.9의 데미지",  0.9f, SkillType.Attack,  SkillDamageType.BaseAttack, SkillRangeType.All, 20);
-            Skill arrowBomb = new Skill("폭발화살", "화살에 폭탄을 장착하고 발사해 모든 적에게 공격력 * 2의 데미지",  2f, SkillType.Attack,  SkillDamageType.BaseAttack, SkillRangeType.One, 100);
+            Skill arrowRain = new Skill("화살비", "화살비를 내려 모든 적에게 공격력 *0.9의 데미지",  0.9f, SkillType.Attack,  SkillDamageType.BaseAttack, SkillRangeType.All, 20);
+            Skill arrowBomb = new Skill("폭발화살", "화살에 폭탄을 장착하고 발사해 적에게 공격력 *2의 데미지",  2f, SkillType.Attack,  SkillDamageType.BaseAttack, SkillRangeType.One, 100);
             DefaultSkills.Add(rapidArrow);
             DefaultSkills.Add(arrowRain);
             DefaultSkills.Add(arrowBomb);
@@ -111,7 +111,7 @@ namespace TerimalQuest.Core
             //기본 스킬 추가
             Skill blizzard = new Skill("블리자드", "모든 적에게 냉기를 발산해 100의 고정데미지",  100, SkillType.Attack, SkillDamageType.FixedDamage, SkillRangeType.All, 40);
             Skill meteor = new Skill("메테오", "모든 적에게 운석을 떨어뜨려 180의 고정데미지",  300, SkillType.Attack, SkillDamageType.FixedDamage, SkillRangeType.All, 200);
-            Skill ragnarok = new Skill("라그나로크", "암흑 에너지를 발산시켜 모든 적에게 300의 고정데미지", 1.5f, SkillType.Attack, SkillDamageType.BaseAttack, SkillRangeType.One, 80);
+            Skill ragnarok = new Skill("라그나로크", "암흑 에너지를 발산시켜 적에게 공격력 *1.5의 데미지", 1.5f, SkillType.Attack, SkillDamageType.BaseAttack, SkillRangeType.One, 80);
             DefaultSkills.Add(blizzard);
             DefaultSkills.Add(meteor);
             DefaultSkills.Add(ragnarok);
