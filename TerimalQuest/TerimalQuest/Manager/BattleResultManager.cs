@@ -137,7 +137,7 @@ namespace TerimalQuest.Manager
             dropTable.Add("슬라임", new List<DropItem>
             {
 
-                new DropItem { itemName = "강화석", minDropCount = 1, maxDropCount = 1, dropRate = 0.2f},
+                new DropItem { itemName = "강화석", minDropCount = 1, maxDropCount = 10, dropRate = 0.5f},
                 new DropItem { itemName = "빨간포션", minDropCount = 1, maxDropCount = 2, dropRate = 0.2f},
                 new DropItem { itemName = "파랑포션", minDropCount = 1, maxDropCount = 2, dropRate = 0.2f},
                 new DropItem { itemName = "노랑포션", minDropCount = 1, maxDropCount = 2, dropRate = 0.2f},
@@ -148,7 +148,7 @@ namespace TerimalQuest.Manager
             {
                 new DropItem { itemName = "수련자 갑옷", minDropCount = 0, maxDropCount = 1, dropRate = 0.2f},
                 new DropItem { itemName = "무쇠갑옷", minDropCount = 0, maxDropCount = 1, dropRate = 0.1f},
-                new DropItem { itemName = "강화석", minDropCount = 1, maxDropCount = 1, dropRate = 0.2f}
+                new DropItem { itemName = "강화석", minDropCount = 1, maxDropCount = 10, dropRate = 0.5f}
             });
 
             dropTable.Add("트롤", new List<DropItem>
@@ -156,7 +156,7 @@ namespace TerimalQuest.Manager
                 new DropItem { itemName = "낡은 검", minDropCount = 1, maxDropCount = 1, dropRate = 0.3f},
                 new DropItem { itemName = "연습용 창", minDropCount = 0, maxDropCount = 1, dropRate = 0.2f},
                 new DropItem { itemName = "청동 도끼", minDropCount = 0, maxDropCount = 1, dropRate = 0.1f},
-                new DropItem { itemName = "강화석", minDropCount = 1, maxDropCount = 1, dropRate = 0.2f}
+                new DropItem { itemName = "강화석", minDropCount = 1, maxDropCount = 10, dropRate = 0.5f}
             });
         }
     }
