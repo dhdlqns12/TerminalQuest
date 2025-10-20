@@ -133,7 +133,12 @@ namespace TerimalQuest.Core
             level++;
             baseAtk += 0.5f;
             baseDef += 1f;
+            maxHp += 10;
+            hp += 10;
+            maxMp += 10;
+            mp += 10;
             QuestManager.Instance.PlayQuest("레벨", 1);
+            RefreshStat();
         }
 
         public void SetExpWithoutLevelUp(int value) //로드 전용

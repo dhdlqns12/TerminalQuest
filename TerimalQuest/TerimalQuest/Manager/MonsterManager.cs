@@ -91,7 +91,7 @@ public class MonsterManager
         }
         else
         {
-            Monster labos = new Monster("라보스", 99, 1999,0,99,99);
+            Monster labos = new Monster("라보스", 99, 2000,0,99,99);
             labos.rewardExp = 9999;
             labos.rewardGold = 9999;
             labos.evadeRate = 0.3f;
@@ -99,5 +99,4 @@ public class MonsterManager
             return labos;
         }
     }
-
 }
