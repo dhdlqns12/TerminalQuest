@@ -135,8 +135,18 @@ namespace TerimalQuest.Core
             baseDef += 1f;
             maxHp += 10;
             hp += 10;
-            maxMp += 10;
-            mp += 10;
+
+            if (this.jobName == "마법사")
+            {
+                maxMp += 20;
+                mp += 20;
+            }
+            else
+            {
+                maxMp += 10;
+                mp += 10;
+            }
+
             QuestManager.Instance.PlayQuest("레벨", 1);
             RefreshStat();
         }
@@ -203,17 +213,17 @@ namespace TerimalQuest.Core
             {
                 ToggleEquipWeapon(weapon);
             }
-            else if(item is Armor armor)
+            else if (item is Armor armor)
             {
                 ToogleEquipArmor(armor);
             }
         }
 
-        private void ToggleEquipWeapon(Weapon  weapon)
+        private void ToggleEquipWeapon(Weapon weapon)
         {
-            if(weapon.isEquipped)
+            if (weapon.isEquipped)
             {
-                if(equippedWeapon!=null&&equippedWeapon!=weapon)
+                if (equippedWeapon != null && equippedWeapon != weapon)
                 {
                     equippedWeapon.isEquipped = false;
                 }

@@ -111,7 +111,8 @@ namespace TerimalQuest.Manager
         public void ShowStatusSceneScripts()
         {
             Player p = GameManager.Instance.player;
-            Console.Write($"상태 보기\r\n캐릭터의 정보가 표시됩니다.\r\n\r\nLv. {p.level}       경험치: {p.exp}\r\n{p.name} ( {p.jobName} )\r\n공격력 : {p.atk}\r\n방어력 : {p.def}\r\n체 력 : {p.hp}\r\n마나: {p.mp}\r\n스태미나 : {p.stamina}\r\nGold : {p.gold} G\r\n\r\n0. 나가기\r\n\r\n원하시는 행동을 입력해주세요.\r\n>> ");
+            p.RefreshStat();
+            Console.Write($"상태 보기\r\n캐릭터의 정보가 표시됩니다.\r\n\r\nLv. {p.level}       경험치: {p.exp}\r\n{p.name} ( {p.jobName} )\r\n공격력 : {p.atk}\r\n방어력 : {p.def}\r\n체 력 : {p.hp}/{p.maxHp}\r\n마나: {p.mp}/{p.maxMp}\r\n스태미나 : {p.stamina}\r\nGold : {p.gold} G\r\n\r\n0. 나가기\r\n\r\n원하시는 행동을 입력해주세요.\r\n>> ");
         }
 
         public void TerminalQuestScripts()
