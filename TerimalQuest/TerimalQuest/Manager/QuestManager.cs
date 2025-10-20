@@ -44,14 +44,20 @@ namespace TerimalQuest.Manager
         public void InitializeQuests(List<Quest> quests)
         {
             List<int> clearNums = player.clearQuestNums;
+            List<Quest> clearQuests = new List<Quest>();
             if (clearNums != null)
             {
                 for(int i = 0; i < quests.Count; i++)
                 {
                     if (clearNums.Contains(quests[i].questNum))
-                        quests.Remove(quests[i]);
+                        clearQuests.Add(quests[i]);
+                }
+                for(int j = 0; j < clearQuests.Count; j++)
+                {
+                    quests.Remove(clearQuests[j]);
                 }
             }
+            
         }
 
 
