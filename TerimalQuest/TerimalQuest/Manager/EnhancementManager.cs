@@ -29,6 +29,7 @@ namespace TerimalQuest.Manager
         private int maxEnhancementLevel = 10;
         public int[] stoneRequiredPerLevel = { 0, 1, 1, 2, 2, 3, 4, 5, 6, 8, 12 };
         public float[] successRatePerLevel = { 1f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.3f, 0.2f, 0.1f, 0.05f, 0.03f };
+        public float[] degradeRatePerLevel = { 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f };
         public float[] enhancementRatePerLevel = { 0, 3, 3, 5, 5, 7, 9, 11, 18, 28, 40 };
 
         // 강화 시 사용하는 변수
@@ -39,6 +40,7 @@ namespace TerimalQuest.Manager
         private int enhancementLevel;           // 강화 레벨
         private int enhancementStoneId;         // 강화석 Id
         private EnhancementStone enhancementStone { get; set; } // 강화석
+        public bool isDegrade { get; set; }
 
         public EnhancementManager() 
         {
@@ -161,6 +163,17 @@ namespace TerimalQuest.Manager
             {
                 enhanceItem.Enhance(enhancementRatePerLevel[enhancementLevel + 1]);
             }
+            else
+            {
+                // 하락 확률 계산
+                float degardRate = degradeRatePerLevel[enhancementLevel];
+                isDegrade = random.NextDouble() < successRate;
+
+                if(isDegrade)
+                {
+                    enhanceItem.Degrade(enhancementRatePerLevel[enhancementLevel]);
+                }
+            }
         }
 
         // 강화 결과
@@ -169,7 +182,7 @@ namespace TerimalQuest.Manager
             // 플레이어 스탯 업데이트
             player.UpdateStats();
 
-            uiManager.DisplayEnhancementResultScripts(enhanceSuccess, prevItem, enhanceItem);
+            uiManager.DisplayEnhancementResultScripts(enhanceSuccess, isDegrade, prevItem, enhanceItem);
         }
     }
 }

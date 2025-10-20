@@ -74,6 +74,11 @@ namespace TerimalQuest.System
             // 아이템 강화
         }
 
+        public virtual void Degrade(float degradeValue)
+        {
+            // 아이템 하락
+        }
+
         public virtual void DisplayInfo(string idxTxt)
         {
             // 아이템 정보 표시
