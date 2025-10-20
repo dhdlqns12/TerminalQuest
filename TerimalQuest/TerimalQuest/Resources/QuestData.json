@@ -47,7 +47,7 @@
     "description": "힘이 들때면 이것을 먹어봐요!!",
     "successDes": "빨간 포션을 먹어보세요",
     "successConditions": {
-      "빨간 포션": 1
+      "빨간포션": 1
     },
     "rewardGold": 100,
     "rewardExp": 10,
