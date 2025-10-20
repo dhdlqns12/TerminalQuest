@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using TerimalQuest.Manager;
 using TerimalQuest.System;
 
+
+
 namespace TerimalQuest.Core
 {
     public class Player : Character
@@ -58,8 +60,6 @@ namespace TerimalQuest.Core
         public float baseEvadeRate { get; set; } //아이템 장착하지 않았을 때의 플레이어 회피 확률
 
         private bool isChangeStat = false;
-
-        //public int[] requiredExp= { 10, 35, 65, 100 };
 
         private int _exp { get; set; }            // 플레이어 경험치
         public int exp
@@ -128,6 +128,14 @@ namespace TerimalQuest.Core
             RefreshStat();
         }
 
+        struct JobBonus
+        {
+            public float AtkBonus;
+            public float DefBonus;
+            public float CritBonus;
+            public int MpBonus;
+        }
+
         private void LevelUp()
         {
             level++;
@@ -136,20 +144,24 @@ namespace TerimalQuest.Core
             maxHp += 10;
             hp += 10;
 
-            if (this.jobName == "마법사")
-            {
-                maxMp += 20;
-                mp += 20;
-            }
-            else
-            {
-                maxMp += 10;
-                mp += 10;
-            }
+            var bonus = GetJobBonus();
+
+            baseAtk += bonus.AtkBonus;
+            baseDef += bonus.DefBonus;
+            critRate += bonus.CritBonus;
+            maxMp += bonus.MpBonus;
+            mp += bonus.MpBonus;
 
             QuestManager.Instance.PlayQuest("레벨", 1);
             RefreshStat();
         }
+
+        private JobBonus GetJobBonus() => jobName switch  // 스위치 expression
+        {
+            "마법사" => new JobBonus { AtkBonus = 0.5f, MpBonus = 25 },
+            "궁수" => new JobBonus { CritBonus = 0.03f, MpBonus = 15 },
+            _ => new JobBonus { DefBonus = 0.5f, MpBonus = 15 }
+        };
 
         public void SetExpWithoutLevelUp(int value) //로드 전용
         {
@@ -173,7 +185,7 @@ namespace TerimalQuest.Core
             skillList = job.DefaultSkills;
         }
 
-        public void IsChangeStat()  // 음 옛날에 해봤던 Dirty Flag패턴이랑 유사한데....
+        public void IsChangeStat()
         {
             isChangeStat = true;
         }

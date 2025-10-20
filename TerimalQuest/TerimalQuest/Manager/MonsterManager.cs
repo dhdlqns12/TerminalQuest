@@ -85,17 +85,17 @@ public class MonsterManager
             Monster kefga = new Monster("케프가", 10, 800,0,50,10);
             kefga.rewardExp = 1000;
             kefga.rewardGold = 5000;
-            kefga.evadeRate = 0.3f;
-            kefga.critRate = 0.5f;
+            kefga.evadeRate = 0.15f;
+            kefga.critRate = 0.25f;
             return kefga;
         }
         else
         {
-            Monster labos = new Monster("라보스", 99, 2000,0,99,99);
+            Monster labos = new Monster("라보스", 99, 1800,0,100,20);
             labos.rewardExp = 9999;
             labos.rewardGold = 9999;
-            labos.evadeRate = 0.3f;
-            labos.critRate = 0.5f;
+            labos.evadeRate = 0.25f;
+            labos.critRate = 0.4f;
             return labos;
         }
     }
