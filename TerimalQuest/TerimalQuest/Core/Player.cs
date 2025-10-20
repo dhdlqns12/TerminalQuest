@@ -126,14 +126,6 @@ namespace TerimalQuest.Core
             RefreshStat();
         }
 
-        struct JobBonus
-        {
-            public float AtkBonus;
-            public float DefBonus;
-            public float CritBonus;
-            public int MpBonus;
-        }
-
         private void LevelUp()
         {
             level++;
@@ -142,24 +134,27 @@ namespace TerimalQuest.Core
             maxHp += 10;
             hp += 10;
 
-            var bonus = GetJobBonus();
-
-            baseAtk += bonus.AtkBonus;
-            baseDef += bonus.DefBonus;
-            critRate += bonus.CritBonus;
-            maxMp += bonus.MpBonus;
-            mp += bonus.MpBonus;
-
+            switch (jobName)
+            {
+                case "마법사":
+                    baseAtk += 0.5f;
+                    maxMp += 25;
+                    mp += 25;
+                    break;
+                case "궁수":
+                    critRate += 0.03f;
+                    maxMp += 15;
+                    mp += 15;
+                    break;
+                default:
+                    baseDef += 0.5f;
+                    maxMp += 15;
+                    mp += 15;
+                    break;
+            }
             QuestManager.Instance.PlayQuest("레벨", 1);
             RefreshStat();
         }
-
-        private JobBonus GetJobBonus() => jobName switch  // 스위치 expression
-        {
-            "마법사" => new JobBonus { AtkBonus = 0.5f, MpBonus = 25 },
-            "궁수" => new JobBonus { CritBonus = 0.03f, MpBonus = 15 },
-            _ => new JobBonus { DefBonus = 0.5f, MpBonus = 15 }
-        };
 
         public void SetExpWithoutLevelUp(int value) //로드 전용
         {
