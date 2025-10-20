@@ -41,7 +41,7 @@ namespace TerimalQuest.System
             QuestManager.Instance.PlayQuest("강화");
         }
 
-        public virtual void Degrade(float degradeValue)
+        public override void Degrade(float degradeValue)
         {
             // 최하위 단계면 하락 X
             if(enhancementLevel <= 1)

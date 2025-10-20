@@ -29,18 +29,21 @@ namespace TerimalQuest.Manager
         private int maxEnhancementLevel = 10;
         public int[] stoneRequiredPerLevel = { 0, 1, 1, 2, 2, 3, 4, 5, 6, 8, 12 };
         public float[] successRatePerLevel = { 1f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.3f, 0.2f, 0.1f, 0.05f, 0.03f };
-        public float[] degradeRatePerLevel = { 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f };
+        public float[] degradeRatePerLevel = { 0f, 0f, 0.05f, 0.05f, 0.05f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f };
         public float[] enhancementRatePerLevel = { 0, 3, 3, 5, 5, 7, 9, 11, 18, 28, 40 };
 
         // 강화 시 사용하는 변수
         private Random random;                  // 강화 확률에 사용할 랜덤 객체
         public Item prevItem { get; set; }      // 강화 이전 상태를 담은 아이템
         public Item enhanceItem { get; set; }   // 강화 할 대상 아이템
-        private bool enhanceSuccess;            // 강화 성공 여부
         private int enhancementLevel;           // 강화 레벨
         private int enhancementStoneId;         // 강화석 Id
+
+        public bool enhanceSuccess { get; set; }    // 강화 성공 여부
+        public bool enhanceDegrade { get; set; }    // 강화 하락 여부
+        public bool enhanceFail { get; set; }       // 강화 실패 여부
+
         private EnhancementStone enhancementStone { get; set; } // 강화석
-        public bool isDegrade { get; set; }
 
         public EnhancementManager() 
         {
@@ -123,8 +126,8 @@ namespace TerimalQuest.Manager
             // 아이템 강화 단계 가져오기
             enhancementLevel = enhanceItem.GetLevel();
 
-            // 장비 레벨 체크
-            if (enhancementLevel >= maxEnhancementLevel)
+            // 장비 레벨 체크 && 예외처리
+            if (enhancementLevel >= maxEnhancementLevel || enhancementLevel >= enhancementRatePerLevel.Length)
             {
                 uiManager.MessageNoMoreEnhancement();
                 return false;
@@ -154,25 +157,48 @@ namespace TerimalQuest.Manager
                 inventory.Remove(enhancementStone);
             }
 
-            // 강화 확률 계산
-            float successRate = successRatePerLevel[enhancementLevel+1];
-            enhanceSuccess = random.NextDouble() < successRate;
+            // 확률 계산
+            int value = random.Next(0, 101);
 
-            // 성공 시 강화 레벨 증가
+            CalcSuccessRate(value);
+
             if(enhanceSuccess)
             {
+                // 강화 성공
                 enhanceItem.Enhance(enhancementRatePerLevel[enhancementLevel + 1]);
+            }
+            else if(enhanceDegrade)
+            {
+                // 강화 하락
+                enhanceItem.Degrade(enhancementRatePerLevel[enhancementLevel]);
             }
             else
             {
-                // 하락 확률 계산
-                float degardRate = degradeRatePerLevel[enhancementLevel];
-                isDegrade = random.NextDouble() < degardRate;
+                // 강화 실패
+            }
+        }
 
-                if(isDegrade)
-                {
-                    enhanceItem.Degrade(enhancementRatePerLevel[enhancementLevel]);
-                }
+        // 확률 계산
+        private void CalcSuccessRate(float value)
+        {
+            int successInt = (int)(successRatePerLevel[enhancementLevel + 1] * 100);
+            int degradeInt = (int)(degradeRatePerLevel[enhancementLevel] * 100);
+
+            enhanceSuccess = false;
+            enhanceDegrade = false;
+            enhanceFail = false;
+
+            if (value >= 0 && value <= successInt)
+            {
+                enhanceSuccess = true;
+            }
+            else if (value > successInt && value <= successInt + degradeInt)
+            {
+                enhanceDegrade = true;
+            }
+            else
+            {
+                enhanceFail = true;
             }
         }
 
@@ -182,7 +208,7 @@ namespace TerimalQuest.Manager
             // 플레이어 스탯 업데이트
             player.UpdateStats();
 
-            uiManager.DisplayEnhancementResultScripts(enhanceSuccess, isDegrade, prevItem, enhanceItem);
+            uiManager.DisplayEnhancementResultScripts(enhanceSuccess, enhanceDegrade, prevItem, enhanceItem);
         }
     }
 }

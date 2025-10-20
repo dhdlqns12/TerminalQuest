@@ -42,7 +42,7 @@ namespace TerimalQuest.System
             QuestManager.Instance.PlayQuest("강화");
         }
 
-        public virtual void Degrade(float degradeValue)
+        public override void Degrade(float degradeValue)
         {
             // 강화 레벨 하락 후 방어력 감소
             enhancementLevel--;

@@ -619,14 +619,14 @@ namespace TerimalQuest.Manager
             // 강화 확률
             ConsoleHelper.PrintColored("강화 성공 확률:", ConsoleColor.Cyan, false);
             Console.Write(" ");
-            ConsoleHelper.PrintColored($"{successRate * 100:F1}%", ConsoleColor.Green);
+            ConsoleHelper.PrintColored($"{successRate * 100:F0}%", ConsoleColor.Green);
 
             Console.WriteLine();
 
             // 하락 확률
             ConsoleHelper.PrintColored("강화 하락 확률:", ConsoleColor.Red, false);
             Console.Write(" ");
-            ConsoleHelper.PrintColored($"{degradeRate * 100:F1}%", ConsoleColor.Red);
+            ConsoleHelper.PrintColored($"{degradeRate * 100:F0}%", ConsoleColor.Red);
 
             Console.WriteLine();
 
@@ -641,7 +641,7 @@ namespace TerimalQuest.Manager
             DisplayOption(["1. 강화하기", "0. 나가기"]);
         }
 
-        public void DisplayEnhancementResultScripts(bool success, bool isDegard, Item prevItem, Item item)
+        public void DisplayEnhancementResultScripts(bool success, bool isDegrade, Item prevItem, Item item)
         {
             Console.Clear();
             EnhancementHeader("장비 강화");
@@ -658,18 +658,15 @@ namespace TerimalQuest.Manager
                 // 강화 성공 텍스트 출력
                 ConsoleHelper.PrintColored("강화에 성공했습니다!", ConsoleColor.Cyan);
             }
+            else if(isDegrade)
+            {
+                // 강화 실패 텍스트 출력
+                ConsoleHelper.PrintColored("강화 대실패.. 강화 레벨이 하락했습니다...", ConsoleColor.Red);
+            }
             else
             {
-                if(isDegard)
-                {
-                    // 강화 실패 텍스트 출력
-                    ConsoleHelper.PrintColored("어이쿠 손이 미끄러졌습니다...", ConsoleColor.Red);
-                }
-                else
-                {
-                    // 강화 실패 텍스트 출력
-                    ConsoleHelper.PrintColored("강화에 실패하였습니다..", ConsoleColor.Red);
-                }
+                // 강화 실패 텍스트 출력
+                ConsoleHelper.PrintColored("강화에 실패하였습니다..", ConsoleColor.Red);
             }
 
             // 강화 전 -> 강화 후 장비 보여주기
