@@ -92,7 +92,7 @@ namespace TerimalQuest.Core
             //기본 스킬 추가
             Skill rapidArrow = new Skill("빨리쏘기", "화살을 강하게 발사해 50의 고정데미지",  50, SkillType.Attack, SkillDamageType.FixedDamage, SkillRangeType.One,  10);
             Skill arrowRain = new Skill("화살비", "화살비를 내려 모든 적에게 공격력 *0.9의 데미지",  0.9f, SkillType.Attack,  SkillDamageType.BaseAttack, SkillRangeType.All, 20);
-            Skill arrowBomb = new Skill("폭발화살", "화살에 폭탄을 장착하고 발사해 적에게 공격력 *2의 데미지",  2f, SkillType.Attack,  SkillDamageType.BaseAttack, SkillRangeType.One, 100);
+            Skill arrowBomb = new Skill("폭발화살", "화살에 폭탄을 장착하고 발사해 적에게 공격력 *2의 데미지",  2f, SkillType.Attack,  SkillDamageType.BaseAttack, SkillRangeType.One, 50);
             DefaultSkills.Add(rapidArrow);
             DefaultSkills.Add(arrowRain);
             DefaultSkills.Add(arrowBomb);
