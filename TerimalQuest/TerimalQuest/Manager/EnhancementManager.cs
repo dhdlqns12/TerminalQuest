@@ -145,6 +145,13 @@ namespace TerimalQuest.Manager
             int requiredStoneCount = stoneRequiredPerLevel[enhancementLevel+1]; // 다음 단계 필요 강화석
             enhancementStone.count -= requiredStoneCount;
 
+            // 강화석 0이하로 내려갈시 개수 조정하고 인벤토리에서 삭제
+            if (enhancementStone.count <= 0)
+            {
+                enhancementStone.count = 0;
+                inventory.Remove(enhancementStone);
+            }
+
             // 강화 확률 계산
             float successRate = successRatePerLevel[enhancementLevel+1];
             enhanceSuccess = random.NextDouble() < successRate;
