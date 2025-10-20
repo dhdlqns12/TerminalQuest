@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using TerimalQuest.Manager;
 using TerimalQuest.System;
 
-
-
 namespace TerimalQuest.Core
 {
     public class Player : Character
