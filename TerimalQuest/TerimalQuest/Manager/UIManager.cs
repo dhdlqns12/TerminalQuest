@@ -186,7 +186,6 @@ namespace TerimalQuest.Manager
 
         public void SetNameScripts()
         {
-            TunnelAnimation();
             Console.Write("원하시는 이름을 설정해주세요. \n>>");
         }
 
@@ -1435,7 +1434,7 @@ namespace TerimalQuest.Manager
         #endregion
 
         #region UIAnimation
-        private void TunnelAnimation()
+        public void TunnelAnimation()
         {
             int centerX = 40;
             int centerY = 12;

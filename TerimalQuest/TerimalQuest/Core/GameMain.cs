@@ -11,7 +11,7 @@ namespace TerimalQuest.Core
             Console.OutputEncoding = global::System.Text.Encoding.UTF8;
             Console.CursorVisible = false;
 
-
+            UIManager.Instance.TunnelAnimation();
             UIManager.Instance.TerminalQuestScripts();
 
             int saveDataCount = 0;

@@ -57,11 +57,11 @@ namespace TerimalQuest.Scenes
         private void TownPatrol()
         {
             Random ran = new Random();
-            
+
             var events = new[]
             {
                 (30,"아이들에게 삥을 뜯겻다.",-1500),
-                (90, "길 읽은 아이를 안내해주었다.",0),
+                (60, "길 읽은 아이를 안내해주었다.",0),
                 (99, "마을 주민에게 선물을  받았다.",1000),
                 (100, "아무 일도 일어나지 않았다.",10000)
             };
@@ -74,9 +74,8 @@ namespace TerimalQuest.Scenes
                 {
                     if (ranNum <= percent)
                     {
-                        if (gold > 0)
-                            questManager.PlayQuest("마을순찰");
-                        if (ranNum > 40 && ranNum <= 70)
+                        questManager.PlayQuest("마을순찰");
+                        if (ranNum > 60 && ranNum <= 99)
                             questManager.PlayQuest("선물");
                         Console.WriteLine($"{message} {gold}골드 흭득");
                         player.gold += gold;
@@ -105,7 +104,7 @@ namespace TerimalQuest.Scenes
 
             int ranNum = ran.Next(1, 101);
 
-            if (player.stamina >= 20&&player.gold>=250)
+            if (player.stamina >= 20 && player.gold >= 250)
             {
                 foreach (var (percent, message, exp) in events)
                 {
@@ -122,7 +121,7 @@ namespace TerimalQuest.Scenes
             {
                 Console.WriteLine("스태미나 또는 골드가 부족합니다.");
             }
-                player.stamina -= 20;
+            player.stamina -= 20;
         }
     }
 }
