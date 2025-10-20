@@ -94,7 +94,7 @@ namespace TerimalQuest.Manager
             }
 
             // 강화 할 때 사용할 강화석 개수가 충분하지 체크
-            return (enhancementStone.count >= stoneRequiredPerLevel[level]);
+            return (enhancementStone.count >= stoneRequiredPerLevel[level + 1]);
         }
 
         // 강화석 개수 얻기
