@@ -11,7 +11,8 @@
     "rewardGold": 700,
     "rewardExp": 30,
     "rewardItem": {
-      "빨간포션": 5
+      "빨간포션": 5,
+      "강화석": 10
     }
   },
   {
@@ -25,7 +26,9 @@
     },
     "rewardGold": 100,
     "rewardExp": 10,
-    "rewardItem": null
+    "rewardItem": {
+      "강화석": 10
+    }
   },
   {
     "questNum": 3,
@@ -38,7 +41,9 @@
     },
     "rewardGold": 2000,
     "rewardExp": 50,
-    "rewardItem": null
+    "rewardItem": {
+      "강화석": 30
+    }
   },
   {
     "questNum": 4,
@@ -52,7 +57,8 @@
     "rewardGold": 100,
     "rewardExp": 10,
     "rewardItem": {
-      "빨간포션": 5
+      "빨간포션": 5,
+      "강화석": 10
     }
   },
   {
@@ -67,8 +73,10 @@
     "rewardGold": 100,
     "rewardExp": 20,
     "rewardItem": {
-      "빨간포션": 5,
-      "노랑포션": 3
+      "빨간포션": 2,
+      "파란포션": 2,
+      "노랑포션": 2,
+      "강화석": 10
     }
   },
   {
@@ -83,11 +91,10 @@
     "rewardGold": 2500,
     "rewardExp": 100,
     "rewardItem": {
-      "스파르타의 창": 1,
-      "스파르타의 갑옷": 1,
       "빨간포션": 10,
       "파랑포션": 5,
-      "노랑포션": 5
+      "노랑포션": 5,
+      "강화석": 100
     }
   },
   {
@@ -115,7 +122,7 @@
     "rewardGold": 1000,
     "rewardExp": 20,
     "rewardItem": {
-      "강화석": 3
+      "강화석": 15
     }
   },
   {
@@ -129,7 +136,9 @@
     },
     "rewardGold": 500,
     "rewardExp": 10,
-    "rewardItem": null
+    "rewardItem": {
+      "강화석": 10
+    }
   },
   {
     "questNum": 10,
@@ -143,7 +152,7 @@
     "rewardGold": 0,
     "rewardExp": 30,
     "rewardItem": {
-      "강화석": 5
+      "강화석": 30
     }
   },
   {
@@ -151,17 +160,18 @@
     "questType": "사냥",
     "name": "자신의 한계를 시험해보고싶나?",
     "description": "오!! 자네 자신감에 가득차있군\n어디 이것도 한번 해결해주시게나\n내 보상은 두둑히 하지",
-    "successDes": "마을 순찰을 하세요",
+    "successDes": "몬스터들을 잡으세요",
     "successConditions": {
-      "슬라임": 15,
-      "오크": 15,
-      "트롤": 15
+      "슬라임": 3,
+      "오크": 3,
+      "트롤": 3
     },
     "rewardGold": 3000,
     "rewardExp": 200,
     "rewardItem": {
       "청동 도끼": 1,
-      "무쇠갑옷": 1
+      "무쇠갑옷": 1,
+      "강화석": 30
     }
   },
   {
@@ -175,6 +185,8 @@
     },
     "rewardGold": 750,
     "rewardExp": 20,
-    "rewardItem": null
+    "rewardItem": {
+      "강화석": 10
+    }
   }
 ]
