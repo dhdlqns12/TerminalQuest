@@ -624,9 +624,9 @@ namespace TerimalQuest.Manager
             Console.WriteLine();
 
             // 하락 확률
-            ConsoleHelper.PrintColored("강화 하락 확률:", ConsoleColor.Cyan, false);
+            ConsoleHelper.PrintColored("강화 하락 확률:", ConsoleColor.Red, false);
             Console.Write(" ");
-            ConsoleHelper.PrintColored($"{degradeRate * 100:F1}%", ConsoleColor.Green);
+            ConsoleHelper.PrintColored($"{degradeRate * 100:F1}%", ConsoleColor.Red);
 
             Console.WriteLine();
 
