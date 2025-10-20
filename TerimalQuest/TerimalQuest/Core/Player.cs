@@ -153,6 +153,8 @@ namespace TerimalQuest.Core
             baseDef = job.def;
             critRate = job.critRate;
             evadeRate = job.evadeRate;
+            baseCritRate = job.critRate;
+            baseEvadeRate = job.evadeRate;
             skillList = job.DefaultSkills;
         }
 

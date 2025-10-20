@@ -60,10 +60,10 @@ namespace TerimalQuest.Scenes
             
             var events = new[]
             {
-                (20,"마을 주민과 만나서 심부름을 했다.",1000),
-                (40, "길 읽은 아이를 안내해주고 보수를 받았다.",500),
-                (70, "마을 주민에게 선물을  받았다.",250),
-                (100, "아무 일도 일어나지 않았다.",0)
+                (30,"아이들에게 삥을 뜯겻다.",-1500),
+                (90, "길 읽은 아이를 안내해주었다.",0),
+                (99, "마을 주민에게 선물을  받았다.",1000),
+                (100, "아무 일도 일어나지 않았다.",10000)
             };
 
             int ranNum = ran.Next(1, 101);
@@ -97,14 +97,15 @@ namespace TerimalQuest.Scenes
 
             var events = new[]
             {
-                (15, "열심히 바닥을 굴렀습니다!",30),
+                (10,"아무것도 안했습니다.",0),
+                (20, "열심히 바닥을 굴렀습니다!",30),
                 (75,"오늘 훈련 완료",20),
                 (100, "하기 싫다... 훈련이...",15)
             };
 
             int ranNum = ran.Next(1, 101);
 
-            if (player.stamina >= 20)
+            if (player.stamina >= 20&&player.gold>=250)
             {
                 foreach (var (percent, message, exp) in events)
                 {

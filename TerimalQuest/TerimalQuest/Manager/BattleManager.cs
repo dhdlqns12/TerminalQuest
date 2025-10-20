@@ -363,12 +363,13 @@ namespace TerimalQuest.Manager
                 float finalSkillDamage = 0;
                 if (selectedSkill.damageType == SkillDamageType.FixedDamage)
                 {
-                    target.hp -= skill.damage;
+                    finalSkillDamage = skill.damage;
                 }
                 else if (selectedSkill.damageType == SkillDamageType.BaseAttack)
                 {
-                    target.hp -= (skill.damage * player.atk);
+                    finalSkillDamage = (skill.damage * player.atk);
                 }
+                target.hp -= finalSkillDamage;
                 recodeManager.RecordSkillUse(skill,(int)finalSkillDamage);
             }
 

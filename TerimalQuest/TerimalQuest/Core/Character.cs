@@ -8,6 +8,7 @@ namespace TerimalQuest.Core
 {
     public class Character
     {
+        private const int DefenseConst = 30;
         public string name { get; set; }      // 캐릭터 이름
         public int level { get; set; }          // 캐릭터 레벨
 
@@ -55,17 +56,21 @@ namespace TerimalQuest.Core
         public int GetFinalDamage(out bool isCritical, int targetDef)
         {
             Random random = new Random();
+            float deviation = atk * 0.1f;
+            float randomDeviation = (float)(random.NextDouble() * (deviation * 2) - deviation);
+            float baseDamage = atk + randomDeviation;
             isCritical = random.NextDouble() < this.critRate;
-            float deviation = (float)Math.Ceiling(atk * 0.1);
-            int minDamage = (int)Math.Ceiling(atk - deviation);
-            int maxDamage = (int)Math.Ceiling(atk + deviation);
-            int finalDamage = random.Next(minDamage, maxDamage + 1) - targetDef;
-            if(finalDamage <= 0) finalDamage = 1;
             if (isCritical)
             {
-                finalDamage = (int)(finalDamage * 1.6);
+                baseDamage *= 1.6f;
             }
-            return  finalDamage;
+            float damageReduction = (float)targetDef / (targetDef + DefenseConst);
+            int finalDamage = (int)Math.Ceiling(baseDamage * (1 - damageReduction));
+            if (finalDamage <= 0)
+            {
+                finalDamage = 1;
+            }
+            return finalDamage;
         }
     }
 }

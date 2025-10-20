@@ -49,9 +49,9 @@ namespace TerimalQuest.Manager
             Console.ResetColor();
 
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("─────────────────────────────────────────");
-            Console.WriteLine($"  이름: {p.name}   HP: {p.hp}/{p.maxHp}   GOLD: {p.gold}");
-            Console.WriteLine("─────────────────────────────────────────");
+            Console.WriteLine("────────────────────────────────────────────────────────────────────");
+            Console.WriteLine($"  이름: {p.name}   HP: {p.hp}/{p.maxHp}   MP: {p.mp}/{p.maxMp}    Stamina: {p.stamina}/{p.maxStamina}    GOLD: {p.gold}");
+            Console.WriteLine("────────────────────────────────────────────────────────────────────");
             Console.ResetColor();
 
             Console.WriteLine();
@@ -69,6 +69,7 @@ namespace TerimalQuest.Manager
             PrintMenuOption(5, "상점");
             PrintMenuOption(6, "마을 활동");
             PrintMenuOption(7, "장비 강화");
+            PrintMenuOption(8, "게임 저장");
             PrintMenuOption(0, "게임 종료");
 
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -110,7 +111,7 @@ namespace TerimalQuest.Manager
         public void ShowStatusSceneScripts()
         {
             Player p = GameManager.Instance.player;
-            Console.Write($"상태 보기\r\n캐릭터의 정보가 표시됩니다.\r\n\r\nLv. {p.level}      \r\n{p.name} ( {p.jobName} )\r\n공격력 : {p.atk}\r\n방어력 : {p.def}\r\n체 력 : {p.hp}\r\nGold : {p.gold} G\r\n\r\n0. 나가기\r\n\r\n원하시는 행동을 입력해주세요.\r\n>> ");
+            Console.Write($"상태 보기\r\n캐릭터의 정보가 표시됩니다.\r\n\r\nLv. {p.level}       경험치: {p.exp}\r\n{p.name} ( {p.jobName} )\r\n공격력 : {p.atk}\r\n방어력 : {p.def}\r\n체 력 : {p.hp}\r\n마나: {p.mp}\r\n스태미나 : {p.stamina}\r\nGold : {p.gold} G\r\n\r\n0. 나가기\r\n\r\n원하시는 행동을 입력해주세요.\r\n>> ");
         }
 
         public void TerminalQuestScripts()
@@ -766,9 +767,24 @@ namespace TerimalQuest.Manager
 
         #region BattleUI
 
+        private bool kefgaEntranceShown = false;
         // 전투 화면 진입 - 몬스터 애니메이션 포함
         public void BattleEntrance(List<Monster> monsters, Player player)
         {
+            Monster boss = monsters.FirstOrDefault(m => m.name == "케프가" || m.name == "라보스");
+            if (boss != null)
+            {
+                // 보스별 등장 연출
+                if (boss.name == "케프가"&& !kefgaEntranceShown)
+                {
+                    DisplayKefgaBossEntrance();
+                    kefgaEntranceShown = true;
+                }
+                else if (boss.name == "라보스")
+                {
+
+                }
+            }
             Console.Clear();
             Console.SetCursorPosition(0, 0);
 
@@ -1099,7 +1115,6 @@ namespace TerimalQuest.Manager
 
         #endregion
 
-
         #region QuestUI
         /// <summary>
         /// 퀘스트 리스트업 함수
@@ -1303,68 +1318,106 @@ namespace TerimalQuest.Manager
         public void DisplayShowEnding()
         {
             RecodeManager recode = RecodeManager.Instance;
-
             Console.Clear();
+
+            int screenWidth = Console.WindowWidth;
+
+            Action<string> writeCentered = (text) =>
+            {
+                if (string.IsNullOrEmpty(text))
+                {
+                    Console.WriteLine();
+                    return;
+                }
+                int leftPadding = (screenWidth - text.Length) / 2;
+                Console.CursorLeft = Math.Max(0, leftPadding);
+                Console.WriteLine(text);
+            };
+
+            Action<string> writeSectionHeader = (text) =>
+            {
+                string headerText = $" {text} ";
+                int remainingWidth = screenWidth - headerText.Length;
+                int leftPadding = remainingWidth / 2;
+                int rightPadding = remainingWidth - leftPadding;
+                string header = new string('━', leftPadding) + headerText + new string('━', rightPadding);
+                Console.WriteLine(header);
+            };
+
+            string border = new string('*', screenWidth);
+            string title = "G A M E   C L E A R";
+            string emptyBorderLine = "*" + new string(' ', screenWidth - 2) + "*";
+            int titlePadding = (screenWidth - 2 - title.Length) / 2;
+            string titleLine = "*" + new string(' ', titlePadding) + title + new string(' ', screenWidth - 2 - title.Length - titlePadding) + "*";
+
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("**************************************************");
-            Console.WriteLine("*                                                *");
-            Console.WriteLine("*             G A M E   C L E A R                *");
-            Console.WriteLine("*                                                *");
-            Console.WriteLine("**************************************************");
+            Console.WriteLine(border);
+            Console.WriteLine(emptyBorderLine);
+            Console.WriteLine(titleLine);
+            Console.WriteLine(emptyBorderLine);
+            Console.WriteLine(border);
             Console.ResetColor();
             Console.WriteLine();
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($" >>Lv.{recode.clearPlayer.level} {recode.clearPlayer.name} ({recode.clearPlayer.jobName}) <<");
+            writeCentered($" >> Lv.{recode.clearPlayer.level} {recode.clearPlayer.name} ({recode.clearPlayer.jobName}) << ");
             Console.ResetColor();
             Console.WriteLine();
-
-            // 4. 종합 기록 출력
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("━━━━━━━━━━━━━━ 최종 기록 ━━━━━━━━━━━━━━");
-            Console.ResetColor();
-            Console.WriteLine($"  가한 총 데미지  : {recode.totalDamage:N0}");
-            Console.WriteLine($"  받은 총 데미지  : {recode.totalDamageTaken:N0}");
             Console.WriteLine();
 
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("━━━━━━━━━━━━ 처치한 몬스터 ━━━━━━━━━━━━");
+            writeSectionHeader("최종 기록");
             Console.ResetColor();
+            Console.WriteLine();
+            writeCentered($"가한 총 데미지  : {recode.totalDamage:N0}");
+            writeCentered($"받은 총 데미지  : {recode.totalDamageTaken:N0}");
+            Console.WriteLine();
+            Console.WriteLine();
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            writeSectionHeader("처치한 몬스터");
+            Console.ResetColor();
+            Console.WriteLine();
 
             if (recode.defeatedMonsterList.Count == 0)
             {
-                Console.WriteLine("  처치한 몬스터가 없습니다.");
+                writeCentered("처치한 몬스터가 없습니다.");
             }
             else
             {
                 foreach (var monster in recode.defeatedMonsterList)
                 {
-                    Console.WriteLine($"  - {monster.Key,-15} : {monster.Value,3}마리");
+                    writeCentered($"- {monster.Key,-20} : {monster.Value,3}마리");
                 }
             }
             Console.WriteLine();
+            Console.WriteLine();
 
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("━━━━━━━━━━ 사용한 스킬 및 데미지 ━━━━━━━━━━");
+            writeSectionHeader("사용한 스킬 및 데미지");
             Console.ResetColor();
+            Console.WriteLine();
 
             if (recode.usedSkillRecords.Count == 0)
             {
-                Console.WriteLine("  사용한 스킬이 없습니다.");
+                writeCentered("사용한 스킬이 없습니다.");
             }
             else
             {
                 foreach (var skill in recode.usedSkillRecords)
                 {
-                    Console.WriteLine($"  - {skill.skillName,-15} ({skill.skillUseCount,2}회) | 총 데미지: {skill.totalDamage:N0}");
+                    writeCentered($"- {skill.skillName,-20} ({skill.skillUseCount,2}회) | 총 데미지: {skill.totalDamage:N0}");
                 }
             }
             Console.WriteLine();
+            Console.WriteLine();
 
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("**************************************************");
-            Console.WriteLine("\n           Thank you for playing!\n");
-            Console.WriteLine("**************************************************");
+            Console.WriteLine(border);
+            Console.WriteLine();
+            writeCentered("Thank you for playing!");
+            Console.WriteLine();
+            Console.WriteLine(border);
             Console.ResetColor();
 
             Console.ReadKey(true);
@@ -1375,6 +1428,163 @@ namespace TerimalQuest.Manager
         public void TownActivityScripts()
         {
             Console.WriteLine("마을에서 수행 할 활동을 선택해 주세요.\n\n1.순찰\n2.훈련\n\n0.나가기\n");
+        }
+        #endregion
+
+        #region UIAnimation
+        private void TunnelAnimation()
+        {
+            int centerX = 40;
+            int centerY = 12;
+
+            for (int frame = 0; frame < 25; frame++)
+            {
+                Console.Clear();
+
+                for (int layer = 5; layer >= 0; layer--)
+                {
+                    int size = (layer * 8 + frame * 2) % 50;
+
+                    if (size < 2) continue;
+
+                    ConsoleColor color;
+                    if (layer == 0) color = ConsoleColor.DarkGray;
+                    else if (layer == 1) color = ConsoleColor.DarkGray;
+                    else if (layer == 2) color = ConsoleColor.DarkGray;
+                    else if (layer == 3) color = ConsoleColor.DarkBlue;
+                    else if (layer == 4) color = ConsoleColor.DarkBlue;
+                    else color = ConsoleColor.Black;
+
+                    Console.ForegroundColor = color;
+
+                    DrawRectangle(centerX - size / 2, centerY - size / 4, size, size / 2);
+                }
+
+                global::System.Threading.Thread.Sleep(150);
+            }
+            Console.Clear();
+        }
+
+        private void DrawRectangle(int x, int y, int width, int height)
+        {
+            if (width <= 0 || height <= 0) return;
+
+            if (y >= 0 && y < Console.WindowHeight)
+            {
+                Console.SetCursorPosition(Math.Max(0, x), y);
+                Console.Write(new string('█', Math.Min(width, Console.WindowWidth - Math.Max(0, x))));
+            }
+
+            if (y + height >= 0 && y + height < Console.WindowHeight)
+            {
+                Console.SetCursorPosition(Math.Max(0, x), y + height);
+                Console.Write(new string('█', Math.Min(width, Console.WindowWidth - Math.Max(0, x))));
+            }
+
+            for (int i = 1; i < height; i++)
+            {
+                if (y + i >= 0 && y + i < Console.WindowHeight)
+                {
+                    if (x >= 0 && x < Console.WindowWidth)
+                    {
+                        Console.SetCursorPosition(x, y + i);
+                        Console.Write('█');
+                    }
+                    if (x + width >= 0 && x + width < Console.WindowWidth)
+                    {
+                        Console.SetCursorPosition(x + width, y + i);
+                        Console.Write('█');
+                    }
+                }
+            }
+        }
+
+        public void DisplayKefgaBossEntrance()
+        {
+            Console.Clear();
+            Console.CursorVisible = false;
+
+            string[] kefgaArt = new string[]
+            {
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠲⣶⠤⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠓⣄⠉⠙⠛⠽⣶⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣖⠦⣄⡀⠈⠙⠻⢽⣲⢤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢦⠀⠈⠓⠢⣄⡀⠀⠙⠺⣗⡢⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢳⡒⠤⢤⣀⣈⠓⠦⣄⠀⠉⠲⣝⠢⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢣⡀⠀⠀⠈⠉⠓⠦⣝⡢⣄⠀⠙⠮⡑⢦⣀⣀⡐⢻⠢⣌⡷⡄⠀⢿⢷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢧⠤⣄⡀⠀⠀⠀⠀⠉⠙⠿⣦⡀⠈⠣⡍⠿⣭⡙⢷⠸⠃⡇⠀⠈⣇⠙⢿⣤⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⡆⠀⠉⠙⠲⠤⣄⡀⠀⠀⠈⠙⠂⠀⠈⠣⡌⠻⣆⠀⢰⠃⠀⠀⢹⠳⣀⠙⢿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡏⠉⠉⠑⠒⠒⠤⣍⣓⠦⣀⠀⠀⠀⠀⠀⠈⢦⠈⠀⢸⠀⠀⠀⠘⡆⠘⢦⡀⠙⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢷⠀⠀⠀⠀⠀⠀⠀⠀⠉⠒⠻⣦⣄⠀⠀⠀⠀⢳⡀⠘⡆⠀⠀⠀⡗⠢⣀⠙⣄⠈⢫⣦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠲⠤⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠈⠓⠀⠀⠀⠀⢣⠀⡇⠀⠀⠀⡇⠀⠈⠳⡌⢦⡀⠱⡷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⣀⣀⣈⡙⠒⠢⠤⣀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⢳⠀⠀⢰⠛⢤⠀⠀⠈⠣⡳⡀⠸⡽⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⠀⠈⠉⠉⠑⠲⠭⢷⣤⣄⠀⠀⠀⠀⢨⠃⠸⡄⠀⡼⠤⡀⠙⢄⠀⠀⠙⢿⡄⠸⡜⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡼⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠙⠂⠀⠀⣇⠀⠀⡇⢠⠃⠀⠈⠱⢄⡳⡄⠀⠈⢻⡀⠸⡜⣶⣄⢲⣄⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⠧⠤⠤⠤⢀⣀⣀⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⢀⡔⠁⣠⠊⢀⠗⢄⡀⠀⠀⠀⠑⢎⣦⠀⠀⠁⠀⢳⠹⣎⢿⢸⢞⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣇⣀⡠⠤⠄⠒⠒⠒⠒⠒⠒⠚⠛⠒⠒⠄⠀⣠⠊⢀⡔⠁⢀⡟⠦⣀⠙⢢⡀⠀⠀⠀⠑⣷⡀⠀⠀⠈⡇⢻⠀⢀⠞⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡞⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡞⠁⣰⠊⠀⣠⠞⠀⠀⠀⠙⠢⣜⢦⡀⠀⠀⠈⢳⡀⠀⠀⢳⠀⢠⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡰⠃⢀⠞⠁⢠⠜⠥⣄⠀⠀⠀⠀⠀⠈⠑⢽⣦⡀⠀⠀⠁⠀⠀⣸⠀⡎⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡯⠤⠤⠒⠒⠒⣈⡩⠭⠭⠭⠭⠒⠒⢠⠞⠀⡴⠃⢠⠜⠓⠒⠤⠤⣍⡓⢤⡀⠀⠀⠀⠀⠙⢷⡄⠀⠀⠀⠀⡇⣰⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣠⠤⠖⠊⠉⠁⠀⠀⠀⠀⠀⠀⢀⠼⠁⢠⠞⢀⡔⠁⠀⠀⠀⠀⠀⠀⠉⠙⠺⢵⣦⡀⠀⠀⠀⠙⠆⠀⣠⠜⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡏⠀⠀⣹⣴⣋⣉⣉⡒⠦⢄⣀⠀⠀⠀⠀⠀⠀⠈⠙⠦⠀⠀⢀⣀⠴⠃⢀⡠⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣳⠀⠀⡏⠀⠀⠀⠀⠈⠉⠑⠒⠻⢖⣤⣀⠀⠀⠀⢀⣀⠴⠒⢉⣠⠔⠚⣉⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡞⠒⠊⢉⣩⠤⠔⠒⠒⠊⠉⠉⠀⠀⠈⢇⠀⠸⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢉⣣⠴⠒⢉⡠⠔⠚⠁⠀⠀⢰⠃⢀⣈⣙⣒⠢⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⠤⠒⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣸⠀⠀⠙⠮⡭⣗⣦⢤⡀⠀⠀⡴⠋⠁⡤⠔⠊⠁⠀⠀⠀⠀⠀⠀⡼⠊⠁⡴⣴⡾⣿⣌⠳⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡜⢁⡤⠔⢒⣒⡒⠒⠒⠒⠢⠔⠚⠉⠉⠁⠀⡎⠀⠀⠀⠀⠈⠏⠒⠭⣙⠓⠤⡇⠀⡴⠃⠀⠀⠀⠀⠀⠀⠀⣠⠜⠁⠀⠀⠓⠻⠷⠿⠟⠣⣌⠉⣲⡤⢄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣎⣴⡯⠊⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠈⠑⠴⠧⢤⣇⣀⣀⣀⣀⡤⠤⢖⡉⠀⠀⠀⠀⠀⠀⠀⠀⢠⢀⠤⠬⣍⣛⣧⣄⠈⠉⠒⠦⢤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⣀⠀⠀⠀⠀⠀⢀⡤⠖⠉⠉⠉⠉⠉⠉⠩⠭⠵⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⠴⠊⠁⣠⣶⣤⣀⡀⠀⠀⣱⣄⠘⠸⢄⡐⠲⠶⣤⣌⣀⣀⠀⠀⠀⠀⠙⠛⢶⣤⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⡰⣾⡻⣅⡀⣀⡴⠚⠁⢀⡠⠖⠒⠒⠒⢶⠤⠤⠤⠤⠤⠤⢴⡶⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⣉⣁⡤⠴⠒⠊⠁⠀⠀⠉⠉⠉⠉⠁⠀⠉⠒⠒⠚⠷⠦⣄⣉⠒⠪⢍⣑⠒⠒⠤⢄⣀⣈⠓⣄⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠰⣟⠒⠁⠀⠉⠁⣠⠴⠚⠁⠀⠀⠀⢴⣞⣁⣀⣀⡤⠴⠒⠊⠁⠀⠀⠀⠀⠀⣀⣠⣄⣀⣠⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠴⠚⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠒⠦⣤⣉⣓⠲⠤⣄⡀⠉⠙⠁⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠉⠙⠛⠛⠉⠀⠀⠀⠀⠀⠀⣠⠔⠚⠉⠉⠀⠀⠀⠀⢀⣀⣠⠤⠤⠒⠋⠁⠀⠀⠀⠀⠀⠉⠙⠲⠤⣄⣀⠀⠀⠀⠀⠀⢀⣠⠤⠚⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠛⠓⠛⠛⠛⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠞⠁⢀⠤⠤⠴⠒⠚⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤⣶⠀⠀⣠⠞⠁⣠⠞⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⣏⣳⠈⠉⠚⠁⣠⠞⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠳⠤⠤⠤⠖⠚⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+            };
+
+            int screenWidth = Console.WindowWidth/2;
+            int artHeight = kefgaArt.Length;
+            int artWidth = 150; 
+
+            for (int x = -artWidth; x < screenWidth; x += 5)  
+            {
+                Console.Clear();
+
+                Console.SetCursorPosition(screenWidth, 5);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(" WARNING ");
+                Console.ResetColor();
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+                int startY = 10; 
+
+                for (int i = 0; i < artHeight; i++)
+                {
+                    if (x >= 0 && x < screenWidth && startY + i < Console.WindowHeight)
+                    {
+                        Console.SetCursorPosition(x, startY + i);
+                        Console.Write(kefgaArt[i]);
+                    }
+                    else if (x < 0)  
+                    {
+                        int visibleStart = Math.Abs(x);
+                        if (visibleStart < kefgaArt[i].Length)
+                        {
+                            string visiblePart = kefgaArt[i].Substring(visibleStart);
+                            Console.SetCursorPosition(0, startY + i);
+                            Console.Write(visiblePart);
+                        }
+                    }
+                }
+                Console.ResetColor();
+
+                Thread.Sleep(150);
+            }
+
+            Console.Clear();
+            Console.SetCursorPosition(screenWidth, Console.WindowHeight / 2);
+            ConsoleHelper.PrintColored("『 케프가 』", ConsoleColor.White);
+            Thread.Sleep(1000);
         }
         #endregion
     }
