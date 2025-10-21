@@ -1,0 +1,142 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TerimalQuest.Manager;
+using TerimalQuest.System;
+
+namespace TerimalQuest.Scenes
+{
+    public class EnhancementScene : IScene
+    {
+        public event Action<IScene> OnSceneChangeRequested;
+
+        private Action currentEnhancementView;
+        private Inventory inventory;
+        private EnhancementManager enhancementManager;
+        private UIManager uiManager;
+
+        private ItemType type;
+
+        public void Enter()
+        {
+            enhancementManager = new EnhancementManager();
+            inventory = GameManager.Instance.player.inventory;
+            uiManager = UIManager.Instance;
+
+            // 강화 시작 화면부터 시작
+            currentEnhancementView = EnhanceStartView;
+            currentEnhancementView?.Invoke();
+        }
+
+        public void Update()
+        {
+            
+        }
+
+        public void Exit()
+        {
+
+        }
+
+        // 강화 시작 화면
+        private void EnhanceStartView()
+        {
+            uiManager.DisplayEnhancementStartScripts(inventory, enhancementManager);
+
+            string choice = ConsoleHelper.GetUserChoice(["0", "1", "2"]);
+
+            // 무기나 방어구 선택 후 강화 페이지로 넘어가기
+            switch (choice)
+            {
+                case "1":
+                    type = ItemType.Weapon;
+                    enhancementManager.SetEnhancealbeItemList(type);
+                    ChangeView(ChoseEnhancementView);
+                    break;
+                case "2":
+                    type = ItemType.Armor;
+                    enhancementManager.SetEnhancealbeItemList(type);
+                    ChangeView(ChoseEnhancementView);
+                    break;
+                case "0":
+                    OnSceneChangeRequested?.Invoke(new StartScene());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // 강화 선택 화면: 무기 or 방어구
+        private void ChoseEnhancementView()
+        {
+            // 아이템 선택 화면 보여주기
+            uiManager.DisplayChoseEnhancementScripts(enhancementManager, type);
+
+            // 강화 가능한 아이템 리스트 정보 가져오기
+            int vaildCount = enhancementManager.enhanceableItems.Count;
+            string[] vaildItemOption = Enumerable.Range(0, vaildCount + 1).Select(i => i.ToString()).ToArray();   // LINQ 문법
+            var choice = ConsoleHelper.GetUserChoice(vaildItemOption);
+
+            if (choice == "0")
+            {
+                ChangeView(EnhanceStartView);
+                return;
+            }
+
+            // 강화 장비 선택 후 강화 뷰로 이동
+            enhancementManager.ChoseEnhanceItem(int.Parse(choice) - 1);
+
+            ChangeView(EnhancementView);
+        }
+
+        // 강화 정보 화면 : 강화 확률과 소모되는 강화석 표시
+        private void EnhancementView()
+        {
+            // 강화 정보 보여주기
+            uiManager.DisplayEnhancementScripts(enhancementManager);
+
+            var choice = ConsoleHelper.GetUserChoice(["0", "1"]);
+
+            while (true)
+            {
+                if (choice == "0")
+                {
+                    ChangeView(ChoseEnhancementView);
+                    return;
+                }
+
+                // 아이템 강화가 가능한 지 체크
+                if (enhancementManager.TryEnhanceItem() == true)
+                {
+                    // 아이템 강화
+                    enhancementManager.EnhanceItem();
+
+                    // 이후 결과 페이지로 이동
+                    ChangeView(EnhanceResultView);
+                    break;
+                }
+
+                choice = ConsoleHelper.GetUserChoice(["0", "1"]);
+            }
+        }
+
+        // 강화 결과 화면
+        private void EnhanceResultView()
+        {
+            enhancementManager.EnhanceResult();
+
+            string choice = ConsoleHelper.GetUserChoice(["0"]);
+
+            ChangeView(EnhanceStartView);
+        }
+
+        // ViewChange
+        private void ChangeView(Action view)
+        {
+            currentEnhancementView = view;
+            currentEnhancementView?.Invoke();
+        }
+    }
+}

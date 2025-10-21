@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace TerimalQuest.Scenes
 {
-    public interface Scene
+    public interface IScene
     {
-        
+        event Action<IScene> OnSceneChangeRequested;
+        void Enter();
+        void Update();
+        void Exit();
     }
 }

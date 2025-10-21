@@ -8,20 +8,35 @@ namespace TerimalQuest.Core
 {
     public class Character
     {
-        protected string name;      // 캐릭터 이름
-        protected int level;        // 캐릭터 레벨
+        private const int DefenseConst = 30;
+        public string name { get; set; }      // 캐릭터 이름
+        public int level { get; set; }          // 캐릭터 레벨
 
-        protected float maxHp;      // 캐릭터 최대 체력
-        protected float hp;         // 캐릭터 체력
+        public float maxHp { get; set; }        // 캐릭터 최대 체력
+        private float _hp;
 
-        protected float maxMp;      // 캐릭터 최대 마나
-        protected float mp;         // 캐릭터 마나
+        public float hp
+        {
+            get { return _hp; }
+            set { _hp = Math.Clamp(value, 0, maxHp); }
+        }
 
-        protected float atk;        // 캐릭터 공격력
-        protected float def;        // 캐릭터 방어력
+        public float maxMp { get; set; }        // 캐릭터 최대 마나
+        private float _mp;
 
-        protected float critRate;   // 캐릭터 크리율 
-        protected float evadeRate;  // 캐릭터 회피율
+        public float mp // 캐릭터 마나
+        {
+            get { return _mp; }
+            set { _mp = Math.Clamp(value, 0, maxMp); }
+        }
+
+        public float atk { get; set; }          // 캐릭터 공격력
+        public float def { get; set; }          // 캐릭터 방어력
+
+        public float critRate { get; set; }     // 캐릭터 크리율 
+        public float evadeRate { get; set; }    // 캐릭터 회피율
+
+        public Character() { }
 
         public Character(string name, int level, float maxHp, float maxMp, float atk, float def) 
         {
@@ -36,6 +51,27 @@ namespace TerimalQuest.Core
 
             this.def = def;
             this.atk = atk;
+        }
+
+        public int GetFinalDamage(out bool isCritical, int targetDef)
+        {
+            Random random = new Random();
+            float deviation = atk * 0.1f;
+            float randomDeviation = (float)(random.NextDouble() * (deviation * 2) - deviation);
+            float baseDamage = atk + randomDeviation;
+            isCritical = random.NextDouble() < this.critRate;
+            if (isCritical)
+            {
+                baseDamage *= 1.6f;
+            }
+            float damageReduction = (float)targetDef / (targetDef + DefenseConst);
+            int finalDamage = (int)Math.Ceiling(baseDamage * (1 - damageReduction));
+            if (finalDamage <= 0)
+            {
+                finalDamage = 1;
+            }
+            if (this is Monster) finalDamage /= 2;
+            return finalDamage;
         }
     }
 }
